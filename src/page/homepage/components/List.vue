@@ -10,8 +10,8 @@
                     </div>
                     <div class="item_text">
                         <p class="goods_name">{{item.goods_name}}</p>
-                        <p>毛巾中的爱马仕</p>
-                        <p>￥200</p>
+                        <p class="goods_name text_second">毛巾中的爱马仕</p>
+                        <p class="goods_name goods_pice">￥2,000</p>
                     </div>
               </router-link>
           </li>
@@ -45,9 +45,13 @@ export default {
             .item_text p
                 text-align center
             .goods_name
-                color #666
+                color #333
                 text-align center
                 ellipsis()
+            .text_second
+                color #666
+            .goods_pice
+                color #000
         .goods_img
             width 100%
             .goods_picture 

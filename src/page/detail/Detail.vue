@@ -2,11 +2,21 @@
     <div>
         <detail-banner :Spics="Swiperpics"></detail-banner>
         <detail-conent :message='Msessage'></detail-conent>
+        <van-tabbar fixed  v-model="active" class="active_tab">
+            <!-- <van-tabbar-item class="add btn">加入购物袋</van-tabbar-item>
+            <van-tabbar-item class="buy_goods btn">立即购买</van-tabbar-item> -->
+            
+            <div>
+                
+                
+            </div>
+        </van-tabbar>
     </div>
 </template>
 <script>
 import DetailBanner from './components/Banner'
 import DetailConent from './components/Conent'
+import {  Tabbar, TabbarItem } from 'vant';
 export default {
     name:'Detail',
     data (){
@@ -17,7 +27,9 @@ export default {
     },
     components:{
         DetailBanner,
-        DetailConent
+        DetailConent,
+         [Tabbar.name]:Tabbar,
+        [TabbarItem.name]:TabbarItem
     },
     methods:{
          init () {
@@ -55,5 +67,8 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+    .btn
+        height 0.4rem
+        width  1.62rem
 
 </style>

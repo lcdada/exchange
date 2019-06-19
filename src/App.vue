@@ -11,14 +11,14 @@
             <router-view v-if="$route.meta.keepAlive" v-on:public_header="public_header" v-on:public_footer="public_footer"></router-view>
           </keep-alive>
             <router-view v-if="!$route.meta.keepAlive"></router-view>
-          <app-footer v-if="footer_show"></app-footer>
+          <!-- <app-footer v-if="footer_show"></app-footer> -->
         </div>
   </div>
 </template>
 
 <script>
 import AppHeader from './components/Header'
-import AppFooter from './components/Footer'
+// import AppFooter from './components/Footer'
 import {DrawerLayout} from 'vue-drawer-layout'
 import {NavBar,Icon} from 'vant'
 
@@ -33,7 +33,7 @@ export default {
   },
   components:{
       AppHeader,
-      AppFooter,
+      // AppFooter,
       [DrawerLayout.name]:DrawerLayout,
       [NavBar.name]:NavBar,
       [Icon.name]:Icon
