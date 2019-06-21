@@ -2,9 +2,9 @@
   <div id="app">
         <div slot="content"> 
           <div class="header">
-             <van-nav-bar title="标题">
+             <van-nav-bar title="标题" >
                 <van-icon name="bars" slot="left" @click="handleMaskClick"/>
-                <van-icon name="search" slot="right" />
+                <van-icon name="bag-o" slot="right"  @click="goShopCart"/>
               </van-nav-bar>
           </div>
           <keep-alive>
@@ -49,6 +49,9 @@ export default {
       },
        handleMaskClick() { 
         this.$refs.drawer.toggle();
+       },
+       goShopCart(){
+         this.$router.push('/cart');
        }
   }
 }

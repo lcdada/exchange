@@ -4,7 +4,7 @@
            <van-nav-bar title="标题">
                 <van-icon name="bars" slot="left" @click="handleMaskClick"/>
               <!-- <van-icon name="bars" slot="left"/> -->
-              <van-icon name="search" slot="right" />
+              <van-icon name="bag-o" slot="right" />
            </van-nav-bar>
         </div>
     </div>

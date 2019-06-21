@@ -44,7 +44,7 @@ export default {
             }).then(params => {
                  if(params.data.code  == 1000){
                         const data = params.data.data.goods_list;
-                        console.log(data)
+                        // console.log(data)
                         this.goods_list = data.data
                     
                     }

@@ -2,11 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from '@/page/homepage/Home'
 import Test from '@/page/test/Test'
-import Login from '@/page/login/Login'
 import Class from '@/page/class/Class'
 import Detail from '@/page/detail/Detail'
 import Cart from '@/page/cart/Cart'
-
+import Buy from '@/page/buy/Buy'
 
 Vue.use(Router)
 
@@ -40,15 +39,16 @@ export default new Router({
 
     },
     {
-      path:'/login',
-      name:'Login',
-      conponent:Login
-    },
-    {
       path:'/class',
       name:'Class',
       component:Class
+    },
+    {
+      path:'/buy',
+      name:'Buy',
+      component:Buy
     }
+
     
   ]
 })
