@@ -2,9 +2,9 @@
     <div class="home">   
         <home-header :bless="bless_info"></home-header>
         <div>
-            <p class="numb_text">你可兑换2款礼品</p>
+            <p class="numb_text">你可兑换<span>{{exchange_num}}</span>款礼品</p>
         </div>
-        <home-list :list="goods_list"></home-list>
+        <home-list :list="goods_list" :bless="bless_info"></home-list>
 
     </div>
 </template>
@@ -21,7 +21,8 @@ export default {
     data (){
         return {
            bless_info:{},
-           goods_list:[]
+           goods_list:[],
+           exchange_num:''
         }
 
     },
@@ -32,7 +33,7 @@ export default {
             }).then(params => {
                     if(params.data.code  == 1000){
                         const data = params.data.data;
-                        console.log(data)
+                        console.log(params)
                         this.bless_info = data.bless_info
 
                     }
@@ -44,7 +45,8 @@ export default {
             }).then(params => {
                  if(params.data.code  == 1000){
                         const data = params.data.data.goods_list;
-                        // console.log(data)
+                        const exchange_num = params.data.data.package_info.exchange_num
+                        this.exchange_num = exchange_num
                         this.goods_list = data.data
                     
                     }

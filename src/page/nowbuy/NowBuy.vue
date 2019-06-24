@@ -26,7 +26,7 @@
               <div class="show-num">{{ item.num }}</div>
               <div class="num-btn" @click="addCar(item)">+</div>
           </div> -->
-          <van-icon name="cross" class="delete" @click="deleteFun(item)" />
+          <van-icon name="cross" class="delete" @click="nowDeleteFun(item)" />
         </li>
       </ul>
       
@@ -60,7 +60,7 @@
 <script>
 import {  Tabbar,Icon,Popup,Toast  } from 'vant';
 export default {
-  name: "Cart",
+  name: "NowBuy",
   data() {
     return {
       show: false,
@@ -77,39 +77,20 @@ export default {
   computed: { 
     //购物车列表
     carData() {
-      return this.$store.state.carList;
-    },
-    //商品总数
-    count() {
-      return this.$store.getters.carCount;
-    },
-    //商品总价
-    totalPrice() {
-      return this.$store.getters.totalPrice;
+      return this.$store.state.nowlist;
     }
   },
   methods: {
     // 增加数量
-    addCar(data){
-       this.$store.dispatch('addCar',data)
-    },
-    // 减数量
-    reduceFun(data){
-       this.$store.dispatch('reducedCar',data)
+    nowAddCar(data){
+       this.$store.dispatch('nowAddCar',data)
     },
     // 删除
-    deleteFun(data){
-        this.$store.dispatch('deleteCar',data)
+    nowDeleteFun(data){
+        this.$router.go(-1);
+        this.$store.dispatch('nowDeleteCar',data)
     },
-
-    // 用户首次登录请求购物车的数据
-    // initCar(){
-    //   this.$store.dispatch('initCar')
-    // },
-    goBuy(){
-      // this.$router.push({path:'./address'})
-      // this.$router.push({path:'/address',name:'Address'})
-    },
+    
     showPopup() {
       this.show = true;
     },
@@ -117,7 +98,7 @@ export default {
         let params = {
             account: this.account,
             pwd:this.pwd,
-            package_id:390,
+            package_id:390, 
             jid:767
         };
       
@@ -133,10 +114,9 @@ export default {
             })
     }
   },
-  created () {
-    // this.initCar();
-  },
-  mounted() {}
+  mounted() {
+     
+  }
 };
 
 </script>

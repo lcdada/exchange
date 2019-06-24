@@ -32,8 +32,9 @@ export default {
             this.$store.dispatch('addCar',params);
             Toast.success('加入购物车');
         },
-        buyNow(data){
-            this.$router.push({path:'./buy',query: {gid: data.id} })
+        buyNow(params){
+            this.$store.dispatch('nowAddCar',params);
+            this.$router.push({path:'/nowbuy',query: {gid: params.id} })
         }
     },
 
