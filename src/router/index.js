@@ -6,6 +6,7 @@ import Class from '@/page/class/Class'
 import Detail from '@/page/detail/Detail'
 import Cart from '@/page/cart/Cart'
 import Buy from '@/page/buy/Buy'
+import Pay from '@/page/pay/Pay'
 
 Vue.use(Router)
 
@@ -47,6 +48,11 @@ export default new Router({
       path:'/buy',
       name:'Buy',
       component:Buy
+    },
+    {
+      path:'/pay',
+      name:'Pay',
+      component:Pay
     }
 
     
