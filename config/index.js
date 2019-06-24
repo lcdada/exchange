@@ -51,8 +51,8 @@ module.exports = {
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsSubDirectory: 'vue',
+    assetsPublicPath: '../addons/labour_union_qrcode',
 
     /**
      * Source Maps
