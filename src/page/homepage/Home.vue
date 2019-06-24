@@ -2,7 +2,7 @@
     <div class="home">   
         <home-header :bless="bless_info"></home-header>
         <div>
-            <p class="numb_text">你可兑换2款礼品</p>
+            <p class="numb_text">你可兑换{{ exchange_num }}款礼品</p>
         </div>
         <home-list :list="goods_list"></home-list>
 
@@ -21,7 +21,8 @@ export default {
     data (){
         return {
            bless_info:{},
-           goods_list:[]
+           goods_list:[],
+            exchange_num:''
         }
 
     },
@@ -32,9 +33,7 @@ export default {
             }).then(params => {
                     if(params.data.code  == 1000){
                         const data = params.data.data;
-                        console.log(data)
                         this.bless_info = data.bless_info
-
                     }
             })
         },
@@ -42,22 +41,17 @@ export default {
             this.$api.home.getGoodsList({
                package_id:390
             }).then(params => {
-                 if(params.data.code  == 1000){
-                        const data = params.data.data.goods_list;
-                        // console.log(data)
-                        this.goods_list = data.data
-                    
-                    }
+                if(params.data.code  == 1000){
+                    this.exchange_num = params.data.data.package_info.exchange_num;
+                    const data = params.data.data.goods_list;
+                    // console.log(data)
+                    this.goods_list = data.data
+                }
             })
         },
 
         openAddress() {
-            wx.ready(function () {
-                /*
-           微信地址 授权 两小时从新提示一次
-           如果用户取消拉出地址，就显示现在的城市选择器插件
-           如果用户
-           */
+            /*wx.ready(function () {
                 wx.openAddress({
                     trigger: function (res) {
                         //alert('用户开始拉出地址');
@@ -83,7 +77,7 @@ export default {
                         //alert(JSON.stringify(res));
                     }
                 });
-            });
+            });*/
         }
     },
 
