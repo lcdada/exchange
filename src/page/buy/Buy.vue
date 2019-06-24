@@ -29,7 +29,6 @@ export default {
 
   methods: {
     onSave(data) {
-      console.log(data.adderssDetail)
       console.log(data)
       // Toast('保存成功');
       let gid = this.$utils.getUrlKey('gid')
@@ -56,6 +55,9 @@ export default {
     },
     onDelete() {
       Toast('已删除');
+    },
+    save(data){
+     alert(111)
     }
   },
   

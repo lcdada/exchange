@@ -1,6 +1,13 @@
 <template>
   <div class="goodsCart_list">
-    <div>
+    <div class="choose_address"> 
+      <div>
+        <img src="./../../assets/img/address_icon1.png" alt="">
+      </div>
+      <p class="address_icon1_text">添加收货地址</p>
+      <van-icon name="arrow"  class="arrow"/>
+    </div>
+    <div class="goods_list">
       <ul>
         <li  v-for="item in carData" :key="item.id" class="item">
           <div class="cart_goods">
@@ -30,22 +37,39 @@
           <button class="btn account" right>去结算</button>
       </div>
     </van-tabbar> -->
-    <button class="goto_exchange">去兑换</button>
+    <div class="leave_word">
+      <p class="leave_word_text">给我们留言</p>
+      <textarea class="leave_word_content"></textarea>
+      <button class="goto_exchange" @click="showPopup">去兑换</button>
+    </div>
+    <van-popup
+     class="pop"
+     v-model="show"
+     lock-scroll:true
+     >
+     <div class="form">
+       <p class="from_title">请验证</p>
+       <input type="text" placeholder="请输入卡号" value="" class="inpt">
+       <input type="text" placeholder="请输入密码" class="inpt">
+       <input type="button" value="确认提交" class="affirm_btn" @click="catr_verify">
+     </div>
+     </van-popup>
   </div>
 </template>
 
 <script>
-import {  Tabbar,Icon } from 'vant';
+import {  Tabbar,Icon,Popup  } from 'vant';
 export default {
   name: "Cart",
   data() {
     return {
-   
+      show: false
     }
   },
   components:{
     [Tabbar.name]:Tabbar,
-    [Icon.name]:Icon 
+    [Icon.name]:Icon,
+    [Popup.name]:Popup  
   },
   computed: { 
     //购物车列表
@@ -73,12 +97,33 @@ export default {
     // 删除
     deleteFun(data){
         this.$store.dispatch('deleteCar',data)
-    }
+    },
 
     // 用户首次登录请求购物车的数据
     // initCar(){
     //   this.$store.dispatch('initCar')
-    // }
+    // },
+    goBuy(){
+      // this.$router.push({path:'./address'})
+      // this.$router.push({path:'/address',name:'Address'})
+    },
+    showPopup() {
+      this.show = true;
+    },
+    catr_verify(){
+          
+       this.$api.home.accountPwd({
+          }).then(params =>{
+              // if(params.data.code  == 1000){
+              //       const data = params.data.data[0];
+              //       console.log(data)
+              //       this.Swiperpics = data.pics
+              //       this.Msessage =data
+
+              //   }
+              console.log(params)
+          })
+    }
   },
   created () {
     // this.initCar();
@@ -92,6 +137,24 @@ export default {
   .goodsCart_list
     padding 0 0.2rem
     padding-bottom 1rem
+    background #f5f5f5
+    .choose_address
+      position relative
+      height 1.12rem
+      display flex
+      align-items center
+      border-radius 0.08rem 
+      background #000
+      color #fff
+      padding 0 0.32rem
+      .address_icon1_text
+        margin-left 0.24rem
+      .arrow
+        position: absolute;
+        right: 0.32rem;
+        bottom: 0.4rem;
+    .goods_list 
+      margin-top 0.16rem
     .item
       position relative
       height 3.72rem 
@@ -100,6 +163,8 @@ export default {
       display flex
       justify-content space-between
       align-items center
+      background #fff
+      margin-bottom 0.02rem
       .cart_goods
         display flex
         justify-content flex-start
@@ -143,15 +208,62 @@ export default {
     position absolute
     top 0
     right 0
-  .goto_exchange
-      width 4.38rem
-      height 0.92rem
+  .leave_word 
+      height 5.58rem
+      background #fff
+      position relative
+      padding 0 0.32rem
+      padding-top 0.32rem
+    .leave_word_text
+      font-size 0.28rem
+      color #000
+      font-weight 600
+    .leave_word_content
+      width 100%;
+      height 2.38rem
+      background #eee
+      margin-top 0.4rem
+    .goto_exchange
+        width 3.24rem
+        height 0.92rem
+        position absolute
+        bottom 0.64rem
+        left  0.32rem
+        color #fff
+        background #000;
+        border-radius 0.08rem
+        display block
+        margin-top 0.5rem
+  .pop
+    width 6.46rem
+    height 6.18rem
+    border-radius 0.32rem
+    padding: 0.3rem;
+    box-sizing: border-box;
+    .form
       margin 0 auto
-      color #fff
-      background #000;
-      border-radius 0.08rem
-      display block
-      margin-top 0.5rem
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      .from_title
+        font-size 0.32rem
+        font-weight 600
+        color #333
+      .inpt
+        width 4.24rem
+        margin-top: 1rem;
+        border-bottom: 1px solid #000;
+        padding-bottom: 0.2rem;
+      .affirm_btn
+        width: 4.24rem;
+        height: 0.8rem;
+        background: #000;
+        color: #fff;
+        border-radius: 0.08rem;
+        font-size: 0.28rem;
+        font-weight: 500;
+        margin-top: 1rem;
 
   // .footer_btn
   //   width 100%
@@ -165,5 +277,6 @@ export default {
   //   .total_p
   //     flex 1
   //     background #fff
+   
     
 </style>
