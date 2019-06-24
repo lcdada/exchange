@@ -49,40 +49,10 @@ export default {
                 }
             })
         },
-
-        openAddress() {
-            /*wx.ready(function () {
-                wx.openAddress({
-                    trigger: function (res) {
-                        //alert('用户开始拉出地址');
-                    },
-                    success: function (res) {
-                        //将收货地址信息 回显到 表单里
-                        localStorage.setItem('addressInfo',JSON.stringify(res));
-
-                        //回显收货地址
-                        $('.username').html(res.userName);
-                        $('.tel').html(res.telNumber);
-                        $('.province').html(res.provinceName);
-                        $('.city').html(res.cityName);
-                        $('.area').html(res.countryName);
-                        $('.detail').html(res.detailInfo);
-                        $('.choose').html('');
-                        $('.Shipping_address').css('marginTop','15px');
-                    },
-                    cancel: function (res) {
-                        //alert('用户取消拉出地址');
-                    },
-                    fail: function (res) {
-                        //alert(JSON.stringify(res));
-                    }
-                });
-            });*/
-        }
     },
 
      mounted () {
-         this.openAddress(), this.getBless(), this.getGoodsList()
+         this.getBless(), this.getGoodsList()
     },
 }
 </script>
