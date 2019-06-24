@@ -49,8 +49,8 @@
      >
      <div class="form">
        <p class="from_title">请验证</p>
-       <input type="text" placeholder="请输入卡号" value="" class="inpt">
-       <input type="text" placeholder="请输入密码" class="inpt">
+       <input type="text" placeholder="请输入卡号" value="" class="inpt" v-model="account">
+       <input type="text" placeholder="请输入密码" class="inpt" v-model="pwd">
        <input type="button" value="确认提交" class="affirm_btn" @click="catr_verify">
      </div>
      </van-popup>
@@ -111,7 +111,7 @@ export default {
       this.show = true;
     },
     catr_verify(){
-          
+
        this.$api.home.accountPwd({
           }).then(params =>{
               // if(params.data.code  == 1000){
