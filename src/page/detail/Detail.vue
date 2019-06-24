@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="detail">
         <detail-banner :Spics="Swiperpics"></detail-banner>
         <detail-conent :message='Msessage'></detail-conent>
     </div>
@@ -47,7 +47,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-    
-
-
+    .detail
+        background #fff
 </style>

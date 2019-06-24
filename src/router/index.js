@@ -5,6 +5,7 @@ import Test from '@/page/test/Test'
 import Class from '@/page/class/Class'
 import Detail from '@/page/detail/Detail'
 import Cart from '@/page/cart/Cart'
+import Address from '@/page/address/Address'
 import Buy from '@/page/buy/Buy'
 import Pay from '@/page/pay/Pay'
 
@@ -31,6 +32,16 @@ export default new Router({
       component:Cart
     },
     {
+      path:'./address',
+      name:'Address',
+      component:Address
+    },
+    {
+      path:'/buy',
+      name:'Buy',
+      component:Buy
+    },
+    {
       path:'/test',
       name:'Test',
       component :Test,
@@ -45,16 +56,9 @@ export default new Router({
       component:Class
     },
     {
-      path:'/buy',
-      name:'Buy',
-      component:Buy
-    },
-    {
       path:'/pay',
       name:'Pay',
       component:Pay
     }
-
-    
   ]
 })

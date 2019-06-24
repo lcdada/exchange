@@ -89,6 +89,7 @@ export default {
 <style lang="stylus">
     .home
         padding 0 .2rem
+        background #fff
         .numb_text
             text-align center
             display block
