@@ -41,20 +41,19 @@ export default {
             this.$api.home.getGoodsList({
                package_id:390
             }).then(params => {
+                if(params.data.code  == 1000){
+                    const data = params.data.data.goods_list;
+                    const exchange_num = params.data.data.package_info.exchange_num
+                    this.exchange_num = exchange_num
+                    this.goods_list = data.data
 
-                 if(params.data.code  == 1000){
-                        const data = params.data.data.goods_list;
-                        const exchange_num = params.data.data.package_info.exchange_num
-                        this.exchange_num = exchange_num
-                        this.goods_list = data.data
-                    
-                    }
+                }
             })
         },
     },
 
-     mounted () {
-         this.getBless(), this.getGoodsList()
+    mounted () {
+        this.getBless(), this.getGoodsList()
     },
 }
 </script>

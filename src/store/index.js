@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         carList: [], //购物车的商品
-        exchangeNum :0,
+        exchangeNum :3,
         nowlist:[],//立即购买
     },
     plugins: [createPersistedState()],

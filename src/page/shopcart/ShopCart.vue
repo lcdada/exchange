@@ -117,11 +117,11 @@ export default {
             position absolute
             top 0.2rem
             right 0.2rem
-    .go_exchange
-        width 4.38rem
-        height 0.92rem
-        border-radius 0.08rem
-        display block
+.go_exchange
+    width 4.38rem
+    height 0.92rem
+    border-radius 0.08rem
+    display block
         margin 0 auto
         margin-top 0.48rem
         background #000

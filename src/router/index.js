@@ -4,7 +4,7 @@ import HomePage from '@/page/homepage/Home'
 import Test from '@/page/test/Test'
 import Class from '@/page/class/Class'
 import Detail from '@/page/detail/Detail'
-import Cart from '@/page/cart/Cart'
+import Order from '@/page/order/Order'
 import ShopCart from '@/page/shopcart/ShopCart'
 import NowBuy from '@/page/nowbuy/NowBuy'
 import Address from '@/page/address/Address'
@@ -30,9 +30,9 @@ export default new Router({
       component:Detail
     },
     {
-      path:'/cart',
-      name:'Cart',
-      component:Cart
+      path:'/order',
+      name:'Order',
+      component:Order
     },
     {
       path:'./address',
