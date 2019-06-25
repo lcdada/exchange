@@ -4,7 +4,7 @@
       <div>
         <img src="./../../assets/img/address_icon1.png" alt="">
       </div>
-      <p class="address_icon1_text">添加收货地址</p>
+      <p class="address_icon1_text" @click="openAddress()">添加收货地址</p>
       <van-icon name="arrow"  class="arrow"/>
     </div>
     <div class="goods_list">
@@ -56,16 +56,16 @@
      </van-popup>
   </div>
 </template>
-
 <script>
 import {  Tabbar,Icon,Popup  } from 'vant';
 export default {
   name: "Cart",
-  data() {
-    return {
-      show: false
-    }
-  },
+    data() {
+        return {
+            show: false,
+            address : []
+        }
+    },
   components:{
     [Tabbar.name]:Tabbar,
     [Icon.name]:Icon,
@@ -86,6 +86,38 @@ export default {
     }
   },
   methods: {
+      openAddress() {
+          /*wx.ready(function () {
+              wx.openAddress({
+                  trigger: function (res) {
+                      //alert('用户开始拉出地址');
+                  },
+                  success: function (res) {
+                        this.address = res;
+
+                      //将收货地址信息 回显到 表单里
+                      localStorage.setItem('addressInfo',JSON.stringify(res));
+
+                      //回显收货地址
+                      $('.username').html(res.userName);
+                      $('.tel').html(res.telNumber);
+                      $('.province').html(res.provinceName);
+                      $('.city').html(res.cityName);
+                      $('.area').html(res.countryName);
+                      $('.detail').html(res.detailInfo);
+                      $('.choose').html('');
+                      $('.Shipping_address').css('marginTop','15px');
+                  },
+                  cancel: function (res) {
+                      //alert('用户取消拉出地址');
+                  },
+                  fail: function (res) {
+                      //alert(JSON.stringify(res));
+                  }
+              });
+          });*/
+      },
+
     // 增加数量
     addCar(data){
        this.$store.dispatch('addCar',data)
@@ -107,12 +139,46 @@ export default {
       // this.$router.push({path:'./address'})
       // this.$router.push({path:'/address',name:'Address'})
     },
-    showPopup() {
-      this.show = true;
-    },
-    catr_verify(){
+      showPopup() {
+          //第一步验证收货地址是否ok
+          //showVerify  this.address
 
-       this.$api.home.accountPwd({
+          //第二步显示弹框  验证卡号密码是否ok
+          this.show = true;
+
+          //测试微信支付
+          this.$api.home.weipay({
+                order_sn: "p2019062490155511383446",
+                openid: "oepU71hOHh5uoG3kMJJG0IF3QGfI",
+                action: 'orderpay'
+            }).then(params =>{
+                if (typeof WeixinJSBridge == "undefined"){
+                    if( document.addEventListener ){
+                        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                    }else if (document.attachEvent){
+                        document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                    }
+                }else{
+                    WeixinJSBridge.invoke(
+                        'getBrandWCPayRequest',
+                        JSON.parse(params),
+                        function(res){
+                            if(res.err_msg == 'get_brand_wcpay_request:ok') {
+                                callback();
+                            }else{
+                            }
+                        }
+                    );
+                }
+            });
+      },
+
+      catr_verify(){
+
+          this.$api.home.accountPwd({
+              account : this.account,
+              pwd : this.pwd
           }).then(params =>{
               // if(params.data.code  == 1000){
               //       const data = params.data.data[0];
@@ -122,13 +188,15 @@ export default {
 
               //   }
               console.log(params)
+
+              //第三步提交订单信息 生成订
           })
-    }
+      }
   },
-  created () {
-    // this.initCar();
-  },
-  mounted() {}
+    created () {
+        // this.initCar();
+    },
+    mounted() {}
 };
 
 </script>

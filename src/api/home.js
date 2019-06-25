@@ -30,6 +30,9 @@ const home = {
     //生成订单
     order(params){
         return axios.post(`${base.home}/exchange/generateOrder`,qs.stringify(params))
+    },
+    weipay(params){
+        return axios.post(`${base.home}/weipay/weipay`,qs.stringify(params))
     }
 
 }
