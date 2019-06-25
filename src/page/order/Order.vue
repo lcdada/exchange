@@ -60,7 +60,7 @@
 <script>
 import {  Tabbar,Icon,Popup,Toast  } from 'vant';
 export default {
-  name: "Cart",
+  name: "Order",
   data() {
     return {
       show: false,
