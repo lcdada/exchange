@@ -2,9 +2,9 @@
     <div class="home">   
         <home-header :bless="bless_info"></home-header>
         <div>
-            <p class="numb_text">你可兑换{{ exchange_num }}款礼品</p>
+            <p class="numb_text">你可兑换<span>{{exchange_num}}</span>款礼品</p>
         </div>
-        <home-list :list="goods_list"></home-list>
+        <home-list :list="goods_list" :bless="bless_info"></home-list>
 
     </div>
 </template>
@@ -22,7 +22,7 @@ export default {
         return {
            bless_info:{},
            goods_list:[],
-            exchange_num:''
+           exchange_num:''
         }
 
     },
@@ -41,12 +41,14 @@ export default {
             this.$api.home.getGoodsList({
                package_id:390
             }).then(params => {
-                if(params.data.code  == 1000){
-                    this.exchange_num = params.data.data.package_info.exchange_num;
-                    const data = params.data.data.goods_list;
-                    // console.log(data)
-                    this.goods_list = data.data
-                }
+
+                 if(params.data.code  == 1000){
+                        const data = params.data.data.goods_list;
+                        const exchange_num = params.data.data.package_info.exchange_num
+                        this.exchange_num = exchange_num
+                        this.goods_list = data.data
+                    
+                    }
             })
         },
     },

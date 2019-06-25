@@ -1,0 +1,129 @@
+<template>
+  <div>
+     <div class="goods_list">
+      <ul>
+        <li  v-for="item in carData" :key="item.id" class="item">
+          <div class="cart_goods">
+              <div class="goods_img">
+                  <img class="goods_picture" :src="item.picture" alt="">
+              </div>
+              <div class="item_text">
+                  <p class="goods_name">{{item.goods_name}}</p>
+                  <p class= "goods_title">{{item.title}}</p>
+                  <p class="goods_num"> x{{ item.num }}</p>
+              </div>
+          </div>
+          <van-icon name="cross" class="delete" @click="deleteFun(item)" />
+        </li>
+      </ul>
+    </div> 
+    <button class="go_exchange" @click="goExchange">去兑换</button>
+  </div>
+</template>
+
+<script>
+import {Icon} from 'vant'
+export default {
+    name:'ShopCart',
+     data() {
+        return {
+        }
+    },
+    components:{
+        [Icon.name]:Icon
+    },
+    computed: { 
+        //购物车列表
+        carData() {
+            return this.$store.state.carList;
+            console.log(this.$store.state.carList)
+        },
+        
+        //商品总数
+        count() {
+            return this.$store.getters.carCount;
+        }
+     
+    },
+     methods: {
+        // 增加数量
+        addCar(data){
+        this.$store.dispatch('addCar',data)
+        },
+        // 减数量
+        reduceFun(data){
+        this.$store.dispatch('reducedCar',data)
+        },
+        // 删除
+        deleteFun(data){
+            this.$store.dispatch('deleteCar',data)
+        },
+        goExchange(){
+            this.$router.push({path:'/cart'})
+        }
+
+    }
+}
+
+</script>
+<style lang='stylus' scoped>
+@import '../../assets/styles/mixins.styl' 
+    .goods_list 
+        margin-top 0.16rem
+        padding 0 0.2rem
+        .item
+            position relative
+            height 3.72rem 
+            padding 0.32rem
+            box-sizing border-box
+            display flex
+            justify-content space-between
+            align-items center
+            background #fff
+            margin-bottom 0.08rem
+            .cart_goods
+                display flex
+                justify-content flex-start
+                align-items center
+                .goods_img
+                    width 2.8rem
+                    height 3.14rem
+                    .goods_picture
+                        width 100%
+                        height 100%
+                        display block
+                .item_text
+                    flex: 1;
+                    margin-left: 0.32rem;
+                    height: 3.14rem;
+                    padding-top 0.18rem
+                    position relative
+                    .goods_name
+                        font-size 0.28rem
+                        color #333
+                        font-weight 600
+                        width 50%
+                        ellipsis()
+                    .goods_title
+                        ellipsis()
+                        font-size 0.28rem
+                        color #666
+                        padding-top 0.2rem
+                    .goods_num
+                        position absolute
+                        bottom 0
+                        left 0
+        .delete
+            position absolute
+            top 0.2rem
+            right 0.2rem
+    .go_exchange
+        width 4.38rem
+        height 0.92rem
+        border-radius 0.08rem
+        display block
+        margin 0 auto
+        margin-top 0.48rem
+        background #000
+        color #fff
+</style>

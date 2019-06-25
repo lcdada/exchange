@@ -2,7 +2,7 @@
   <div id="app">
         <div slot="content"> 
           <div class="header">
-             <van-nav-bar title="标题" >
+             <van-nav-bar title="标题"  fixed >
                 <van-icon name="bars" slot="left" @click="handleMaskClick"/>
                 <van-icon name="bag-o" slot="right"  @click="goShopCart"/>
               </van-nav-bar>
@@ -51,13 +51,14 @@ export default {
         this.$refs.drawer.toggle();
        },
        goShopCart(){
-         this.$router.push('/cart');
+         this.$router.push('/shopcart');
        }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-  
+    .header
+        padding-bottom 0.92rem
 </style>
 
