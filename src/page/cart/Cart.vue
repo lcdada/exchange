@@ -112,6 +112,32 @@ export default {
     },
     showPopup() {
       this.show = true;
+      //测试微信支付
+        this.$api.home.weipay({
+            order_sn: "p2019062490155511383446",
+            openid: "oepU71hOHh5uoG3kMJJG0IF3QGfI",
+            action: 'orderpay'
+        }).then(params =>{
+            if (typeof WeixinJSBridge == "undefined"){
+                if( document.addEventListener ){
+                    document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                }else if (document.attachEvent){
+                    document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                    document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                }
+            }else{
+                WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',
+                    JSON.parse(params),
+                    function(res){
+                        if(res.err_msg == 'get_brand_wcpay_request:ok') {
+                            callback();
+                        }else{
+                        }
+                    }
+                );
+            }
+        });
     },
     catr_verify(){
         let params = {
