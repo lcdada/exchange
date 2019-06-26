@@ -4,7 +4,7 @@
             <div>
                 <img src="./../../assets/img/address_icon1.png" alt="">
             </div>
-            <p class="address_icon1_text">添加收货地址</p>
+            <p class="address_icon1_text" @click="openAddress()">添加收货地址</p>
             <van-icon name="arrow"  class="arrow"/>
         </div>
         <div class="goods_list">
@@ -39,7 +39,7 @@
         </van-tabbar> -->
         <div class="leave_word">
             <p class="leave_word_text">给我们留言</p>
-            <textarea class="leave_word_content"></textarea>
+            <textarea class="leave_word_content" v-model="remark"></textarea>
             <button class="goto_exchange" @click="showPopup">去兑换</button>
         </div>
         <van-popup
@@ -65,7 +65,14 @@ export default {
     return {
       show: false,
       account:'',
-      pwd:''
+      pwd:'',
+      address : {},
+      remark:'',
+      isWx: false,
+      chooseGoods : '',
+      jid :'',
+      packageId : '',
+      exchangeNum : ''
     }
   },
   components:{
@@ -89,115 +96,163 @@ export default {
     }
   },
   methods: {
-    // 增加数量
-    addCar(data){
-       this.$store.dispatch('addCar',data)
-    },
-    // 减数量
-    reduceFun(data){
-       this.$store.dispatch('reducedCar',data)
-    },
-    // 删除
-    deleteFun(data){
-        this.$store.dispatch('deleteCar',data)
-    },
+      // 增加数量
+      addCar(data){
+          this.$store.dispatch('addCar',data)
+      },
+      // 减数量
+      reduceFun(data){
+          this.$store.dispatch('reducedCar',data)
+      },
+      // 删除
+      deleteFun(data){
+          this.$store.dispatch('deleteCar',data)
+      },
 
-    // 用户首次登录请求购物车的数据
-    // initCar(){
-    //   this.$store.dispatch('initCar')
-    // },
-    goBuy(){
-      // this.$router.push({path:'./address'})
-      // this.$router.push({path:'/address',name:'Address'})
-    },
-    showPopup() {
-      this.show = true;
-      //测试微信支付
-        this.$api.home.weipay({
-            order_sn: "p2019062490155511383446",
-            openid: "oepU71hOHh5uoG3kMJJG0IF3QGfI",
-            action: 'orderpay'
-        }).then(params =>{
-            if (typeof WeixinJSBridge == "undefined"){
-                if( document.addEventListener ){
-                    document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-                }else if (document.attachEvent){
-                    document.attachEvent('WeixinJSBridgeReady', jsApiCall);
-                    document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-                }
-            }else{
-                WeixinJSBridge.invoke(
-                    'getBrandWCPayRequest',
-                    JSON.parse(params),
-                    function(res){
-                        if(res.err_msg == 'get_brand_wcpay_request:ok') {
-                            callback();
-                        }else{
-                        }
-                    }
-                );
+      // 用户首次登录请求购物车的数据
+      // initCar(){
+      //   this.$store.dispatch('initCar')
+      // },
+      goBuy(){
+          // this.$router.push({path:'./address'})
+          // this.$router.push({path:'/address',name:'Address'})
+      },
+      showPopup() {
+          this.jid = localStorage.getItem('jid');
+          this.exchangeNum = localStorage.getItem('exchange_num'+this.jid);
+          this.packageId = localStorage.getItem('package_id'+this.jid);
+
+          //0.判断是否提交的有购物车商品
+          if(this.carData === 'null' ||this.carData.length === 0) {
+              Toast("请选择商品！");
+          }
+
+          if(this.carData.length > this.exchangeNum) {
+              Toast("你最多可以兑换"+this.exchangeNum+"款商品");
+          }
+
+          for(var i in this.carData)
+          {
+            this.chooseGoods += this.carData[i].id+',';
+          }
+
+          //1.判断是否选择收货地址
+          let addressInfo = '';
+          addressInfo = localStorage.getItem('addressInfo');
+          addressInfo = JSON.stringify({
+              username : '戚金奎',
+              mobile : '18310211825',
+              address : '这是测试',
+              area : '北京市,市辖区,东城区', //省市区， 逗号拼接
+              remark : '5分钟后我要看到我购买的商品',
+              spare_name : '吕布',
+              spare_mobile : '18310211824',
+          });
+
+          if(!addressInfo || addressInfo === 'null') {
+              this.openAddress();
+          }
+
+          addressInfo = JSON.parse(addressInfo);
+          //2.获取收货地址并验证
+          this.address = {
+              username : addressInfo.userName,
+              mobile : addressInfo.telNumber,
+              address : addressInfo.detailInfo,
+              area : addressInfo.provinceName+','+addressInfo.cityName+','+addressInfo.countryName, //省市区， 逗号拼接
+
+              remark : this.remark,
+              spare_name : '吕布',
+              spare_mobile : '18310211824',
+          };
+
+          if(!this.isWx) {
+              if(this.address.mobile === '') {
+                  Toast("请填写您的手机号码");
+              }
+
+              if(this.address.address === '') {
+                  Toast("请填写你的地址信息");
+              }
+          }
+
+          //3.显示输入卡密弹框
+          this.show = true;
+      },
+
+      openAddress() {
+          if(this.isWx) {
+              wx.ready(function () {
+                  wx.openAddress({
+                      trigger: function (res) {
+                          //alert('用户开始拉出地址');
+                      },
+                      success: function (res) {
+                          //将收货地址信息 回显到 表单里
+                          localStorage.setItem('addressInfo',JSON.stringify(res));
+                      },
+                      cancel: function (res) {
+                          //alert('用户取消拉出地址');
+                      },
+                      fail: function (res) {
+                          //alert(JSON.stringify(res));
+                      }
+                  });
+              });
+          }else{
+              //跳转新页面  编辑地址 并 save 保存到 localStorage addressInfo
+          }
+      },
+
+      catr_verify(){
+          //4.验证卡密
+          this.$api.home.accountPwd({
+              account: this.account,
+              pwd:this.pwd,
+              package_id:this.packageId,
+              jid:this.jid
+          }).then(params =>{
+              if(params.data.code  == 1000){
+                  //5.获取订单信息 提交订单
+                    let orderData = {
+                        choose_goods : this.chooseGoods,
+                        package_id : this.packageId,
+                        account : this.account,
+                        pwd : this.pwd,
+                        address : this.address
+                    };
+                    this.generateOrder(orderData);
+
+                  //this.$router.push({path:'/succeed'})
+              }else if(params.data.code  == 2002){
+                  Toast(params.data.msg);
+              }
+          })
+      },
+      generateOrder(params) {
+        this.$api.home.generateOrder(params).then(params =>{
+            if(params.data.code === 1000){
+                this.$router.push({path:'/succeed','query':{"order_sn":params.data.data.ordersn}})
+            }else if(params.data.code === 2002){
+                Toast(params.data.msg);
             }
         });
-    },
-    catr_verify(){
-        let params = {
-            account: this.account,
-            pwd:this.pwd,
-            package_id:390,
-            jid:767
-        };
-                //测试微信支付
-                this.$api.home.weipay({
-                    order_sn: "p2019062490155511383446",
-                    openid: "oepU71hOHh5uoG3kMJJG0IF3QGfI",
-                    action: 'orderpay'
-                }).then(params =>{
-                    if (typeof WeixinJSBridge == "undefined"){
-                        if( document.addEventListener ){
-                            document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-                        }else if (document.attachEvent){
-                            document.attachEvent('WeixinJSBridgeReady', jsApiCall);
-                            document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-                        }
-                    }else{
-                        WeixinJSBridge.invoke(
-                            'getBrandWCPayRequest',
-                            JSON.parse(params),
-                            function(res){
-                                if(res.err_msg == 'get_brand_wcpay_request:ok') {
-                                    callback();
-                                }else{
-                                }
-                            }
-                        );
-                    }
-                });
-            },
-            catr_verify(){
-                let params = {
-                    account: this.account,
-                    pwd:this.pwd,
-                    package_id:390,
-                    jid:767
-                };
-
-
-                this.$api.home.accountPwd({
-                    params:params
-                }).then(params =>{
-                    if(params.data.code  == 1000){
-                        this.$router.push({path:'/succeed'})
-                    }else if(params.data.code  == 2002){
-                        Toast(params.data.msg);
-                    }
-                })
+      }
+  },
+    created () {
+        localStorage.setItem('addressInfo',null);
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)=="micromessenger") {
+            if(ua.match('wxwork') == "wxwork") {
+                this.isWx = false;
             }
-        },
-        created () {
-            // this.initCar();
-        },
-        mounted() {}
-    };
+            this.isWx = true;
+        } else {
+            this.isWx = false;
+        }
+    },
+    mounted() {}
+};
 
 </script>
 <style lang='stylus' scoped>

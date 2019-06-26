@@ -59,7 +59,7 @@ export default {
             this.$store.dispatch('deleteCar',data)
         },
         goExchange(){
-            this.$router.push({path:'/cart'})
+            this.$router.push({path:'/order'})
         }
 
     }

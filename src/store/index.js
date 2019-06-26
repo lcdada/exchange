@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
+import {  Toast  } from 'vant';
 import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 // store.js
@@ -13,8 +14,22 @@ export default new Vuex.Store({
     mutations: {
         // 加
         addCar(state, params) {
+            let jid = localStorage.getItem("jid");
+            let exchange_num = localStorage.getItem("exchange_num"+jid);
+            let alreadyNum = 0;
             let CarCon = state.carList;
-            // 判断如果购物车是否有这个商品，有就只增加数量，否则就添加一个
+
+            for(let i in CarCon)
+            {
+                alreadyNum += parseInt(CarCon[i].num);
+
+                if(alreadyNum >= exchange_num) {
+                    Toast("你最多可以兑换"+exchange_num+"款商品");
+                    return false;
+                }
+            }
+
+            // 判断如果购物车是否有这个商品，有就只增加数量，否则就添加一个  维护一个购物车数量
             // some 只要有一个isHas为true,就为true
             let isHas = CarCon.some((item) => {
                 if (params.id == item.id) {

@@ -4,7 +4,7 @@
 
        
           <li v-for="item in list" :key="item.id"  class="item_img">
-              <router-link :to="{ path: '/detail', query: {id: item.id,jid:bless.id} }">
+              <router-link :to="{ path: '/detail', query: {id: item.id,jid:bless.id,package_id:package} }">
                     <div class="goods_img">
                         <img class="goods_picture" :src="item.around_thumb" alt="">
                     </div>
@@ -24,7 +24,8 @@ export default {
     name:'HomeList',
     props:{
         list:Array,
-        bless:Object
+        bless:Object,
+        package:String
     }
 }
 

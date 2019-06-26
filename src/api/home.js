@@ -33,6 +33,9 @@ const home = {
     },
     weipay(params){
         return axios.post(`${base.home}/weipay/weipay`,qs.stringify(params))
+    },
+    generateOrder(params){
+        return axios.post(`${base.home}/exchange/generateOrder`,qs.stringify(params))
     }
 
 }

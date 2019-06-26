@@ -1,10 +1,10 @@
 <template>
     <div class="home">   
-        <home-header :bless="bless_info"></home-header>
+        <home-header :bless="bless_info" :package="package_id"></home-header>
         <div>
             <p class="numb_text">你可兑换<span>{{exchange_num}}</span>款礼品</p>
         </div>
-        <home-list :list="goods_list" :bless="bless_info"></home-list>
+        <home-list :package="package_id" :list="goods_list" :bless="bless_info"></home-list>
 
     </div>
 </template>
@@ -20,26 +20,32 @@ export default {
     },
     data (){
         return {
-           bless_info:{},
-           goods_list:[],
-           exchange_num:''
+            bless_info:{},
+            goods_list:[],
+            exchange_num:'',
+            package_id:'',
+            jid : 767
         }
 
     },
     methods:{
         getBless () {
             this.$api.home.getBless({
-               jid:767
+               jid:this.jid
             }).then(params => {
-                    if(params.data.code  == 1000){
-                        const data = params.data.data;
-                        this.bless_info = data.bless_info
-                    }
+                if(params.data.code  == 1000){
+                    const data = params.data.data;
+                    this.bless_info = data.bless_info
+                    this.package_id = data.package_id;
+
+                    this.getGoodsList(this.package_id);
+                }
             })
         },
-        getGoodsList (){
+
+        getGoodsList (package_id){
             this.$api.home.getGoodsList({
-               package_id:390
+               package_id:package_id
             }).then(params => {
                 if(params.data.code  == 1000){
                     const data = params.data.data.goods_list;
@@ -47,13 +53,16 @@ export default {
                     this.exchange_num = exchange_num
                     this.goods_list = data.data
 
+                    localStorage.setItem('package_id'+this.jid,package_id);
+                    localStorage.setItem('exchange_num'+this.jid,this.exchange_num);
+                    localStorage.setItem('jid',this.jid);
                 }
             })
         },
     },
 
     mounted () {
-        this.getBless(), this.getGoodsList()
+        this.getBless()
     },
 }
 </script>
