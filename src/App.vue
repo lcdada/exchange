@@ -3,8 +3,8 @@
         <div slot="content"> 
           <div class="header">
              <van-nav-bar title="标题"  fixed >
-                <van-icon name="bars" slot="left" @click="handleMaskClick"/>
-                <van-icon name="bag-o" slot="right"  @click="goShopCart"/>
+                <van-icon name="wap-nav" slot="left" size="0.4rem" color="#000" />
+                <van-icon name="bag-o" slot="right" size="0.4rem" color="#000" @click="goShopCart"/>
               </van-nav-bar>
           </div>
           <keep-alive>
@@ -47,12 +47,9 @@ export default {
       public_footer:function (bool) {
           this.footer_show = bool;
       },
-       handleMaskClick() { 
-        this.$refs.drawer.toggle();
-       },
-       goShopCart(){
-         this.$router.push('/shopcart');
-       }
+      goShopCart(){
+        this.$router.push('/shopcart');
+      }
   }
 }
 </script>

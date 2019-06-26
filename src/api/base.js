@@ -3,7 +3,7 @@
  */
 const base = {    
     sq: './../../static/mock',    
-    home:"http://123.56.162.249:18306"
+    home:"http://47.94.149.236:18306"
 }
 
 export default base;

@@ -122,8 +122,8 @@ export default {
     height 0.92rem
     border-radius 0.08rem
     display block
-        margin 0 auto
-        margin-top 0.48rem
-        background #000
-        color #fff
+    margin 0 auto
+    margin-top 0.48rem
+    background #000
+    color #fff
 </style>

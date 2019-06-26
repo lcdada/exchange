@@ -3,7 +3,6 @@
       <div class="detail_text">
           <p class="goods_name">{{message.goods_name}}</p>
           <p class="name_second">{{message.salute_sketch}}</p>
-          <p class="price">{{message.market_price}}</p>
       </div>
       <div class="detail_conent" v-html='message.summary'>{{message.summary}}</div>
         <van-tabbar class="footer">
@@ -54,9 +53,6 @@ export default {
         .name_second
             color #666
             font-size 0.28rem
-        .price
-            font-size 0.32rem
-            line-height auto
     .detail_conent
        padding-bottom 2rem
     .footer

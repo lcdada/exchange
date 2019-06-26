@@ -10,8 +10,7 @@
                     </div>
                     <div class="item_text">
                         <p class="goods_name">{{item.goods_name}}</p>
-                        <p class="goods_name text_second">毛巾中的爱马仕</p>
-                        <p class="goods_name goods_pice">￥2,000</p>
+                        <p class="goods_name text_second">{{item.salute_sketch}}</p>
                     </div>
               </router-link>
           </li>
@@ -47,6 +46,7 @@ export default {
             .item_text p
                 text-align center
             .goods_name
+                font-weight 500
                 color #333
                 text-align center
                 ellipsis()
