@@ -139,16 +139,6 @@ export default {
           //1.判断是否选择收货地址
           let addressInfo = '';
           addressInfo = localStorage.getItem('addressInfo');
-          addressInfo = JSON.stringify({
-              username : '戚金奎',
-              mobile : '18310211825',
-              address : '这是测试',
-              area : '北京市,市辖区,东城区', //省市区， 逗号拼接
-              remark : '5分钟后我要看到我购买的商品',
-              spare_name : '吕布',
-              spare_mobile : '18310211824',
-          });
-
           if(!addressInfo || addressInfo === 'null') {
               this.openAddress();
           }
