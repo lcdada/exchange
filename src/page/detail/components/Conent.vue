@@ -22,18 +22,33 @@ export default {
     props:{
         message:Object
     },
+    data(){
+        return{
+           CartList:[] 
+        }
+    },
     components:{
          [Tabbar.name]:Tabbar,
          [Toast.name]:Toast 
     },
     methods: {
         addCart(params){
+            console.log(params)
             this.$store.dispatch('addCar',params);
             Toast.success('加入购物车');
+            const goodsDetial = {
+                picture:params.thumb,
+                goods_name:params.goods_name,
+                title:params.class_name,
+                num:1
+            }
+            
+            const goodsList = localStorage.setItem('CartList',JSON.stringify(goodsDetial))
+            console.log(goodsList)
         },
         buyNow(params){
             this.$store.dispatch('nowAddCar',params);
-            this.$router.push({path:'/nowbuy',query: {gid: params.id} })
+            this.$router.push({path:'/order',query: {goods_id: params.id,now:true} })
         }
     },
 

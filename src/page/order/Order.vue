@@ -1,11 +1,18 @@
 <template>
     <div class="goodsCart_list">
-        <div class="choose_address">
+        <div class="choose_address" v-if="!showAddress">
             <div>
                 <img src="./../../assets/img/address_icon1.png" alt="">
             </div>
             <p class="address_icon1_text" @click="openAddress()">添加收货地址</p>
             <van-icon name="arrow"  class="arrow"/>
+        </div>
+        <div class="show_address" v-if="showAddress">
+            <div class="peopleInfo">
+                <p class="userName" :userName="userName">{{userName}}</p>
+                <p class="telNumber" :telNumber="telNumber">{{telNumber}}</p>    
+            </div>
+            <p class="address_text" :detail="detail">{{detail}}</p>          
         </div>
         <div class="goods_list">
             <ul>
@@ -20,23 +27,11 @@
                             <p class="goods_num"> x{{ item.num }}</p>
                         </div>
                     </div>
-                    <!-- <div class="goods_num">
-
-                        <div class="num-btn" @click="reduceFun(item)">-</div>
-                        <div class="show-num">{{ item.num }}</div>
-                        <div class="num-btn" @click="addCar(item)">+</div>
-                    </div> -->
-                    <van-icon name="cross" class="delete" @click="deleteFun(item)" />
+                    <!-- <van-icon name="cross" class="delete" @click="deleteFun(item)" /> -->
                 </li>
             </ul>
 
         </div>
-        <!-- <van-tabbar class="footer_total">
-          <div  class="footer_btn">
-              <button class="btn total_p" left >总金额：￥{{totalPrice}}</button>
-              <button class="btn account" right>去结算</button>
-          </div>
-        </van-tabbar> -->
         <div class="leave_word">
             <p class="leave_word_text">给我们留言</p>
             <textarea class="leave_word_content" v-model="remark"></textarea>
@@ -72,7 +67,11 @@ export default {
       chooseGoods : '',
       jid :'',
       packageId : '',
-      exchangeNum : ''
+      exchangeNum : '',
+      showAddress:false,
+      userName:'',
+      telNumber:'',
+      detail:''
     }
   },
   components:{
@@ -84,7 +83,11 @@ export default {
   computed: { 
     //购物车列表
     carData() {
-      return this.$store.state.carList;
+        if(this.$route.query.now!=undefined){
+        		return this.$store.state.nowlist;
+        	}else{
+        		return this.$store.state.carList;
+        	}
     },
     //商品总数
     count() {
@@ -123,13 +126,13 @@ export default {
           this.packageId = localStorage.getItem('package_id'+this.jid);
 
           //0.判断是否提交的有购物车商品
-          if(this.carData === 'null' ||this.carData.length === 0) {
-              Toast("请选择商品！");
-          }
+        //   if(this.carData === 'null' ||this.carData.length === 0) {
+        //       Toast("请选择商品！");
+        //   }
 
-          if(this.carData.length > this.exchangeNum) {
-              Toast("你最多可以兑换"+this.exchangeNum+"款商品");
-          }
+        //   if(this.carData.length > this.exchangeNum) {
+        //       Toast("你最多可以兑换"+this.exchangeNum+"款商品");
+        //   }
 
           for(var i in this.carData)
           {
@@ -171,6 +174,21 @@ export default {
       },
 
       openAddress() {
+
+        //     var addressInfo={
+        //       userName:'苏克',
+        //       telNumber:'15810227932',
+        //       provinceName:' 山西',
+        //       cityName:'运城',
+        //       countryName:'永济',
+        //       detailInfo:'中关村在线'
+        //   }
+
+        //   localStorage.setItem('addressInfo',JSON.stringify(addressInfo));
+
+        //输出地址信息到页面
+            
+
           if(this.isWx) {
               wx.ready(function () {
                   wx.openAddress({
@@ -179,7 +197,12 @@ export default {
                       },
                       success: function (res) {
                           //将收货地址信息 回显到 表单里
+                          this.showAddress = true;
+                          this.userName = res.userName;
+                          this.telNumber = res.telNumber
+                          this.detail = res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo
                           localStorage.setItem('addressInfo',JSON.stringify(res));
+
                       },
                       cancel: function (res) {
                           //alert('用户取消拉出地址');
@@ -261,12 +284,33 @@ export default {
         color #fff
         padding 0 0.32rem
         margin-top 0.16rem
-    .address_icon1_text
-        margin-left 0.24rem
-    .arrow
-        position: absolute;
-        right: 0.32rem;
-        bottom: 0.4rem;
+        .address_icon1_text
+            margin-left 0.24rem
+        .arrow
+            position: absolute;
+            right: 0.32rem;
+            bottom: 0.4rem;
+    .show_address
+        height 1.4rem
+        background #fff
+        margin-top 0.2rem
+        padding 0.2rem
+        box-sizing border-box
+        .peopleInfo
+            display flex
+            justify-content flex-start
+            align-items center
+            line-height 0.4rem
+            .userName,.telNumber
+                font-size 0.28rem
+                font-weight 600
+                color #000
+            .telNumber
+                margin-left 0.8rem
+        .address_text
+            line-height 0.6rem
+            color  #999
+            font-size 0.24rem   
     .goods_list
         margin-top 0.16rem
     .item
@@ -300,7 +344,7 @@ export default {
         font-size 0.28rem
         color #333
         font-weight 600
-        width 70%
+        width 50%
         ellipsis()
     .goods_title
         ellipsis()
@@ -334,8 +378,12 @@ export default {
     .leave_word_content
         width 100%;
         height 2.38rem
-    background #eee
+        background #f5f5f5
         margin-top 0.4rem
+        background #eee
+        margin-top 0.4rem
+        padding  0.2rem
+        box-sizing  border-box
     .goto_exchange
         width 3.24rem
         height 0.92rem

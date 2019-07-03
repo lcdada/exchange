@@ -57,6 +57,9 @@ export default {
         // 删除
         deleteFun(data){
             this.$store.dispatch('deleteCar',data)
+            if(this.count == 1){
+                this.$router.go(-1)
+            }
         },
         goExchange(){
             this.$router.push({path:'/order'})

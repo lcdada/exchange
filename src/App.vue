@@ -2,7 +2,7 @@
   <div id="app">
         <div slot="content"> 
           <div class="header">
-             <van-nav-bar title="标题"  fixed >
+             <van-nav-bar title="蓝卡优选"  fixed >
                 <van-icon name="wap-nav" slot="left" size="0.4rem" color="#000" />
                 <van-icon name="bag-o" slot="right" size="0.4rem" color="#000" @click="goShopCart"/>
               </van-nav-bar>
@@ -17,8 +17,6 @@
 </template>
 
 <script>
-import AppHeader from './components/Header'
-// import AppFooter from './components/Footer'
 import {DrawerLayout} from 'vue-drawer-layout'
 import {NavBar,Icon} from 'vant'
 
@@ -32,8 +30,6 @@ export default {
     }
   },
   components:{
-      AppHeader,
-      // AppFooter,
       [DrawerLayout.name]:DrawerLayout,
       [NavBar.name]:NavBar,
       [Icon.name]:Icon

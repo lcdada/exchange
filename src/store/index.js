@@ -7,7 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         carList: [], //购物车的商品
-        exchangeNum :3,
+        // exchangeNum :3,
         nowlist:[],//立即购买
     },
     plugins: [createPersistedState()],
@@ -54,20 +54,8 @@ export default new Vuex.Store({
         },
         // 立即购买添加
         nowAddCar(state,params) {
-            let CarCon = state.nowlist;
-            // 判断如果购物车是否有这个商品，有就只增加数量，否则就添加一个
-            // some 只要有一个isHas为true,就为true
-            let isHas = CarCon.some((item) => {
-                if (params.id == item.id) {
-                    item.num++;
-                    return true;
-                } else {
-                    return false;
-                }
-            })
-
-            if (!isHas) {
-                let obj = {
+            this.state.nowlist=[]
+            let obj = {
                     "goods_name":params.goods_name,
                     "id": params.id,
                     "title": params.class_name,
@@ -76,8 +64,6 @@ export default new Vuex.Store({
                     "num": 1,
                 }
                 this.state.nowlist.push(obj)
-                //  this.state.nowlist.pop(ob)
-            }
         },
         // 减
         reducedCar(state,params){
