@@ -1,19 +1,25 @@
 <template>
-  <div id="app">
-        <div slot="content"> 
-          <div class="header">
-             <van-nav-bar title="蓝卡优选"  fixed >
-                <van-icon name="wap-nav" slot="left" size="0.4rem" color="#000" />
-                <van-icon name="bag-o" slot="right" size="0.4rem" color="#000" @click="goShopCart"/>
-              </van-nav-bar>
-          </div>
-          <keep-alive>
-            <router-view v-if="$route.meta.keepAlive" v-on:public_header="public_header" v-on:public_footer="public_footer"></router-view>
-          </keep-alive>
-            <router-view v-if="!$route.meta.keepAlive"></router-view>
-          <!-- <app-footer v-if="footer_show"></app-footer> -->
-        </div>
-  </div>
+	<div id="app">
+		<div slot="content"> 
+			<div class="header">
+				<div>
+					<van-icon name="wap-nav" slot="left" color="#000" size="20px" @click="goHomePage"/>
+				</div>
+				<div class="logo_block">
+					<img src="./assets/img/logo_text.png" alt="" class="logo_img">
+				</div>
+				<div>
+					<van-icon name="bag-o" slot="right" color="#000" size="20px" @click="goShopCart"/>
+				</div>
+			</div>
+			<div class="center">
+				<keep-alive>
+					<router-view v-if="$route.meta.keepAlive" v-on:public_header="public_header" v-on:public_footer="public_footer"></router-view>
+				</keep-alive>
+				<router-view v-if="!$route.meta.keepAlive"></router-view>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -45,13 +51,36 @@ export default {
       },
       goShopCart(){
         this.$router.push('/shopcart');
-      }
+	  },
+	  goHomePage(){
+		  this.$router.push('/')
+	  }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-    .header
-        padding-bottom 0.92rem
+	.header
+		width 100%
+		height 0.92rem 
+		background #fff
+		padding 0 0.2rem
+		display flex
+		justify-content space-between
+		align-items center
+		box-sizing border-box
+		z-index 9
+		position fixed
+		top 0
+		left 0
+		.logo_block
+			width 2.06rem
+			height 0.4rem 				
+		.logo_img
+			width 100%
+			height 100%
+			display block
+	.center
+		margin-top 0.92rem
 </style>
 

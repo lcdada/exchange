@@ -1,6 +1,6 @@
 <template>
     <div class="goodsCart_list">
-        <div class="choose_address" v-if="!showAddress">
+        <div class="choose_address" v-if="!showAddress" ref='suke'>
             <div>
                 <img src="./../../assets/img/address_icon1.png" alt="">
             </div>

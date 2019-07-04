@@ -1,23 +1,28 @@
 <template>
   <div>
      <div class="goods_list">
-      <ul>
-        <li  v-for="item in carData" :key="item.id" class="item">
-          <div class="cart_goods">
-              <div class="goods_img">
-                  <img class="goods_picture" :src="item.picture" alt="">
-              </div>
-              <div class="item_text">
-                  <p class="goods_name">{{item.goods_name}}</p>
-                  <p class= "goods_title">{{item.title}}</p>
-                  <p class="goods_num"> x{{ item.num }}</p>
-              </div>
-          </div>
-          <van-icon name="cross" class="delete" @click="deleteFun(item)" />
-        </li>
-      </ul>
+        <ul>
+            <li  v-for="item in carData" :key="item.id" class="item">
+            <div class="cart_goods">
+                <div class="goods_img">
+                    <img class="goods_picture" :src="item.picture" alt="">
+                </div>
+                <div class="item_text">
+                    <p class="goods_name">{{item.goods_name}}</p>
+                    <p class= "goods_title">{{item.title}}</p>
+                    <p class="goods_num"> x{{ item.num }}</p>
+                </div>
+            </div>
+            <van-icon name="cross" class="delete" @click="deleteFun(item)" />
+            </li>
+        </ul>
     </div> 
-    <button class="go_exchange" @click="goExchange">去兑换</button>
+    <button class="go_exchange" @click="goExchange" v-if='!seenCartgoods'>去兑换</button>
+    <div v-if='seenCartgoods'>
+        <p>
+            空空如也
+        </p>
+    </div>
   </div>
 </template>
 
@@ -27,6 +32,7 @@ export default {
     name:'ShopCart',
      data() {
         return {
+            seenCartgoods:false
         }
     },
     components:{
@@ -58,7 +64,9 @@ export default {
         deleteFun(data){
             this.$store.dispatch('deleteCar',data)
             if(this.count == 1){
-                this.$router.go(-1)
+                // this.$router.go(-1)
+                console.log(this.count)
+                this.seenCartgoods= true
             }
         },
         goExchange(){
