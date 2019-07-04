@@ -19,9 +19,11 @@
     </div> 
     <button class="go_exchange" @click="goExchange" v-if='!seenCartgoods'>去兑换</button>
     <div v-if='seenCartgoods'>
-        <p>
-            空空如也
-        </p>
+       <div class="empty_content">
+            <p class="text1">购物袋</p>
+            <p class="text2">购物袋为空 ,快去挑选吧!</p>
+            <button class="goHomePage" @click="goHomePage">去逛逛</button>
+        </div>
     </div>
   </div>
 </template>
@@ -71,8 +73,11 @@ export default {
         },
         goExchange(){
             this.$router.push({path:'/order'})
-        }
+        },
 
+        goHomePage(){
+            
+        }
     }
 }
 
@@ -137,4 +142,24 @@ export default {
     margin-top 0.48rem
     background #000
     color #fff
+.empty_content
+        display flex
+        flex-direction column
+        align-items center
+        .text1
+            font-size 0.28rem
+            line-height 0.44rem
+            font-weight 600
+            color #000
+        .text2
+            color #333
+            line-height 0.4rem
+            margin-top 0.1rem
+        .goHomePage
+            width 90%
+            height 0.92rem
+            background #000
+            color #fff
+            border-radius 0.08rem
+            margin-top 0.6rem
 </style>
