@@ -280,6 +280,7 @@ export default {
         padding 0 0.2rem
         padding-bottom 1rem
         background #f5f5f5
+        padding-top 0.2rem
     .choose_address
         position relative
         height 1.12rem
@@ -299,9 +300,9 @@ export default {
     .show_address
         height 1.4rem
         background #fff
-        margin-top 0.2rem
         padding 0.2rem
         box-sizing border-box
+        border-bottom 0.02rem solid #f5f5f5
         .peopleInfo
             display flex
             justify-content flex-start
