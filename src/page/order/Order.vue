@@ -7,7 +7,7 @@
             <p class="address_icon1_text" @click="openAddress()">添加收货地址</p>
             <van-icon name="arrow"  class="arrow"/>
         </div>
-        <div class="show_address" v-if="showAddress">
+        <div class="show_address" style="display: none">
             <div class="peopleInfo">
                 <p class="userName" :userName="userName">{{userName}}</p>
                 <p class="telNumber" :telNumber="telNumber">{{telNumber}}</p>    
@@ -155,8 +155,6 @@ export default {
               area : addressInfo.provinceName+','+addressInfo.cityName+','+addressInfo.countryName, //省市区， 逗号拼接
 
               remark : this.remark,
-              spare_name : '吕布',
-              spare_mobile : '18310211824',
           };
 
           if(!this.isWx) {
@@ -190,17 +188,24 @@ export default {
             
 
           if(this.isWx) {
+              let showAddress = this.showAddress;
               wx.ready(function () {
                   wx.openAddress({
                       trigger: function (res) {
                           //alert('用户开始拉出地址');
                       },
                       success: function (res) {
+                          $('.choose_address').hide();
+                          $('.show_address').show();
+
+                          $('.userName').html(res.userName);
+                          $('.telNumber').html(res.telNumber);
+                          $('.address_text').html(res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo);
+
                           //将收货地址信息 回显到 表单里
-                          this.showAddress = true;
-                          this.userName = res.userName;
-                          this.telNumber = res.telNumber
-                          this.detail = res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo
+                         /* that.userName = res.userName;
+                          that.telNumber = res.telNumber
+                          that.detail = res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo*/
                           localStorage.setItem('addressInfo',JSON.stringify(res));
 
                       },
@@ -226,6 +231,8 @@ export default {
               jid:this.jid
           }).then(params =>{
               if(params.data.code  == 1000){
+                  this.chooseGoods = this.chooseGoods.split(',')[0];
+
                   //5.获取订单信息 提交订单
                     let orderData = {
                         choose_goods : this.chooseGoods,
@@ -234,6 +241,7 @@ export default {
                         pwd : this.pwd,
                         address : this.address
                     };
+
                     this.generateOrder(orderData);
 
                   //this.$router.push({path:'/succeed'})
