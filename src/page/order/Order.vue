@@ -1,13 +1,13 @@
 <template>
     <div class="goodsCart_list">
-        <div class="choose_address" v-if="!showAddress">
+        <div class="choose_address" v-if="!showAddress" ref='suke'>
             <div>
                 <img src="./../../assets/img/address_icon1.png" alt="">
             </div>
             <p class="address_icon1_text" @click="openAddress()">添加收货地址</p>
             <van-icon name="arrow"  class="arrow"/>
         </div>
-        <div class="show_address" style="display: none">
+        <div class="show_address" style="display:none">
             <div class="peopleInfo">
                 <p class="userName" :userName="userName">{{userName}}</p>
                 <p class="telNumber" :telNumber="telNumber">{{telNumber}}</p>    
@@ -203,9 +203,22 @@ export default {
                           $('.address_text').html(res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo);
 
                           //将收货地址信息 回显到 表单里
+<<<<<<< HEAD
                          /* that.userName = res.userName;
                           that.telNumber = res.telNumber
                           that.detail = res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo*/
+=======
+                        //   this.showAddress = true;
+                        //   this.userName = res.userName;
+                        //   this.telNumber = res.telNumber
+                        //   this.detail = res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo
+                             $('.choose_address').hide();
+							 $('.show_address').show();
+
+							 $('.userName').html(res.userName);
+							 $('.telNumber').html(res.telNumber);
+							 $('.address_text').html(res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo);
+>>>>>>> a5e2414940ecab93e7337e8cc9537b2c290746ef
                           localStorage.setItem('addressInfo',JSON.stringify(res));
 
                       },
@@ -282,6 +295,7 @@ export default {
         padding 0 0.2rem
         padding-bottom 1rem
         background #f5f5f5
+        padding-top 0.2rem
     .choose_address
         position relative
         height 1.12rem
@@ -301,9 +315,9 @@ export default {
     .show_address
         height 1.4rem
         background #fff
-        margin-top 0.2rem
         padding 0.2rem
         box-sizing border-box
+        border-bottom 0.02rem solid #f5f5f5
         .peopleInfo
             display flex
             justify-content flex-start

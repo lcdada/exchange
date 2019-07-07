@@ -36,15 +36,15 @@ export default {
             console.log(params)
             this.$store.dispatch('addCar',params);
             Toast.success('加入购物车');
-            const goodsDetial = {
-                picture:params.thumb,
-                goods_name:params.goods_name,
-                title:params.class_name,
-                num:1
-            }
+            // const goodsDetial = {
+            //     picture:params.thumb,
+            //     goods_name:params.goods_name,
+            //     title:params.class_name,
+            //     num:1
+            // }
             
-            const goodsList = localStorage.setItem('CartList',JSON.stringify(goodsDetial))
-            console.log(goodsList)
+            // const goodsList = localStorage.setItem('CartList',JSON.stringify(goodsDetial))
+            // console.log(goodsList)
         },
         buyNow(params){
             this.$store.dispatch('nowAddCar',params);
