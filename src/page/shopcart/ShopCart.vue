@@ -40,6 +40,13 @@ export default {
     components:{
         [Icon.name]:Icon
     },
+    created(){
+		if(this.count == 0){
+            // console.log(this.count)
+            // console.log(111)
+            this.seenCartgoods= true
+        }
+	},
     computed: { 
         //购物车列表
         carData() {
@@ -76,7 +83,7 @@ export default {
         },
 
         goHomePage(){
-            
+            this.$router.push({path:'/'})
         }
     }
 }
@@ -146,6 +153,7 @@ export default {
         display flex
         flex-direction column
         align-items center
+        padding-top 0.3rem
         .text1
             font-size 0.28rem
             line-height 0.44rem

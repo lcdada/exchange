@@ -7,7 +7,7 @@
             <p class="address_icon1_text" @click="openAddress()">添加收货地址</p>
             <van-icon name="arrow"  class="arrow"/>
         </div>
-        <div class="show_address" v-if="showAddress">
+        <div class="show_address" style="display:none">
             <div class="peopleInfo">
                 <p class="userName" :userName="userName">{{userName}}</p>
                 <p class="telNumber" :telNumber="telNumber">{{telNumber}}</p>    
@@ -197,10 +197,16 @@ export default {
                       },
                       success: function (res) {
                           //将收货地址信息 回显到 表单里
-                          this.showAddress = true;
-                          this.userName = res.userName;
-                          this.telNumber = res.telNumber
-                          this.detail = res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo
+                        //   this.showAddress = true;
+                        //   this.userName = res.userName;
+                        //   this.telNumber = res.telNumber
+                        //   this.detail = res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo
+                             $('.choose_address').hide();
+							 $('.show_address').show();
+
+							 $('.userName').html(res.userName);
+							 $('.telNumber').html(res.telNumber);
+							 $('.address_text').html(res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo);
                           localStorage.setItem('addressInfo',JSON.stringify(res));
 
                       },

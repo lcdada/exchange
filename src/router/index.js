@@ -5,6 +5,7 @@ import Detail from '@/page/detail/Detail'
 import Order from '@/page/order/Order'
 import ShopCart from '@/page/shopcart/ShopCart'
 import Succeed from '@/page/succeed/Succeed'
+import Donate from '@/page/donate/Donate'
 
 Vue.use(Router)
 
@@ -38,5 +39,10 @@ export default new Router({
       name:'Succeed',
       component:Succeed
     },
+    {
+      path:'/donate',
+      name:'Donate',
+      component:Donate
+    }
   ]
 })
