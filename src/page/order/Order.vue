@@ -203,22 +203,12 @@ export default {
                           $('.address_text').html(res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo);
 
                           //将收货地址信息 回显到 表单里
-<<<<<<< HEAD
-                         /* that.userName = res.userName;
-                          that.telNumber = res.telNumber
-                          that.detail = res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo*/
-=======
-                        //   this.showAddress = true;
-                        //   this.userName = res.userName;
-                        //   this.telNumber = res.telNumber
-                        //   this.detail = res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo
                              $('.choose_address').hide();
 							 $('.show_address').show();
 
 							 $('.userName').html(res.userName);
 							 $('.telNumber').html(res.telNumber);
 							 $('.address_text').html(res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo);
->>>>>>> a5e2414940ecab93e7337e8cc9537b2c290746ef
                           localStorage.setItem('addressInfo',JSON.stringify(res));
 
                       },
