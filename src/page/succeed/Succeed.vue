@@ -7,11 +7,9 @@
       <div class="succ_text">
           <p class="succ_text_text">关注公众号，自动接收配送进度更新</p>
           <div class="qr_code">
-               <img src="" alt="" class="qr_code_img">
+               <img src="./../../assets/img/qrcode.jpg" alt="" class="qr_code_img">
           </div>
           <p class="p_num">订单编号：<span>{{ order_sn }}</span></p>
-          <p class="p_num">礼品编号：<span>433743323</span></p>
-          <p class="p_num">兑换时间：<span>2019-6-20</span></p>
       </div>
   </div>
 </template>

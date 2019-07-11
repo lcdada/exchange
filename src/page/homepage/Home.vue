@@ -11,6 +11,7 @@
 <script>
 import HomeHeader from './components/Header'
 import HomeList from './components/List'
+import utils from '@/utils/utils'
 
 export default {
     name:"HomePage",
@@ -24,7 +25,7 @@ export default {
             goods_list:[],
             exchange_num:'',
             package_id:'',
-            jid : 767
+            jid : utils.getUrlKey('jid') ? utils.getUrlKey('jid') : 767
         }
 
     },
@@ -40,7 +41,6 @@ export default {
 
                     this.getGoodsList(this.package_id);
                 }
-            })
         },
 
         getGoodsList (package_id){

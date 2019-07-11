@@ -8,23 +8,22 @@
     </div>
 </template>
 <script>
-import {Swipe, SwipeItem,Lazyload } from 'vant'
-export default {
-    name:'DetailBanner',
-    props:{
-        Spics:Array
-    },
-    components:{
-        [Swipe.name]:Swipe,
-        [SwipeItem.name]:SwipeItem,
-        [Lazyload.name]:Lazyload 
-    },
-    data() {
-        return {
-            
+    import {Swipe, SwipeItem,Lazyload } from 'vant'
+    export default {
+        name:'DetailBanner',
+        props:{
+            Spics:Array
+        },
+        components:{
+            [Swipe.name]:Swipe,
+            [SwipeItem.name]:SwipeItem,
+            [Lazyload.name]:Lazyload
+        },
+        data() {
+            return {
+            }
         }
     }
-}
 </script>
 <style lang="stylus" scoped>
     .swiper_item
