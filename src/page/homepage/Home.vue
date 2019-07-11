@@ -41,8 +41,9 @@ export default {
 
                     this.getGoodsList(this.package_id);
                 }
+            })
         },
-
+        
         getGoodsList (package_id){
             this.$api.home.getGoodsList({
                package_id:package_id
