@@ -52,6 +52,7 @@ export default {
                 ellipsis()
             .text_second
                 color #666
+                font-size 0.26rem
             .goods_pice
                 color #000
         .goods_img

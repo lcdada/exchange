@@ -92,8 +92,7 @@ export default {
 <style lang='stylus' scoped>
 @import '../../assets/styles/mixins.styl' 
     .goods_list 
-        margin-top 0.16rem
-        padding 0 0.2rem
+        padding 0.2rem 0.2rem
         .item
             position relative
             height 3.72rem 

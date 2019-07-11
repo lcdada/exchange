@@ -10,13 +10,15 @@
                 playsinline
                 webkit-playsinline
                 preload="auto"
-                controls 
+                controls
+                :poster="bless.cover_map" 
+                object-fit = fill
             >
             </video>
         </div>
       <div class="bless_text">
           <p class="from_name">Dear All</p>
-          <p class="bless_content" v-html="bless.theme_content">{{bless.theme_content}}</p>
+          <p class="bless_content" v-html="bless.theme_content"></p>
       </div>
   </div>
 </template>
@@ -27,6 +29,10 @@ export default {
      props:{
         bless:Object
     },
+    
+    updated() {
+   
+    }
 }
 
 </script>

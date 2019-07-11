@@ -1,7 +1,7 @@
 <template>
     <div>
-        <van-swipe :autoplay="3000">
-            <van-swipe-item v-for="item in Spics" :key="item.id" class="swiper_item">
+        <van-swipe :autoplay="3000" class="swiper_item">
+            <van-swipe-item v-for="item in Spics" :key="item.id" >
                 <img :src="item" class="swiper_item_img"/>
             </van-swipe-item>
         </van-swipe>
@@ -27,6 +27,10 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-    .swiper_item_img
+    .swiper_item
         width 100%
+        height  8.4rem
+        .swiper_item_img
+            width 100%
+            height 100%
 </style>

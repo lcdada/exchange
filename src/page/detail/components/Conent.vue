@@ -8,7 +8,7 @@
         <van-tabbar class="footer">
             <div  class="footer_btn">
                 <button class="btn addcart"  @click="addCart(message)">加入购物车</button>
-                <button class="btn buynow" @click="buyNow(message)">立即购买</button>
+                <button class="btn buynow" @click="buyNow(message)">立即兑换</button>
             </div>
         </van-tabbar>
   </div>
@@ -65,6 +65,7 @@ export default {
             font-size 0.32rem
             font-weight 600
             line-height auto
+            padding  0 0.4rem
         .name_second
             color #666
             font-size 0.28rem
@@ -80,7 +81,7 @@ export default {
             align-items center
             padding 0 0.4rem
             .btn
-                width 3.24rem
+                width 48%
                 height 0.8rem
                 border 1px solid #000
                 border-radius 0.08rem

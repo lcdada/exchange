@@ -37,7 +37,7 @@
 					<!-- <van-icon name="shop-collect" slot="left" color="#000" size="20px" @click="Transferr"/> -->
 				</div>
 				<div class="logo_block">
-					<img src="./assets/img/logo_text.png" alt="" class="logo_img">
+					<img src="./assets/img/logo_text.png" alt="" class="logo_img" @click="goHome">
 				</div>
 				<div>
 					<van-icon name="bag-o" slot="right" color="#000" size="20px" @click="goShopCart"/>
@@ -93,6 +93,9 @@ export default {
 	  },
 	  Transferr(){
 		  this.$router.push({path:'/donate'})
+	  },
+	  goHome(){
+		  this.$router.push({path:'/'})
 	  }
   }
 }

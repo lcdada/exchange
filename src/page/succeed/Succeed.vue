@@ -1,7 +1,7 @@
 <template>
   <div>
       <div class="succ_top">
-          <van-icon name="checked" />
+          <van-icon name="checked" size="20px"/>
           <p class="top_text">恭喜！ 兑换成功</p>
       </div>
       <div class="succ_text">

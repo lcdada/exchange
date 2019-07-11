@@ -17,7 +17,7 @@
         <div class="goods_list">
             <ul>
                 <li  v-for="item in carData" :key="item.id" class="item">
-                    <div class="cart_goods">
+                    <!-- <div class="cart_goods"> -->
                         <div class="goods_img">
                             <img class="goods_picture" :src="item.picture" alt="">
                         </div>
@@ -26,7 +26,7 @@
                             <p class= "goods_title">{{item.title}}</p>
                             <p class="goods_num"> x{{ item.num }}</p>
                         </div>
-                    </div>
+                    <!-- </div> -->
                     <!-- <van-icon name="cross" class="delete" @click="deleteFun(item)" /> -->
                 </li>
             </ul>
@@ -44,8 +44,8 @@
         >
             <div class="form">
                 <p class="from_title">请验证</p>
-                <input type="text" placeholder="请输入卡号" value="" class="inpt" v-model="account">
-                <input type="text" placeholder="请输入密码" class="inpt" v-model="pwd">
+                <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入卡号" value="" class="inpt" v-model="account">
+                <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入密码" class="inpt" v-model="pwd">
                 <input type="button" value="确认提交" class="affirm_btn" @click="catr_verify">
             </div>
         </van-popup>
@@ -58,7 +58,7 @@ export default {
   name: "Order",
   data() {
     return {
-      show: false,
+      show: true,
       account:'',
       pwd:'',
       address : {},
@@ -71,7 +71,8 @@ export default {
       showAddress:false,
       userName:'',
       telNumber:'',
-      detail:''
+      detail:'',
+      timer:null
     }
   },
   components:{
@@ -248,6 +249,18 @@ export default {
               }
           })
       },
+       inputFocus(){
+            clearTimeout(this.timer)
+        },
+        inputFocusout() {
+            this.timer = setTimeout(() => {
+            window.scrollTo(0,0)
+            // 间隔设为10，减少页面失去焦点定时器的突兀感，
+            },10)
+        },
+        destroyed() {
+            clearTimeout(this.timer)
+        },
       generateOrder(params) {
         this.$api.home.generateOrder(params).then(params =>{
             if(params.data.code === 1000){
@@ -322,7 +335,7 @@ export default {
         margin-top 0.16rem
     .item
         position relative
-        height 3.72rem
+        width 100%
         padding 0.32rem
         box-sizing border-box
         display flex
@@ -330,37 +343,41 @@ export default {
         align-items center
         background #fff
         margin-bottom 0.02rem
-    .cart_goods
-        display flex
-        justify-content flex-start
-        align-items center
-    .goods_img
-        width 2.8rem
-        height 3.14rem
-    .goods_picture
-        width 100%
-        height 100%
-        display block
-    .item_text
-        flex: 1;
-        margin-left: 0.32rem;
-        height: 3.14rem;
-        padding-top 0.18rem
-        position relative
-    .goods_name
-        font-size 0.28rem
-        color #333
-        font-weight 600
-        width 50%
-        ellipsis()
-    .goods_title
-        ellipsis()
-        font-size 0.28rem
-        color #666
-        padding-top 0.2rem
-    .goods_num
-        position absolute
-        bottom 0 left 0
+    // .cart_goods
+    //     width 100%
+    //     height 100%
+    //     display flex
+    //     justify-content space-between
+    //     align-items center
+        .goods_img
+            width 2.8rem
+            height 3.14rem
+            .goods_picture
+                width 100%
+                height 100%
+                display block
+        .item_text
+            margin-left: 0.32rem;
+            width 3.66rem
+            height 3.14rem
+            box-sizing border-box
+            padding-top 0.18rem
+            position relative
+            .goods_name
+                font-size 0.28rem
+                color #333
+                font-weight 600
+                width 90%
+                ellipsis()
+            .goods_title
+                ellipsis()
+                font-size 0.28rem
+                color #666
+                padding-top 0.2rem
+            .goods_num
+                position absolute
+                bottom 0 
+                left 0
     // .goods_num{
     //   width 1rem
     //   display flex
@@ -392,11 +409,11 @@ export default {
         padding  0.2rem
         box-sizing  border-box
     .goto_exchange
-        width 3.24rem
+        width 100%
         height 0.92rem
-        position absolute
-        bottom 0.64rem
-        left  0.32rem
+        // position absolute
+        // bottom 0.64rem
+        // left  0.32rem
         color #fff
         background #000;
         border-radius 0.08rem
@@ -420,9 +437,11 @@ export default {
         color #333
     .inpt
         width 4.24rem
+        height 0.6rem
+        border-radius 0
         margin-top: 1rem;
         border-bottom: 1px solid #000;
-        padding-bottom: 0.2rem;
+        // padding-bottom: 0.2rem;
     .affirm_btn
         width: 4.24rem;
         height: 0.8rem;

@@ -36,7 +36,11 @@ const home = {
     },
     generateOrder(params){
         return axios.post(`${base.home}/exchange/generateOrder`,qs.stringify(params))
-    }
+    },
+    //记录转赠信息
+    DonateLog(params){
+        return axios.post(`${base.home}/donate/addDonateLog`,qs.stringify(params))
+    },
 
 }
 

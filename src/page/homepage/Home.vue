@@ -2,7 +2,7 @@
     <div class="home">   
         <home-header :bless="bless_info" :package="package_id"></home-header>
         <div>
-            <p class="numb_text">你可兑换<span>{{exchange_num}}</span>款礼品</p>
+            <p class="numb_text">你可兑换<span class="number">{{exchange_num}}</span>款礼品</p>
         </div>
         <home-list :package="package_id" :list="goods_list" :bless="bless_info"></home-list>
 
@@ -75,4 +75,8 @@ export default {
             display block
             padding 0.8rem 0 0.32rem 0
             font-weight 600
+            font-size 0.32rem
+            .number
+                font-size 0.36rem
+                padding 0 0.04rem
 </style>
