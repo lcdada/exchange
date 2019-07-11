@@ -41,7 +41,6 @@ export default {
 
                     this.getGoodsList(this.package_id);
                 }
-            })
         },
 
         getGoodsList (package_id){
