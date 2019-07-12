@@ -3,7 +3,7 @@
  */
 const base = {    
     sq: './../../static/mock',    
-    home:"http://47.94.149.236:18306"
+    home:process.env.API_ROOT
 }
-
+console.log(process.env.API_ROOT)
 export default base;
