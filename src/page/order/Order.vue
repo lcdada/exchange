@@ -58,7 +58,7 @@ export default {
   name: "Order",
   data() {
     return {
-      show: true,
+      show: false,
       account:'',
       pwd:'',
       address : {},
