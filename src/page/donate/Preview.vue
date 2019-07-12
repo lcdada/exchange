@@ -11,19 +11,17 @@
           <p class="text"></p>
           <p class="from"></p>
       </div>
-      <div>
-		  <ul>
-			  <li>
-				  
-			  </li>
-		  </ul>
-      </div>  
+      <home-list ></home-list>
   </div>
 </template>
 
 <script>
+import HomeList from './../homepage/components/List'
 export default {
     name:'Preview',
+    components:{
+        HomeList,
+    },
     data() {
         return {
             to_user:''
@@ -31,7 +29,7 @@ export default {
     },
     created() {
         let to_user = localStorage.getItem("to_user")
-        // console.log(to_user );
+        console.log(to_user );
         
         
     },

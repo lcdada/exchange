@@ -17,6 +17,10 @@
 							<p class="class_item">前往商城</p>
 							<van-icon name="arrow"  class="arrow"/>
 						</li>
+						<li class="item" @click="Donate">
+							<p class="class_item">转增</p>
+							<van-icon name="arrow"  class="arrow"/>
+						</li>
 						<!-- <li
 						v-for="item in class_list"
 						:key="item.id"
@@ -95,7 +99,12 @@ export default {
 		  this.$router.push({path:'/donate'})
 	  },
 	  goHome(){
+		  this.show = false
 		  this.$router.push({path:'/'})
+	  },
+	  Donate(){
+		  this.show = false
+		  this.$router.push({path:'/donate'})
 	  }
   }
 }
