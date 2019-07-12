@@ -12,7 +12,7 @@ import 'swiper/dist/css/swiper.css'
 import api from './api' // 导入api接口
 import 'babel-polyfill' //解决手机浏览器默认不支持promise。
 import utils from './utils/utils'
-import DrawerLayout from 'vue-drawer-layout'
+// import DrawerLayout from 'vue-drawer-layout'
 // import VConsole from 'vconsole/dist/vconsole.min.js' //import vconsole
 // let vConsole = new VConsole()
 
@@ -22,7 +22,7 @@ Vue.prototype.$utils = utils
 Vue.config.productionTip = false
 fastClick.attach(document.body)
 Vue.use(VueAwesomeSwiper)
-Vue.use(DrawerLayout)
+// Vue.use(DrawerLayout)
 
 fastClick.prototype.focus = function (targetElement) {
   let length;

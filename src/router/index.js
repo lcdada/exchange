@@ -6,7 +6,8 @@ import Order from '@/page/order/Order'
 import ShopCart from '@/page/shopcart/ShopCart'
 import Succeed from '@/page/succeed/Succeed'
 import Donate from '@/page/donate/Donate'
-
+import Preview from '@/page/donate/Preview'
+ 
 Vue.use(Router)
 
 export default new Router({
@@ -43,6 +44,11 @@ export default new Router({
       path:'/donate',
       name:'Donate',
       component:Donate
+    },
+    {
+      path:'/preview',
+      name:'Preview',
+      component:Preview
     }
   ]
 })
