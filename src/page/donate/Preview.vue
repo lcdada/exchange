@@ -11,20 +11,25 @@
           <p class="text"></p>
           <p class="from"></p>
       </div>
-      <home-list ></home-list>
+      <home :package="package_id" :list="goods_list" :bless="bless_info" :flag="flag"></home>
   </div>
 </template>
 
 <script>
-import HomeList from './../homepage/components/List'
+import Home from './../homepage/Home'
 export default {
     name:'Preview',
     components:{
-        HomeList,
+        Home,
     },
     data() {
         return {
-            to_user:''
+            to_user:'',
+            bless_info:{},
+            goods_list:[],
+            exchange_num:'',
+            package_id:'',
+            flag:false
         }
     },
     created() {

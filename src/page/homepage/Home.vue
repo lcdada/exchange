@@ -1,6 +1,6 @@
 <template>
     <div class="home">   
-        <home-header :bless="bless_info" :package="package_id"></home-header>
+        <home-header :bless="bless_info" :package="package_id" v-if="flag"></home-header>
         <div>
             <p class="numb_text">你可兑换<span class="number">{{exchange_num}}</span>款礼品</p>
         </div>
@@ -19,6 +19,7 @@ export default {
         HomeHeader,
         HomeList
     },
+    props:["flag"],
     data (){
         return {
             bless_info:{},

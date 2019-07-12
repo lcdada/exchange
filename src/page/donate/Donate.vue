@@ -37,13 +37,23 @@
 	  </div>
 	  <van-tabbar fixed class="footer_btn">
 		  <button class="fot_btn btn_one" @click="Preview">预览</button>
-		  <button class="fot_btn btn_wto">直接转增</button>
+		  <button class="fot_btn btn_wto" @click="NowPreview">直接转增</button>
 	  </van-tabbar>  
+	  <van-popup 
+		v-model="showphome"
+		lock-scroll:true
+		class="showPreview"
+		close-on-click-overlay:true
+	  >
+		  <p class="from_title">请验证</p>
+		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" >
+		   <button class="btn_affirm" @click="btn_affirm">确认提交</button>
+	  </van-popup>	
   </div>
 </template>
 
 <script>
-import { Uploader,Tabbar } from 'vant';
+import { Uploader,Tabbar ,Popup } from 'vant';
 export default {
 	data() {
 		return {
@@ -51,12 +61,15 @@ export default {
 			from:'',
 			bless_text:'',
 			fileList: [],
-			fileListTwo:[]
+			fileListTwo:[],
+			showphome:false,
+			timer:null
 		}
 	},
 	components:{
 		[Uploader.name]:Uploader,
-		[Tabbar.name]:Tabbar
+		[Tabbar.name]:Tabbar,
+		[Popup.name]:Popup 
 	},
 	methods: {
 		afterRead(){
@@ -81,9 +94,36 @@ export default {
 			localStorage.setItem('theme_content',this.bless_text);
 			
 			
-			return false
+			// return false
 			this.$router.push({path:'/preview'})
+		},
+		NowPreview(){
+			this.showphome = true
+		},
+		 inputFocus(){
+            clearTimeout(this.timer)
+        },
+        inputFocusout() {
+            this.timer = setTimeout(() => {
+            window.scrollTo(0,0)
+            // 间隔设为10，减少页面失去焦点定时器的突兀感，
+            },10)
+        },
+        destroyed() {
+            clearTimeout(this.timer)
+		},
+		btn_affirm(){
+			this.$api.home.donateUser({
+			   imgBase64:img,
+			   mime:imgtype
+            }).then(params => {
+                if(params.data.code  == 1000){
+					console.log(params);
+					
+                }
+            })
 		}
+
 	},
 }
 
@@ -100,7 +140,7 @@ export default {
 			border-bottom  0.01rem solid #eee
 			.peoele_int
 				flex 1
-				height 100%
+				height 99%
 				margin-left 0.5rem
 			.inp_title
 				display block
@@ -147,6 +187,32 @@ export default {
 			.btn_wto
 				background #fff
 				color #333
-				border 0.01rem solid #000	 
-				
+				border 0.01rem solid #000
+		.showPreview
+			width 70%
+			height 6rem
+			background #fff
+			border-radius 0.16rem 
+			padding  0.56rem
+			.from_title
+				line-height 0.44rem
+				font-size 0.32rem
+				text-align  center
+				color #333
+			.inpt
+				width 4.26rem
+				height 0.6rem
+				display block
+				margin 0 auto
+				margin-top 1.2rem
+				border-bottom  0.04rem solid #333
+			.btn_affirm
+				width 4.24rem
+				height 0.8rem
+				background #333
+				color #ffffff
+				display  block
+				margin 0 auto
+				margin-top 1.6rem
+
  </style>
