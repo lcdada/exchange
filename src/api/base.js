@@ -5,5 +5,4 @@ const base = {
     sq: './../../static/mock',    
     home:process.env.API_ROOT
 }
-console.log(process.env.API_ROOT)
 export default base;
