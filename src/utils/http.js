@@ -7,6 +7,9 @@ import router from '../router';
 import store from '../store/index';
 import { Toast } from 'vant';
 
+
+axios.default.baseUrl=process.env.API_ROOT
+
 /** 
  * 提示函数 
  * 禁止点击蒙层、显示一秒后关闭

@@ -1,5 +1,5 @@
 /**
- * article模块接口列表
+ * home模块接口列表
  */
 
 import base from './base'; // 导入接口域名列表
@@ -44,4 +44,4 @@ const home = {
 
 }
 
-export default home;
+export default home;  
