@@ -41,6 +41,10 @@ const home = {
     DonateLog(params){
         return axios.post(`${base.home}/donate/addDonateLog`,qs.stringify(params))
     },
+    //上传转赠图片
+    UploadImg(params){
+        return axios.post(`${base.home}/exchange/uploadImg`,qs.stringify(params))
+    },
 
 }
 

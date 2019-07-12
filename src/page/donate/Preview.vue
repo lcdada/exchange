@@ -7,7 +7,7 @@
           <video src=""></video>
       </div>
       <div>
-          <p class="to">{{this.to_user}}</p>
+          <p class="to" >{{to_user}}</p>
           <p class="text"></p>
           <p class="from"></p>
       </div>
@@ -28,7 +28,7 @@ export default {
         }
     },
     created() {
-        let to_user = localStorage.getItem("to_user")
+        const to_user = localStorage.getItem("to_user")
         console.log(to_user );
         
         
