@@ -17,6 +17,7 @@
 					v-model="fileList"
 					multiple
 					:max-count="1"
+					:after-read="afterReadOne"
 				/>
 				<span>上传图片</span>
 		  	</div>
@@ -25,6 +26,7 @@
 					v-model="fileListTwo"
 					multiple
 					:max-count="1"
+					accept = "video/mp4"
 					:after-read="afterRead"
 				/>
 				<span>上传视频</span>
@@ -45,15 +47,18 @@
 		class="showPreview"
 		close-on-click-overlay:true
 	  >
-		  <p class="from_title">请验证</p>
-		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" >
+	  	   <van-icon name="cross"  class="close_uicon" size='20px' @click="close_icon"/>
+		   <p class="from_title">请验证</p>
+		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入卡号" value="" class="inpt"  v-model="account">
+		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入密码" value="" class="inpt"  v-model="pwd">
+		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" v-model="phone">
 		   <button class="btn_affirm" @click="btn_affirm">确认提交</button>
 	  </van-popup>	
   </div>
 </template>
 
 <script>
-import { Uploader,Tabbar ,Popup } from 'vant';
+import { Uploader,Tabbar ,Popup,Icon } from 'vant';
 export default {
 	data() {
 		return {
@@ -63,13 +68,37 @@ export default {
 			fileList: [],
 			fileListTwo:[],
 			showphome:false,
-			timer:null
+			timer:null,
+			preview_url:'',
+			preview_url_video:'',
+			addDonateLog:{
+				from_user:'',
+				to_user:'',
+				bless_content:'',
+				bless_pic:'',
+				bless_video:'',
+				package_id:'',
+				account:'',
+			},
+			donateUser:{
+				accoun:'',
+				pwd:'',
+				from_mobile:'',
+				to_mobile:'',
+				donate_id:'',
+				package_id:'',
+				jid:'',
+				code:'',
+				phone:''
+			}
+			
 		}
 	},
 	components:{
 		[Uploader.name]:Uploader,
 		[Tabbar.name]:Tabbar,
-		[Popup.name]:Popup 
+		[Popup.name]:Popup,
+		[Icon.name]:Icon
 	},
 	methods: {
 		afterRead(){
@@ -81,18 +110,53 @@ export default {
             }).then(params => {
                 if(params.data.code  == 1000){
 					console.log(params);
-					
+					const preview_url = params.data.data.preview_url
+					this.preview_url_video = preview_url
+					console.log(this.preview_url)
+					localStorage.setItem('video',this.preview_url)
                 }
             })
 			
 		},
+		afterReadOne(){
+			const img = this.fileList[0].content
+			const imgtype = this.fileList[0].file.type
+			this.$api.home.UploadImg({
+			   imgBase64:img,
+			   mime:imgtype
+            }).then(params => {
+                if(params.data.code  == 1000){
+					console.log(params);
+					const preview_url = params.data.data.preview_url
+					this.preview_url = preview_url
+					console.log(this.preview_url)
+					localStorage.setItem('thumb',this.preview_url)
+                }
+            })
+		},
 		Preview(){
+			
 			localStorage.setItem('to_user',this.to);
 			localStorage.setItem('from_user',this.from);
-			localStorage.setItem('thumb',this.fileList);
-			localStorage.setItem('video',this.fileListTwo);
 			localStorage.setItem('theme_content',this.bless_text);
-			
+			let jid = localStorage.getItem ('jid')
+			let page_id = localStorage.getItem('package_id'+jid)
+			this.$api.home.DonateLog({
+			  	from_user:this.addDonateLog.from_user,
+				to_user:this.addDonateLog.to_user,
+				bless_content:this.addDonateLog.bless_content,
+				bless_pic:this.preview_url,
+				bless_video:this.preview_url_video,
+				package_id:page_id,
+            }).then(params => {
+                if(params.data.code  == 1000){
+					console.log(params);
+					const preview_url = params.data.data.preview_url
+					this.preview_url = preview_url
+					console.log(this.preview_url)
+					localStorage.setItem('thumb',this.preview_url)
+                }
+            })
 			
 			// return false
 			this.$router.push({path:'/preview'})
@@ -114,15 +178,25 @@ export default {
 		},
 		btn_affirm(){
 			this.$api.home.donateUser({
-			   imgBase64:img,
-			   mime:imgtype
+				accoun:this.donateUser.accoun,
+				pwd:this.donateUser.pwd,
+				from_mobile:this.donateUser.from_mobile,
+				to_mobile:this.donateUser.to_mobile,
+				donate_id:'',
+				package_id:'',
+				jid:'',
+				code:''
+
             }).then(params => {
                 if(params.data.code  == 1000){
 					console.log(params);
 					
                 }
             })
-		}
+		},
+		close_icon(){
+           this.showphome = false 
+        }
 
 	},
 }
@@ -194,6 +268,10 @@ export default {
 			background #fff
 			border-radius 0.16rem 
 			padding  0.56rem
+			.close_uicon
+				position absolute
+				top 0.2rem
+				right 0.2rem
 			.from_title
 				line-height 0.44rem
 				font-size 0.32rem
@@ -204,7 +282,7 @@ export default {
 				height 0.6rem
 				display block
 				margin 0 auto
-				margin-top 1.2rem
+				margin-top 0.2rem
 				border-bottom  0.04rem solid #333
 			.btn_affirm
 				width 4.24rem

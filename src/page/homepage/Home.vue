@@ -22,6 +22,7 @@ export default {
     props:["flag"],
     data (){
         return {
+            flage:true ,
             bless_info:{},
             goods_list:[],
             exchange_num:'',
