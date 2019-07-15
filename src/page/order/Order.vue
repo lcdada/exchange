@@ -49,16 +49,33 @@
                 <input type="button" value="确认提交" class="affirm_btn" @click="catr_verify">
             </div>
         </van-popup>
+         <van-popup
+                class="pop"
+                v-model="showagain"
+                lock-scroll:true
+        >
+            <div class="form">
+                <p class="from_title">请验证</p>
+                <div class="code_block">
+			        <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入手机号" value=""   class="input_code" v-model="mobile">
+				    <button @click="getCode">获取验证码</button>
+		        </div>
+                <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输验证码" value=""   class="inpt" v-model="code">
+                 <button class="btn_affirm" @click="catr_verify">确认提交</button>
+            </div>
+        </van-popup>
     </div>
 </template>
 
 <script>
+import utils from '../../utils/utils'
 import {  Tabbar,Icon,Popup,Toast  } from 'vant';
 export default {
   name: "Order",
   data() {
     return {
       show: false,
+      showagain:false,
       account:'',
       pwd:'',
       address : {},
@@ -72,7 +89,11 @@ export default {
       userName:'',
       telNumber:'',
       detail:'',
-      timer:null
+      timer:null,
+      donate_type:utils.getUrlKey('donate_type'),
+      mobile:utils.getUrlKey('mobile'),
+      requestParam:{},
+      code:'',
     }
   },
   components:{
@@ -122,10 +143,6 @@ export default {
           // this.$router.push({path:'/address',name:'Address'})
       },
       showPopup() {
-          this.jid = localStorage.getItem('jid');
-          this.exchangeNum = localStorage.getItem('exchange_num'+this.jid);
-          this.packageId = localStorage.getItem('package_id'+this.jid);
-
           //0.判断是否提交的有购物车商品
         //   if(this.carData === 'null' ||this.carData.length === 0) {
         //       Toast("请选择商品！");
@@ -169,21 +186,29 @@ export default {
           }
 
           //3.显示输入卡密弹框
-          this.show = true;
+          let donate_type = this.donate_type
+          if(!donate_type){
+              this.jid = localStorage.getItem('jid');
+              this.packageId = localStorage.getItem('package_id'+this.jid);
+              this.show = true;
+          }else{
+              this.packageId = utils.getUrlKey('packageId'),
+              this.showagain = true
+          }
       },
 
       openAddress() {
 
-        //     var addressInfo={
-        //       userName:'苏克',
-        //       telNumber:'15810227932',
-        //       provinceName:' 山西',
-        //       cityName:'运城',
-        //       countryName:'永济',
-        //       detailInfo:'中关村在线'
-        //   }
+            var addressInfo={
+              userName:'苏克',
+              telNumber:'15810227932',
+              provinceName:' 山西',
+              cityName:'运城',
+              countryName:'永济',
+              detailInfo:'中关村在线'
+          }
 
-        //   localStorage.setItem('addressInfo',JSON.stringify(addressInfo));
+          localStorage.setItem('addressInfo',JSON.stringify(addressInfo));
 
         //输出地址信息到页面
             
@@ -228,31 +253,63 @@ export default {
 
       catr_verify(){
           //4.验证卡密
-          this.$api.home.accountPwd({
-              account: this.account,
-              pwd:this.pwd,
-              package_id:this.packageId,
-              jid:this.jid
-          }).then(params =>{
-              if(params.data.code  == 1000){
-                  this.chooseGoods = this.chooseGoods.split(',')[0];
+         
+          if(this.donate_type){
+                this.chooseGoods = this.chooseGoods.split(',')[0];
 
-                  //5.获取订单信息 提交订单
-                    let orderData = {
-                        choose_goods : this.chooseGoods,
-                        package_id : this.packageId,
-                        account : this.account,
-                        pwd : this.pwd,
-                        address : this.address
-                    };
+            //5.获取订单信息 提交订单
+                let orderData = {
+                    choose_goods : this.chooseGoods,
+                    package_id : this.packageId,
+                    address : this.address,
+                    mobile : this.mobile,
+                    code : this.code
+                };
 
-                    this.generateOrder(orderData);
+                this.generateOrder(orderData);
+            }else{
+                this.$api.home.accountPwd({
+                account: this.account,
+                pwd:this.pwd,
+                package_id:this.packageId,
+                jid:this.jid
+            }).then(params =>{
+                if(params.data.code  == 1000){
+                    this.chooseGoods = this.chooseGoods.split(',')[0];
 
-                  //this.$router.push({path:'/succeed'})
-              }else if(params.data.code  == 2002){
-                  Toast(params.data.msg);
-              }
-          })
+                    //5.获取订单信息 提交订单
+                        let orderData = {
+                            choose_goods : this.chooseGoods,
+                            package_id : this.packageId,
+                            account : this.account,
+                            pwd : this.pwd,
+                            address : this.address
+                        };
+
+                        this.generateOrder(orderData);
+
+                    //this.$router.push({path:'/succeed'})
+                }else if(params.data.code  == 2002){
+                    Toast(params.data.msg);
+                }
+            })
+          }
+          
+      },
+        // 获取验证码
+      getCode(){
+          this.$api.home.getCode({
+				
+				mobile : this.mobile 
+            }).then(params => {
+                // if(params.data.code  == 1000){
+				
+				// }
+				console.log(params)
+            })
+      },
+      btn_affirm(){
+
       },
        inputFocus(){
             clearTimeout(this.timer)
@@ -440,13 +497,27 @@ export default {
         font-size 0.32rem
         font-weight 600
         color #333
-    .inpt
+    .inpt,.code_block
         width 4.24rem
         height 0.6rem
         border-radius 0
-        margin-top: 1rem;
+        margin-top: 0.6rem;
         border-bottom: 1px solid #000;
         // padding-bottom: 0.2rem;
+    .code_block
+            display flex
+            justify-content space-between
+            align-items center
+            .input_code
+                width 2rem
+        .btn_affirm
+            width 4.24rem
+            height 0.8rem
+            background #333
+            color #ffffff
+            display  block
+            margin 0 auto
+            margin-top 1.6rem
     .affirm_btn
         width: 4.24rem;
         height: 0.8rem;

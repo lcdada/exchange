@@ -4,7 +4,10 @@
           <img :src= thumb alt="" class="bless_img">
       </div>
       <div class="bless_div_video">
-          <video :src=video width="100%" height="100%" object-fit:fill x5-video-player-type="h5"></video>
+          <video class="video" style="padding: 0px;" autoplay="autoplay" controls="controls" webkit-playsinline="" width="100%" height="100%" >
+              <source id="video" :src=video >
+          </video>
+        
       </div>
       <div class="bless_conent">
           <p class="to" >{{to_user}}</p>
@@ -24,7 +27,9 @@
 	  >
            <van-icon name="cross"  class="close_uicon" size='20px' @click="close_icon"/>
 		   <p class="from_title">请验证</p>
-		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" >
+           <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入卡号" value="" class="inpt"  v-model="addDonateLog.account">
+		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入密码" value="" class="inpt"  v-model="addDonateLog.pwd">
+		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" v-model="addDonateLog.phone">
 		   <button class="btn_affirm" @click="btn_affirm">确认提交</button>
 	  </van-popup>	  
   </div>
@@ -55,7 +60,16 @@ export default {
             exchange_num:'',
             package_id:'',
             flag:false,
-            showphome:false
+            showphome:false,
+            addDonateLog:{
+				from_user:'',
+				to_user:'',
+				bless_content:'',
+				bless_pic:'',
+				bless_video:'',
+				package_id:'',
+				account:'',
+			},
         }
     },
     created() {
@@ -90,7 +104,24 @@ export default {
             this.showphome = true 
         },
         btn_affirm(){
+            let donate_id = localStorage.getItem('donate_id');
+			let jid = localStorage.getItem ('jid');
+			let page_id = localStorage.getItem('package_id'+jid);
+			this.$api.home.donateUser({
+				account:this.addDonateLog.account,
+				pwd:this.addDonateLog.pwd,
+				from_mobile:this.addDonateLog.phone,
+				package_id:page_id,
+				jid:jid,
+				donate_id:donate_id
 
+            }).then(params => {
+                if(params.data.code  == 1000){
+					// console.log(params);
+                    this.showphome = false
+                    this.$router.push({path:'/donatesucc.vue'})
+                }
+            })
         },
         close_icon(){
            this.showphome = false 
@@ -105,6 +136,8 @@ export default {
         width 100%
         .bless_img
             width 100%
+    .bless_div_video
+        margin-top 0.3rem
            
     .bless_conent
         background #ffffff
@@ -148,7 +181,7 @@ export default {
             height 0.6rem
             display block
             margin 0 auto
-            margin-top 1.2rem
+            margin-top 0.2rem
             border-bottom  0.04rem solid #333
         .btn_affirm
             width 4.24rem

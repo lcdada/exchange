@@ -2,7 +2,7 @@
   <div>
         <div class="bless_video" controls="controls">
             <video
-                :src="bless.video" 
+                :src="bless.video"
                 width="100%"
                 height="100%"
                 x5-video-player-fullscreen="true"
