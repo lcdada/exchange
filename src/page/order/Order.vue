@@ -255,6 +255,10 @@ export default {
           //4.验证卡密
          
           if(this.donate_type){
+              if(!this.code){
+                  Toast("请填写验证码");
+                  return false
+              }
                 this.chooseGoods = this.chooseGoods.split(',')[0];
 
             //5.获取订单信息 提交订单
