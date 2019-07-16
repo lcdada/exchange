@@ -26,14 +26,10 @@ export default {
             bless_info:{},
             goods_list:[],
             exchange_num:'',
-            package_id:'',
-            // jid : utils.getUrlKey('jid'),
-            jid:767,
-            package_id:'390',
-            account:22222222,
-            // donate_id:19602,
-            mobile:15810227932,
-            donate_type:'1',
+            jid : utils.getUrlKey('jid'),
+            package_id:utils.getUrlKey('package_id'),
+            donate_id:utils.getUrlKey('donate_id'),
+            donate_type:utils.getUrlKey('donate_type'),
             requestParam : {}
         }
 

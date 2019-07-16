@@ -116,6 +116,10 @@ export default {
 		[Popup.name]:Popup,
 		[Icon.name]:Icon
 	},
+	created() {
+		localStorage.setItem('thumb',null);
+		localStorage.setItem('video',null)
+	},
 	methods: {
 		afterReadOne(){
 			const img = this.fileList[0].content
@@ -143,7 +147,7 @@ export default {
                 }
             })
 		},
-		Preview(){
+		addDonate(callback){
 			localStorage.setItem('to_user',this.addDonateLog.to_user);
 			localStorage.setItem('from_user',this.addDonateLog.from_user);
 			localStorage.setItem('theme_content',this.addDonateLog.bless_content);
@@ -151,29 +155,29 @@ export default {
 			let page_id = localStorage.getItem('package_id'+jid)
 			let thumb = localStorage.getItem('thumb')
 			let video =  localStorage.getItem('video')
-			this.$api.home.DonateLog({	
-			  	from_user:this.addDonateLog.from_user,
+			this.$api.home.DonateLog({
+				from_user:this.addDonateLog.from_user,
 				to_user:this.addDonateLog.to_user,
 				bless_content:this.addDonateLog.bless_content,
 				package_id:page_id,
 				bless_pic:thumb,
 				bless_video:video
-            }).then(params => {
-                if(params.data.code  == 1000){
-					console.log(params);
-					const preview_url = params.data.data.preview_url
+			}).then(params => {
+				callback(params);
+			})
+		},
+		Preview(){
+			this.addDonate(function(params) {
+				if(params.data.code == 1000){
 					const donate_id = params.data.data
-					console.log(donate_id)
 					localStorage.setItem('donate_id',donate_id)
-                }
-            })
-			
+				}
+			})
 			// return false
 			this.$router.push({path:'/preview'})
 		},
 		NowPreview(){
-			let jid = this.jid;
-			 if(!jid) {
+			if(!this.jid) {
 				this.showphomeagain = true
             }else{
 				this.showphome = true
@@ -203,40 +207,41 @@ export default {
             clearTimeout(this.timer)
 		},
 		btn_affirm(){
-			
-			let jid = this.jid;
-			let page_id = this.package_id;
-
-			if(jid) {
-				let donate_id_one = localStorage.getItem('donate_id');
-                this.requestParam = {
-					account:this.addDonateLog.account,
-					pwd:this.addDonateLog.pwd,
-					from_mobile:this.addDonateLog.phone,
-					package_id:page_id,
-					jid:jid,
-					donate_id:donate_id_one,
-                }
-            }else{
-                this.requestParam = {
-					from_mobile:this.from_mobile,
-					code:this.code,
-					to_mobile:this.friend_phone,
-					package_id:page_id,
-					donate_id:this.donate_id,
-					account:this.account
-                }
-            }
-			this.$api.home.donateUser(this.requestParam).then(params => {
-                if(params.data.code  == 1000){
-					this.$router.push({path:'/donatesucc'})
-                }
-            })
+			let that = this;
+			this.addDonate(function(params) {
+				if(params.data.code == 1000){
+					const donate_id = params.data.data
+					if(that.jid) {
+						let package_id = localStorage.getItem("package_id"+that.jid);
+						that.requestParam = {
+							account:that.addDonateLog.account,
+							pwd:that.addDonateLog.pwd,
+							from_mobile:that.addDonateLog.phone,
+							package_id:package_id,
+							jid:that.jid,
+							donate_id:donate_id,
+						}
+					}else{
+						that.requestParam = {
+							from_mobile:that.from_mobile,
+							code:that.code,
+							to_mobile:that.friend_phone,
+							package_id:that.package_id,
+							donate_id:donate_id,
+							account:that.account
+						}
+					}
+					that.$api.home.donateUser(that.requestParam).then(params => {
+						if(params.data.code  == 1000){
+							that.$router.push({path:'/donatesucc'})
+						}
+					})
+				}
+			})
 		},
 		close_icon(){
            this.showphome = false 
         }
-
 	},
 }
 

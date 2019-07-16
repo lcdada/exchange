@@ -38,7 +38,7 @@
 <script>
 
 import Home from './../homepage/Home'
-import { Uploader,Tabbar ,Popup,Icon  } from 'vant';
+import { Uploader,Tabbar ,Popup,Icon ,Toast } from 'vant';
 export default {
     name:'Preview',
     components:{
@@ -46,7 +46,8 @@ export default {
         [Uploader.name]:Uploader,
 		[Tabbar.name]:Tabbar,
         [Popup.name]:Popup ,
-        [Icon.name]:Icon 
+        [Icon.name]:Icon,
+        [Toast.name]:Toast
     },
     data() {
         return {
@@ -119,7 +120,9 @@ export default {
                 if(params.data.code  == 1000){
 					// console.log(params);
                     this.showphome = false
-                    this.$router.push({path:'/donatesucc.vue'})
+                    this.$router.push({path:'/donatesucc'})
+                }else{
+                    Toast(params.data.msg);
                 }
             })
         },
