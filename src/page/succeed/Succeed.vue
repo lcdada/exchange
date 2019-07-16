@@ -7,7 +7,7 @@
       <div class="succ_text">
           <p class="succ_text_text">长按二维码，关注后自动接收配送进度推送</p>
           <div class="qr_code">
-               <img src="./../../assets/img/qrcode.jpg" alt="" class="qr_code_img">
+               <img :src="qrcode" alt="" class="qr_code_img">
           </div>
           <p class="p_num">订单编号：<span>{{ order_sn }}</span></p>
       </div>
@@ -26,9 +26,16 @@ export default {
     data() {
         return {
             order_sn: utils.getUrlKey('order_sn'),
+            qrcode : ''
         }
     },
-    mounted() {}
+    mounted() {
+        this.$api.home.getParamsCode({
+            order_id : this.order_sn
+        }).then(params => {
+            this.qrcode = params.data.data;
+        })
+    }
 }
 </script>
 <style lang='stylus' scoped> 

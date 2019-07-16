@@ -58,8 +58,7 @@
 		v-model="showphomeagain"
 		lock-scroll:true
 		class="showPreview"
-		close-on-click-overlay:true
-	  >
+		close-on-click-overlay:true>
 	  	   <van-icon name="cross"  class="close_uicon" size='20px' @click="close_icon"/>
 		   <p class="from_title">请验证</p>
 		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout"  value="15810227932" class="inpt"  v-model="from_mobile">

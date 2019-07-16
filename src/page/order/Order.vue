@@ -76,7 +76,6 @@ export default {
     return {
       show: false,
       showagain:false,
-      account:'',
       pwd:'',
       address : {},
       remark:'',
@@ -92,6 +91,7 @@ export default {
       timer:null,
       donate_type:utils.getUrlKey('donate_type'),
       mobile:utils.getUrlKey('mobile'),
+      account:utils.getUrlKey('account'),
       requestParam:{},
       code:'',
     }
@@ -192,14 +192,14 @@ export default {
               this.packageId = localStorage.getItem('package_id'+this.jid);
               this.show = true;
           }else{
-              this.packageId = utils.getUrlKey('packageId'),
+              this.packageId = utils.getUrlKey('package_id'),
               this.showagain = true
           }
       },
 
       openAddress() {
 
-            var addressInfo={
+            /*var addressInfo={
               userName:'苏克',
               telNumber:'15810227932',
               provinceName:' 山西',
@@ -210,7 +210,7 @@ export default {
 
           localStorage.setItem('addressInfo',JSON.stringify(addressInfo));
 
-        //输出地址信息到页面
+        //输出地址信息到页面*/
             
 
           if(this.isWx) {
@@ -267,7 +267,8 @@ export default {
                     package_id : this.packageId,
                     address : this.address,
                     mobile : this.mobile,
-                    code : this.code
+                    code : this.code,
+                    account: this.account,
                 };
 
                 this.generateOrder(orderData);

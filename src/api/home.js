@@ -53,7 +53,10 @@ const home = {
     getCode(params){
         return axios.post(`${base.home}/exchange/getCode`,qs.stringify(params))
     },
-
+//获取验证码
+    getParamsCode(params){
+        return axios.post(`${base.home}/exchange/getParamCode`,qs.stringify(params))
+    },
 }
 
 export default home;  

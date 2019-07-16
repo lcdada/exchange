@@ -31,13 +31,33 @@
 		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入密码" value="" class="inpt"  v-model="addDonateLog.pwd">
 		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" v-model="addDonateLog.phone">
 		   <button class="btn_affirm" @click="btn_affirm">确认提交</button>
-	  </van-popup>	  
+	  </van-popup>
+
+      <van-popup
+              v-model="showphomeagain"
+              lock-scroll:true
+              class="showPreview"
+              close-on-click-overlay:true
+      >
+          <van-icon name="cross"  class="close_uicon" size='20px' @click="close_icon"/>
+          <p class="from_title">请验证</p>
+          <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout"  value="15810227932" class="inpt"  v-model="from_mobile">
+          <div class="code_block">
+              <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入验证码" value=""   class="input_code" v-model="code">
+              <button @click="getCode">获取验证码</button>
+          </div>
+
+          <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" v-model="friend_phone">
+          <button class="btn_affirm" @click="btn_affirm">确认提交</button>
+      </van-popup>
+
   </div>
 </template>
 
 <script>
 
 import Home from './../homepage/Home'
+import utils from '../../utils/utils'
 import { Uploader,Tabbar ,Popup,Icon ,Toast } from 'vant';
 export default {
     name:'Preview',
@@ -59,9 +79,15 @@ export default {
             bless_info:{},
             goods_list:[],
             exchange_num:'',
-            package_id:'',
-            flag:false,
+            from_mobile:utils.getUrlKey('mobile'),
+            jid:utils.getUrlKey('jid'),
+            package_id:utils.getUrlKey('package_id'),
+            account:utils.getUrlKey('account'),
+            donate_id:utils.getUrlKey('donate_id'),
+            mobile:utils.getUrlKey('mobile'),
+            donate_type:utils.getUrlKey('donate_type'),            flag:false,
             showphome:false,
+            showphomeagain:false,
             addDonateLog:{
 				from_user:'',
 				to_user:'',
@@ -71,6 +97,7 @@ export default {
 				package_id:'',
 				account:'',
 			},
+            donateUserInfo :{}
         }
     },
     created() {
@@ -83,10 +110,7 @@ export default {
         this.from_user = from_user,
         this.theme_content = theme_content,
         this.thumb = thumb,
-        this.video = video,
-        console.log(video );
-        
-        
+        this.video = video
     },
     methods:{
          inputFocus(){
@@ -102,21 +126,44 @@ export default {
             clearTimeout(this.timer)
         },
         NowPreview(){
-            this.showphome = true 
+            if(!this.jid) {
+                this.showphomeagain = true
+            }else{
+                this.showphome = true
+            }
+        },
+        getCode(){
+            this.$api.home.getCode({
+                mobile : this.from_mobile
+            }).then(params => {
+                console.log(params)
+            })
         },
         btn_affirm(){
             let donate_id = localStorage.getItem('donate_id');
-			let jid = localStorage.getItem ('jid');
-			let page_id = localStorage.getItem('package_id'+jid);
-			this.$api.home.donateUser({
-				account:this.addDonateLog.account,
-				pwd:this.addDonateLog.pwd,
-				from_mobile:this.addDonateLog.phone,
-				package_id:page_id,
-				jid:jid,
-				donate_id:donate_id
 
-            }).then(params => {
+            if(this.jid) {
+                let package_id = localStorage.getItem("package_id"+that.jid);
+                this.donateUserInfo = {
+                    account:this.addDonateLog.account,
+                    pwd:this.addDonateLog.pwd,
+                    from_mobile:this.addDonateLog.phone,
+                    package_id:package_id,
+                    jid:this.jid,
+                    donate_id:donate_id,
+                }
+            }else{
+                this.donateUserInfo = {
+                    from_mobile:this.from_mobile,
+                    code:this.code,
+                    to_mobile:this.friend_phone,
+                    package_id:this.package_id,
+                    donate_id:donate_id,
+                    account:this.account
+                }
+            }
+
+			this.$api.home.donateUser(this.donateUserInfo).then(params => {
                 if(params.data.code  == 1000){
 					// console.log(params);
                     this.showphome = false
@@ -129,8 +176,7 @@ export default {
         close_icon(){
            this.showphome = false 
         }
-
-    }   
+    }
 }
 
 </script>
