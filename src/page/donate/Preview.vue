@@ -28,11 +28,8 @@ export default {
         }
     },
     created() {
-        const to_user = localStorage.getItem("to_user")
-        console.log(to_user );
-        
-        
-    },
+        this.to_user =  localStorage.getItem("to_user")
+    }
 }
 
 </script>

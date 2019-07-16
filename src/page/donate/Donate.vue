@@ -68,20 +68,17 @@ export default {
             }).then(params => {
                 if(params.data.code  == 1000){
 					console.log(params);
-					
                 }
             })
-			
 		},
 		Preview(){
+
 			localStorage.setItem('to_user',this.to);
 			localStorage.setItem('from_user',this.from);
 			localStorage.setItem('thumb',this.fileList);
 			localStorage.setItem('video',this.fileListTwo);
 			localStorage.setItem('theme_content',this.bless_text);
-			
-			
-			return false
+
 			this.$router.push({path:'/preview'})
 		}
 	},
