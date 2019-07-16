@@ -288,9 +288,10 @@ export default {
 
                         this.generateOrder(orderData);
 
-                    //this.$router.push({path:'/succeed'})
+                    this.$router.push({path:'/succeed'})
                 }else if(params.data.code  == 2002){
                     Toast(params.data.msg);
+                    this.showagain = false
                 }
             })
           }

@@ -2,14 +2,14 @@
   <div>
       <div class="succ_top">
           <van-icon name="checked" size="20px"/>
-          <p class="top_text">恭喜！ 兑换成功</p>
+          <p class="top_text">恭喜！ 转增成功</p>
       </div>
-      <!-- <div class="succ_text">
-          <p class="succ_text_text">长按二维码，关注后自动接收配送进度推送</p>
+      <div class="succ_text">
+          <p class="succ_text_text">长按二维码，关注了解更多商品</p>
           <div class="qr_code">
                <img src="./../../assets/img/qrcode.jpg" alt="" class="qr_code_img">
           </div>
-      </div> -->
+      </div>
   </div>
 </template>
 
