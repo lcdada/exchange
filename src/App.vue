@@ -13,10 +13,10 @@
 						<img src="./assets/img/logo_icon.png" alt="">
 					</div>
 					<ul >
-						<li class="item" @click="goStore">
+						<!-- <li class="item" @click="goStore">
 							<p class="class_item">前往商城</p>
 							<van-icon name="arrow"  class="arrow"/>
-						</li>
+						</li> -->
 						<li class="item" @click="Donate">
 							<p class="class_item">转增</p>
 							<van-icon name="arrow"  class="arrow"/>
