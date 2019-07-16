@@ -1,6 +1,6 @@
 <template>
     <div class="home">   
-        <home-header :bless="bless_info" :package="package_id"></home-header>
+        <home-header :bless="bless_info" :package="package_id" v-if="show"></home-header>
         <div>
             <p class="numb_text">你可兑换<span class="number">{{exchange_num}}</span>款礼品</p>
         </div>
@@ -19,24 +19,47 @@ export default {
         HomeHeader,
         HomeList
     },
+    props:["flag"],
     data (){
         return {
+            show:true,
             bless_info:{},
             goods_list:[],
             exchange_num:'',
             package_id:'',
-            jid : utils.getUrlKey('jid') ? utils.getUrlKey('jid') : 767
+            // jid : utils.getUrlKey('jid'),
+            jid:767,
+            package_id:'390',
+            account:22222222,
+            // donate_id:19602,
+            mobile:15810227932,
+            donate_type:'1',
+            requestParam : {}
         }
 
     },
+    created(){
+        if( this.flag == false){
+            this.show = false
+        }
+    },
     methods:{
         getBless () {
-            this.$api.home.getBless({
-               jid:this.jid
-            }).then(params => {
+             if(this.donate_id) {
+                this.requestParam = {
+                    donate_id:this.donate_id
+                }
+            }else{
+                this.requestParam = {
+                    jid:this.jid
+                }
+            }
+            
+            this.$api.home.getBless(this.requestParam).then(params => {
                 if(params.data.code  == 1000){
                     const data = params.data.data;
                     this.bless_info = data.bless_info
+                    
                     this.package_id = data.package_id;
 
                     this.getGoodsList(this.package_id);
