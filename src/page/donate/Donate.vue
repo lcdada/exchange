@@ -64,7 +64,8 @@
 		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout"  value="15810227932" class="inpt"  v-model="from_mobile">
 		   <div class="code_block">
 			    <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入验证码" value=""   class="input_code" v-model="code">
-				<button @click="getCode">获取验证码</button>
+				<button @click="getCode" v-if="!showCode">获取验证码</button>
+              	<button @click="getCode" v-if="showCode">{{codeTime}}s后重新获取</button>
 		   </div>
 		  
 		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" v-model="friend_phone">
@@ -105,7 +106,9 @@ export default {
 			requestParam : {},
 			phone_num:'',
 			code:'',
-			friend_phone:''
+			friend_phone:'',
+            codeTime:0,
+            showCode:false
 			
 		}
 	},
@@ -187,10 +190,17 @@ export default {
 				
 				mobile : this.from_mobile 
             }).then(params => {
-                // if(params.data.code  == 1000){
-				
-				// }
-				console.log(params)
+               if(params.data.code == 1000){
+                    this.showCode = true,
+                    this.codeTime = 60;
+                    let codeTimeTimer =  setInterval(()=>{
+                        this.codeTime--;
+                        if(this.codeTime<=0){
+                            this.showCode = false;
+                            clearInterval(codeTimeTimer);
+                        }
+                    }, 1000);
+                }
             })
 		},
 		 inputFocus(){

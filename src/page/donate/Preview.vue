@@ -44,7 +44,8 @@
           <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout"  value="15810227932" class="inpt"  v-model="from_mobile">
           <div class="code_block">
               <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入验证码" value=""   class="input_code" v-model="code">
-              <button @click="getCode">获取验证码</button>
+              <button @click="getCode" v-if="!showCode">获取验证码</button>
+              <button @click="getCode" v-if="showCode">{{codeTime}}s后重新获取</button>
           </div>
 
           <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" v-model="friend_phone">
@@ -97,7 +98,11 @@ export default {
 				package_id:'',
 				account:'',
 			},
-            donateUserInfo :{}
+            donateUserInfo :{},
+            friend_phone:'',
+            code:'',
+            codeTime:0,
+            showCode:false
         }
     },
     created() {
@@ -136,7 +141,18 @@ export default {
             this.$api.home.getCode({
                 mobile : this.from_mobile
             }).then(params => {
-                console.log(params)
+                if(params.data.code == 1000){
+                    this.showCode = true,
+                    this.codeTime = 60;
+                    let codeTimeTimer =  setInterval(()=>{
+                        this.codeTime--;
+                        if(this.codeTime<=0){
+                            this.showCode = false;
+                            clearInterval(codeTimeTimer);
+                        }
+                    }, 1000);
+                }
+              
             })
         },
         btn_affirm(){
@@ -225,13 +241,19 @@ export default {
             font-size 0.32rem
             text-align  center
             color #333
-        .inpt
+        .inpt,.code_block
             width 4.26rem
             height 0.6rem
             display block
             margin 0 auto
             margin-top 0.2rem
             border-bottom  0.04rem solid #333
+        .code_block
+            display flex
+            justify-content space-between
+            align-items center
+            .input_code
+                width 2rem
         .btn_affirm
             width 4.24rem
             height 0.8rem
