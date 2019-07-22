@@ -6,15 +6,19 @@
       </div>
       <div class="detail_conent" v-html='message.summary'>{{message.summary}}</div>
         <van-tabbar class="footer">
-            <div  class="footer_btn">
+            <div  class="footer_btn"  v-if="show_addcart">
                 <button class="btn addcart"  @click="addCart(message)">加入购物车</button>
-                <button class="btn buynow" @click="buyNow(message)">立即兑换</button>
+                <button class="btn buynow" @click="buyNow(message)" ref='nowbutton'>立即兑换</button>
+            </div>
+            <div  class="footer_btn"  v-if="!show_addcart">
+                <button class="btn buynow nowButton" @click="buyNow(message)" ref='nowbutton'>立即兑换</button>
             </div>
         </van-tabbar>
   </div>
 </template>
 
 <script>
+import utils from '../../../utils/utils'
 import {  Tabbar, Toast  } from 'vant';
 
 export default {
@@ -24,12 +28,19 @@ export default {
     },
     data(){
         return{
-           CartList:[] 
+           CartList:[],
+           show_addcart:true,
+           source :utils.getUrlKey('source'),
         }
     },
     components:{
          [Tabbar.name]:Tabbar,
          [Toast.name]:Toast 
+    },
+    created(){
+        if(this.source || this.source == 'goods_qrcode'){
+            this.show_addcart = false;
+        }
     },
     methods: {
         addCart(params){
@@ -94,5 +105,7 @@ export default {
                 color #000
                 font-weight 600
                 font-size 0.28rem
+            .nowButton
+                width  100%
 
 </style>

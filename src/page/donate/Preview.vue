@@ -1,13 +1,12 @@
 <template>
   <div>
-      <div class="bless_div_img">
+      <div class="bless_div_img" v-if='show_thumb'>
           <img :src= thumb alt="" class="bless_img">
       </div>
-      <div class="bless_div_video">
+      <div class="bless_div_video" v-if="show_video">
           <video class="video" style="padding: 0px;" autoplay="autoplay" controls="controls" webkit-playsinline="" width="100%" height="100%" >
               <source id="video" :src=video >
           </video>
-        
       </div>
       <div class="bless_conent">
           <p class="to" >{{to_user}}</p>
@@ -102,20 +101,29 @@ export default {
             friend_phone:'',
             code:'',
             codeTime:0,
-            showCode:false
+            showCode:false,
+            show_thumb:true,
+            show_video:true
+            
         }
     },
     created() {
-        const to_user = localStorage.getItem("to_user")
-        const from_user = localStorage.getItem("from_user")
-        const theme_content = localStorage.getItem("theme_content")
-        const thumb = localStorage.getItem("thumb")
-        const video  = localStorage.getItem("video")
-        this.to_user = to_user,
-        this.from_user = from_user,
-        this.theme_content = theme_content,
-        this.thumb = thumb,
-        this.video = video
+        const to_user = localStorage.getItem("to_user");
+        const from_user = localStorage.getItem("from_user");
+        const theme_content = localStorage.getItem("theme_content");
+        const thumb = localStorage.getItem("thumb");
+        const video  = localStorage.getItem("video");
+        this.to_user = to_user;
+        this.from_user = from_user;
+        this.theme_content = theme_content;
+        this.thumb = thumb;
+        this.video = video;
+        if(!this.thumb){
+            this.show_thumb = false
+        }
+        if(!this.vidoe){
+            this.show_video = false
+        }
     },
     methods:{
          inputFocus(){
