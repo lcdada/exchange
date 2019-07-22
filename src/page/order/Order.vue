@@ -277,7 +277,8 @@ export default {
                 account: this.account,
                 pwd:this.pwd,
                 package_id:this.packageId,
-                jid:this.jid
+                jid:this.jid,
+                source:utils.getUrlKey('source')
             }).then(params =>{
                 if(params.data.code  == 1000){
                     this.chooseGoods = this.chooseGoods.split(',')[0];
@@ -288,7 +289,8 @@ export default {
                             package_id : this.packageId,
                             account : this.account,
                             pwd : this.pwd,
-                            address : this.address
+                            address : this.address,
+                            source:utils.getUrlKey('source')
                         };
 
                         this.generateOrder(orderData);

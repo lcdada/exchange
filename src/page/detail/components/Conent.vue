@@ -16,6 +16,7 @@
 
 <script>
 import {  Tabbar, Toast  } from 'vant';
+import utils from '../../../utils/utils';
 
 export default {
     name:'DetailConent',
