@@ -376,6 +376,7 @@ export default {
         margin-top 0.16rem
         .address_icon1_text
             margin-left 0.24rem
+            display block;
         .arrow
             position: absolute;
             right: 0.32rem;

@@ -120,7 +120,21 @@ export default {
 	},
 	created() {
 		localStorage.setItem('thumb',null);
-		localStorage.setItem('video',null)
+		localStorage.setItem('video',null);
+		// let VImg  = localStorage.getItem("donate_id");
+		// console.log(VImg)
+		// if(VImg != "" || VImg != null){
+        //     this.$api.home.getBless({
+		// 		donate_id:VImg
+		// 	}).then(params => {
+        //         if(params.data.code  == 1000){
+        //             const data = params.data.data;
+        //             this.fileList = data.bless_info.thumb
+        //             this.fileListTwo = data.bless_info.video
+        //           console.log(params);
+        //         }
+        //     })
+		// }
 	},
 	methods: {
 		afterReadOne(){

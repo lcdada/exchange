@@ -1,6 +1,6 @@
 <template>
     <div class="detail">
-        <detail-banner :Spics="Swiperpics"></detail-banner>
+        <detail-banner :Spics="Swiperpics" :message='Msessage'></detail-banner>
         <detail-conent :message='Msessage'></detail-conent>
     </div>
 </template>

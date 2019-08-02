@@ -1,6 +1,7 @@
 <template>
   <div>
       <div class="detail_text">
+          <p class="serialNum">{{message.goods_sn}}</p>
           <p class="goods_name">{{message.goods_name}}</p>
           <p class="name_second">{{message.salute_sketch}}</p>
       </div>
@@ -20,8 +21,6 @@
 <script>
 import utils from '../../../utils/utils'
 import {  Tabbar, Toast  } from 'vant';
-import utils from '../../../utils/utils';
-
 export default {
     name:'DetailConent',
     props:{
@@ -78,7 +77,7 @@ export default {
             font-weight 600
             line-height auto
             padding  0 0.4rem
-        .name_second
+        .name_second,.serialNum
             color #666
             font-size 0.28rem
     .detail_conent

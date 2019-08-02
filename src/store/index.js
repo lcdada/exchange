@@ -8,6 +8,7 @@ export default new Vuex.Store({
     state: {
         carList: [], //购物车的商品
         // exchangeNum :3,
+        // count:0,
         nowlist:[],//立即购买
     },
     plugins: [createPersistedState()],
@@ -24,6 +25,7 @@ export default new Vuex.Store({
                 alreadyNum += parseInt(CarCon[i].num);
 
                 if(alreadyNum >= exchange_num) {
+                    // state.count ++
                     Toast("你最多可以兑换"+exchange_num+"款商品");
                     return false;
                 }
