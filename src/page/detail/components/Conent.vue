@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import utils from '../../../utils/utils'
 import {  Tabbar, Toast  } from 'vant';
 import utils from '../../../utils/utils';
 
@@ -59,6 +58,8 @@ export default {
             // console.log(goodsList)
         },
         buyNow(params){
+
+
             this.$store.dispatch('nowAddCar',params);
             this.$router.push({path:'/order',query: {goods_id: params.id,now:true} })
         }

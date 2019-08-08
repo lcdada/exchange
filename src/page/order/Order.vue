@@ -199,7 +199,7 @@ export default {
 
       openAddress() {
 
-            /*var addressInfo={
+            var addressInfo={
               userName:'苏克',
               telNumber:'15810227932',
               provinceName:' 山西',
@@ -210,7 +210,7 @@ export default {
 
           localStorage.setItem('addressInfo',JSON.stringify(addressInfo));
 
-        //输出地址信息到页面*/
+        //输出地址信息到页面
             
 
           if(this.isWx) {
@@ -286,7 +286,7 @@ export default {
                     //5.获取订单信息 提交订单
                         let orderData = {
                             choose_goods : this.chooseGoods,
-                            package_id : this.packageId,
+                            package_id : params.data.data.package_id ? params.data.data.package_id : this.packageId,
                             account : this.account,
                             pwd : this.pwd,
                             address : this.address,
@@ -294,8 +294,6 @@ export default {
                         };
 
                         this.generateOrder(orderData);
-
-                    this.$router.push({path:'/succeed'})
                 }else if(params.data.code  == 2002){
                     Toast(params.data.msg);
                     this.showagain = false
@@ -334,7 +332,7 @@ export default {
       generateOrder(params) {
         this.$api.home.generateOrder(params).then(params =>{
             if(params.data.code === 1000){
-                this.$router.push({path:'/succeed','query':{"order_sn":params.data.data.ordersn}})
+                //this.$router.push({path:'/succeed','query':{"order_sn":params.data.data.ordersn}})
             }else if(params.data.code === 2002){
                 Toast(params.data.msg);
             }
