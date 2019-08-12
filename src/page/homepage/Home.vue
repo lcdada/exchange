@@ -83,6 +83,7 @@ export default {
 
     mounted () {
         this.getBless()
+        // this.getGoodsList()
     },
 }
 </script>
@@ -90,6 +91,10 @@ export default {
     .home
         padding 0 .2rem
         background #fff
+        // @media screen and (min-width: 1180px) {
+        //     width 80%
+        //     margin 0 auto
+        // }
         .numb_text
             text-align center
             display block

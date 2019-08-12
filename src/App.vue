@@ -45,7 +45,7 @@
 				</div>
 				<div class="cartNumberBlock">
 					<van-icon name="bag-o" slot="right" color="#000" size="20px" @click="goShopCart"/>
-					<span class="cartNumber">{{$store.state.count}}</span>
+					<!-- <span class="cartNumber" v-if="showGoodsCartNumber" >{{this.$store.getters.carCount}}</span> -->
 				</div>
 			</div>
 			<div class="center">
@@ -68,9 +68,13 @@ export default {
     return {
       header_show:true,
 	  footer_show:true,
-	  show: false
+	  show: false,
+	  showGoodsCartNumber:true
 
     }
+  },
+  created() {
+	  this.init()
   },
   components:{
       [DrawerLayout.name]:DrawerLayout,
@@ -106,8 +110,15 @@ export default {
 	  Donate(){
 		  this.show = false
 		  this.$router.push({path:'/donate'})
+	  },
+	  init(){
+		  if(this.$store.getters.carCount == 0){
+			  this.showGoodsCartNumber = false
+			  console.log(this.$store.getters.carCount)
+		  }
 	  }
-  }
+
+  },
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
     <div class="detail">
         <detail-banner :Spics="Swiperpics" :message='Msessage'></detail-banner>
-        <detail-conent :message='Msessage'></detail-conent>
+        <detail-conent :message='Msessage' :flag = 'flag'></detail-conent>
     </div>
 </template>
 <script>
@@ -13,7 +13,8 @@ export default {
     data (){
         return {
             Swiperpics:[],
-            Msessage:{}
+            Msessage:{},
+            flag:""
         }
     },
     components:{
@@ -30,18 +31,48 @@ export default {
             }).then(params =>{
                  if(params.data.code  == 1000){
                         const data = params.data.data[0];
-                        console.log(data)
                         this.Swiperpics = data.pics
                         this.Msessage =data
 
                     }
             })
+        },
+        getGoodsNotice(){
+            let id = this.$route.query.id
+            this.$api.home.getGoodsNotice({
+                gid:id
+            }).then(params =>{
+                 if(params.data.code  == 1000){
+                     if(params.data.data.hasOwnProperty("post_content") && params.data.data.post_content.length > 0){
+                         alert(params.data.data.post_content)
+                     }
+
+                    }
+            })
+        },
+        getNoSkuInfo(){
+            let id = this.$route.query.id
+            this.$api.home.getNoSkuInfo({
+                gid:id
+            }).then(params =>{
+                if(params.data.code  == 1000){
+                    if(params.data.data.notice.type != "" && params.data.data.notice.type == 5) {
+                        if(params.data.data.notice.type == 5) {
+                            alert(params.data.data.notice.post_content);
+
+                            if(params.data.data.notice.status != 1) {
+                                this.flag = false
+                            }
+                        }
+                    }
+                }
+            })
         }
-       
-        
     },
     mounted () {
-        this.init()
+        this.init(),
+        this.getGoodsNotice(),
+        this.getNoSkuInfo()
        
     },  
 }

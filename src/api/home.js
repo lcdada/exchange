@@ -57,6 +57,15 @@ const home = {
     getParamsCode(params){
         return axios.post(`${base.home}/exchange/getParamCode`,qs.stringify(params))
     },
+
+//商品的替补信息
+    getNoSkuInfo(params){
+        return axios.post(`${base.home}/exchange/getNoSkuInfo`,qs.stringify(params))
+    },
+//商品公告相关
+    getGoodsNotice(params){
+        return axios.post(`${base.home}/exchange/getGoodsNotice`,qs.stringify(params))
+    }
 }
 
 export default home;  

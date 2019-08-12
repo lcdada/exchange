@@ -54,18 +54,16 @@
             return {
                 current: 0,
                 videoDetail:true,
-                video_time:true
+                video_time:false
             }
         },
-        watch:{
-            if(){
-                
-            }
-        },
-        beforeMount(){
-            if(this.message.video == "" || this.message.video == undefined){
-                // console.log(this.message.video)
-                this.video_time = false
+       
+        watch: {
+            message:function(value){
+                let valueData = value.video;
+                if(valueData != ""){
+                    this.showVideoTime()
+                }
             }
         },
         methods: {
@@ -73,14 +71,21 @@
                 this.current = index;
             },
             showVideo(){
-                // let video_play = this.$refs.video;
-                // video_play
                 this.videoDetail = false
             },
             close_video(){
                 this.videoDetail = true
+            },
+            showVideoTime(){
+                if(this.message.video != "undefined" || this.message.video != ""){
+                    this.video_time = true 
+                }
             }
+           
+        },
+        mounted(){
         }
+       
     }
 </script>
 <style lang="stylus" scoped>
