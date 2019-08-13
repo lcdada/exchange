@@ -7,11 +7,6 @@
             <p class="address_icon1_text" @click="openAddress()">添加收货地址</p>
             <van-icon name="arrow"  class="arrow"/>
         </div>
-        <div class="standby">
-            <p>备用联系人</p>
-            <input type="text" name="" id="" placeholder="姓名" class="standby_inp" v-model="standbyName">
-            <input type="number" name="" id="" placeholder="联系方式" class="standby_inp" v-model="standbyPhone">
-        </div>
         <div class="show_address" style="display:none">
             <div class="peopleInfo">
                 <p class="userName" :userName="userName">{{userName}}</p>
@@ -19,6 +14,13 @@
             </div>
             <p class="address_text" :detail="detail">{{detail}}</p>          
         </div>
+
+        <div class="standby">
+            <p>备用联系人</p>
+            <input type="text" name="" id="" placeholder="姓名" class="standby_inp" v-model="standbyName">
+            <input type="number" name="" id="" placeholder="联系方式" class="standby_inp" v-model="standbyPhone">
+        </div>
+
         <div class="goods_list">
             <ul>
                 <li  v-for="item in carData" :key="item.id" class="item">
