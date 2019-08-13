@@ -334,7 +334,7 @@ export default {
       generateOrder(params) {
         this.$api.home.generateOrder(params).then(params =>{
             if(params.data.code === 1000){
-                //this.$router.push({path:'/succeed','query':{"order_sn":params.data.data.ordersn}})
+                this.$router.push({path:'/succeed','query':{"order_sn":params.data.data.ordersn}})
             }else if(params.data.code === 2002){
                 Toast(params.data.msg);
             }
