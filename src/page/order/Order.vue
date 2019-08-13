@@ -53,7 +53,7 @@
                 <p class="from_title">请验证</p>
                 <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入卡号" value="" class="inpt" v-model="account">
                 <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入密码" class="inpt" v-model="pwd">
-                <input type="button" value="确认提交" class="affirm_btn" @click="catr_verify">
+                <input type="button" value="确认提交" class="affirm_btn" @click="catr_verify"  :disabled="isDisable">
             </div>
         </van-popup>
          <van-popup
@@ -68,7 +68,7 @@
 				    <button @click="getCode">获取验证码</button>
 		        </div>
                 <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输验证码" value=""   class="inpt" v-model="code">
-                 <button class="btn_affirm" @click="catr_verify">确认提交</button>
+                 <button class="btn_affirm" @click="catr_verify" :disabled="isDisable">确认提交</button>
             </div>
         </van-popup>
     </div>
@@ -103,7 +103,8 @@ export default {
       code:'',
       standbyName:'',
       standbyPhone:'',
-        lastClick :''
+        lastClick :'',
+        isDisable:false
     }
   },
   components:{
@@ -256,28 +257,13 @@ export default {
           }
       },
 
-      lockClick() {
-        var nowClick = new Date();
-        if (this.lastClick == null) {
-            this.lastClick = nowClick;
-            return true;
-        } else {
-            if (Math.round((nowClick.getTime() - this.lastClick.getTime())) > 500) {
-                this.lastClick = nowClick;
-                return true;
-            }
-            else {
-                this.lastClick = nowClick;
-                return false
-            }
-        }
-    },
-
-
-catr_verify(){
+     
+    catr_verify(){
           //4.验证卡密
-         if(this.lockClick()) {
-             if(this.donate_type){
+            this.isDisable = true
+            setTimeout(() => {
+
+                 if(this.donate_type){
                  if(!this.code){
                      Toast("请填写验证码");
                      return false
@@ -323,7 +309,9 @@ catr_verify(){
                      }
                  })
              }
-         }
+                this.isDisable = false
+            }, 1000)
+            
       },
         // 获取验证码
       getCode(){
