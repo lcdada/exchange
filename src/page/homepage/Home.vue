@@ -2,7 +2,7 @@
     <div class="home">   
         <home-header :bless="bless_info" :package="package_id" v-if="show"></home-header>
         <div>
-            <p class="numb_text">你可兑换<span class="number">{{exchange_num}}</span>款礼品</p>
+            <p class="numb_text">您可兑换<span class="number">{{exchange_num}}</span>款礼品</p>
         </div>
         <home-list :package="package_id" :list="goods_list" :bless="bless_info"></home-list>
 
@@ -83,6 +83,7 @@ export default {
 
     mounted () {
         this.getBless()
+        // this.getGoodsList()
     },
 }
 </script>
@@ -90,6 +91,10 @@ export default {
     .home
         padding 0 .2rem
         background #fff
+        // @media screen and (min-width: 1180px) {
+        //     width 80%
+        //     margin 0 auto
+        // }
         .numb_text
             text-align center
             display block

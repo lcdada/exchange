@@ -17,9 +17,9 @@ export default new Router({
       path:'/',
       name:'HomePage',
       component:HomePage,
-      meta: {
-        keepAlive: false //缓存
-      }
+      // meta: {
+      //   keepAlive: false //缓存
+      // }
     },
     {
       path:'/detail',

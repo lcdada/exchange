@@ -18,7 +18,7 @@
 							<van-icon name="arrow"  class="arrow"/>
 						</li> -->
 						<li class="item" @click="Donate">
-							<p class="class_item">转增</p>
+							<p class="class_item">转赠</p>
 							<van-icon name="arrow"  class="arrow"/>
 						</li>
 						<!-- <li
@@ -43,8 +43,9 @@
 				<div class="logo_block">
 					<img src="./assets/img/logo_text.png" alt="" class="logo_img" @click="goHome">
 				</div>
-				<div>
+				<div class="cartNumberBlock">
 					<van-icon name="bag-o" slot="right" color="#000" size="20px" @click="goShopCart"/>
+					<!-- <span class="cartNumber" v-if="showGoodsCartNumber" >{{this.$store.getters.carCount}}</span> -->
 				</div>
 			</div>
 			<div class="center">
@@ -67,9 +68,13 @@ export default {
     return {
       header_show:true,
 	  footer_show:true,
-	  show: false
+	  show: false,
+	  showGoodsCartNumber:true
 
     }
+  },
+  created() {
+	  this.init()
   },
   components:{
       [DrawerLayout.name]:DrawerLayout,
@@ -105,8 +110,15 @@ export default {
 	  Donate(){
 		  this.show = false
 		  this.$router.push({path:'/donate'})
+	  },
+	  init(){
+		  if(this.$store.getters.carCount == 0){
+			  this.showGoodsCartNumber = false
+			  console.log(this.$store.getters.carCount)
+		  }
 	  }
-  }
+
+  },
 }
 </script>
 
@@ -149,6 +161,22 @@ export default {
 			width 100%
 			height 100%
 			display block
+		.cartNumberBlock
+			position relative
+			.cartNumber
+				display block
+				position absolute
+				top 0
+				right 0
+				width 0.25rem
+				height 0.25rem
+				border-radius 50%
+				line-height 0.25rem
+				text-align center
+				background red;
+				color #fff;
+				font-size 0.1rem
+
 	.center
 		margin-top 0.92rem
 </style>
