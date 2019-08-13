@@ -7,6 +7,11 @@
             <p class="address_icon1_text" @click="openAddress()">添加收货地址</p>
             <van-icon name="arrow"  class="arrow"/>
         </div>
+        <div class="standby">
+            <p>备用联系人</p>
+            <input type="text" name="" id="" placeholder="姓名" class="standby_inp" v-model="standbyName">
+            <input type="number" name="" id="" placeholder="联系方式" class="standby_inp" v-model="standbyPhone">
+        </div>
         <div class="show_address" style="display:none">
             <div class="peopleInfo">
                 <p class="userName" :userName="userName">{{userName}}</p>
@@ -94,6 +99,8 @@ export default {
       account:utils.getUrlKey('account'),
       requestParam:{},
       code:'',
+      standbyName:'',
+      standbyPhone:''
     }
   },
   components:{
@@ -173,6 +180,8 @@ export default {
               area : addressInfo.provinceName+','+addressInfo.cityName+','+addressInfo.countryName, //省市区， 逗号拼接
 
               remark : this.remark,
+              spare_name:this.standbyName,
+              spare_mobile:this.standbyPhone
           };
 
           if(!this.isWx) {
@@ -381,6 +390,20 @@ export default {
             position: absolute;
             right: 0.32rem;
             bottom: 0.4rem;
+    .standby
+        height: 3.5rem;
+        background: #fff;
+        margin-top: 0.2rem;
+        box-sizing: border-box;
+        padding: 0.2rem 0.4rem;
+        display: flex;
+        flex-direction: column;
+        .standby_inp
+            height 0.88rem;
+            background #ebebeb
+            margin-top 0.4rem 
+            padding-left 0.2rem   
+
     .show_address
         height 1.4rem
         background #fff
