@@ -243,6 +243,7 @@ export default {
 							package_id:package_id,
 							jid:that.jid,
 							donate_id:donate_id,
+							from_user:that.addDonateLog.from_user,
 						}
 					}else{
 						that.requestParam = {
@@ -251,7 +252,8 @@ export default {
 							to_mobile:that.friend_phone,
 							package_id:that.package_id,
 							donate_id:donate_id,
-							account:that.account
+							account:that.account,
+							from_user:that.addDonateLog.from_user,
 						}
 					}
 					that.$api.home.donateUser(that.requestParam).then(params => {

@@ -256,80 +256,60 @@ export default {
           }
       },
 
-      lockClick() {
-        var nowClick = new Date();
-        if (this.lastClick == null) {
-            this.lastClick = nowClick;
-            return true;
-        } else {
-            if (Math.round((nowClick.getTime() - this.lastClick.getTime())) > 500) {
-                this.lastClick = nowClick;
-                return true;
-            }
-            else {
-                this.lastClick = nowClick;
-                return false
-            }
-        }
-    },
-
-
-catr_verify(){
-          //4.验证卡密
-         if(this.lockClick()) {
-             if(this.donate_type){
-                 if(!this.code){
-                     Toast("请填写验证码");
-                     return false
-                 }
-                 this.chooseGoods = this.chooseGoods.split(',')[0];
-
-                 //5.获取订单信息 提交订单
-                 let orderData = {
-                     choose_goods : this.chooseGoods,
-                     package_id : this.packageId,
-                     address : this.address,
-                     mobile : this.mobile,
-                     code : this.code,
-                     account: this.account,
-                 };
-
-                 this.generateOrder(orderData);
-             }else{
-                 this.$api.home.accountPwd({
-                     account: this.account,
-                     pwd:this.pwd,
-                     package_id:this.packageId,
-                     jid:this.jid,
-                     source:utils.getUrlKey('source')
-                 }).then(params =>{
-                     if(params.data.code  == 1000){
-                         this.chooseGoods = this.chooseGoods.split(',')[0];
-
-                         //5.获取订单信息 提交订单
-                         let orderData = {
-                             choose_goods : this.chooseGoods,
-                             package_id : params.data.data.package_id ? params.data.data.package_id : this.packageId,
-                             account : this.account,
-                             pwd : this.pwd,
-                             address : this.address,
-                             source:utils.getUrlKey('source')
-                         };
-
-                         this.generateOrder(orderData);
-                     }else if(params.data.code  == 2002){
-                         Toast(params.data.msg);
-                         this.showagain = false
-                     }
-                 })
+    catr_verify(){
+        //4.验证卡密
+         if(this.donate_type){
+             if(!this.code){
+                 Toast("请填写验证码");
+                 return false
              }
+             this.chooseGoods = this.chooseGoods.split(',')[0];
+
+             //5.获取订单信息 提交订单
+             let orderData = {
+                 choose_goods : this.chooseGoods,
+                 package_id : this.packageId,
+                 address : this.address,
+                 mobile : this.mobile,
+                 code : this.code,
+                 account: this.account,
+             };
+
+             this.generateOrder(orderData);
+         }else{
+             this.$api.home.accountPwd({
+                 account: this.account,
+                 pwd:this.pwd,
+                 package_id:this.packageId,
+                 jid:this.jid,
+                 source:utils.getUrlKey('source')
+             }).then(params =>{
+                 if(params.data.code  == 1000){
+                     this.chooseGoods = this.chooseGoods.split(',')[0];
+
+                     //5.获取订单信息 提交订单
+                     let orderData = {
+                         choose_goods : this.chooseGoods,
+                         package_id : params.data.data.package_id ? params.data.data.package_id : this.packageId,
+                         account : this.account,
+                         pwd : this.pwd,
+                         address : this.address,
+                         source:utils.getUrlKey('source')
+                     };
+
+                     this.generateOrder(orderData);
+                 }else if(params.data.code  == 2002){
+                     Toast(params.data.msg);
+                     this.showagain = false
+                 }
+             })
          }
       },
         // 获取验证码
       getCode(){
           this.$api.home.getCode({
 				
-				mobile : this.mobile 
+				mobile : this.mobile
             }).then(params => {
                 // if(params.data.code  == 1000){
 				
