@@ -17,8 +17,10 @@
             </video>
         </div>
       <div class="bless_text">
-          <p class="from_name">Dear All</p>
+          <p class="to_name" v-html="bless.to_user"></p>
           <p class="bless_content" v-html="bless.theme_content"></p>
+          <p class="from_name" v-html="bless.from_user"></p>
+
       </div>
   </div>
 </template>
@@ -27,12 +29,23 @@
 export default {
     name:'HomeHeader',
      props:{
-        bless:Object
+        bless:Object,
+        title:Object
     },
     
     updated() {
-   
-    }
+        
+    },
+    methods: {
+        title_text(){
+            localStorage.setItem("title",this.title.title)
+            this.title = localStorage.getItem('title')
+        }
+        
+    },
+    mounted() {
+        this.title_text()
+    },
 }
 
 </script>
@@ -42,9 +55,13 @@ export default {
         height 4.2rem
     .bless_text
         padding 0.16rem 0
+        .to_name
+            padding-bottom 0.2rem
+            box-sizing border-box
         .from_name
             padding-bottom 0.2rem
             box-sizing border-box
+            text-align right 
         .bless_content
             color #666
             padding-bottom 0.2rem
