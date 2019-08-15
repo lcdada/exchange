@@ -1,6 +1,6 @@
 <template>
     <div class="home">   
-        <home-header :bless="bless_info" :package="package_id" v-if="show"></home-header>
+        <home-header :bless="bless_info" :package="package_id" v-if="show" :title="title"></home-header>
         <div>
             <p class="numb_text">您可兑换<span class="number">{{exchange_num}}</span>款礼品</p>
         </div>
@@ -24,6 +24,7 @@ export default {
         return {
             show:true,
             bless_info:{},
+            title:{},
             goods_list:[],
             exchange_num:'',
             jid : utils.getUrlKey('jid'),
@@ -54,7 +55,9 @@ export default {
             this.$api.home.getBless(this.requestParam).then(params => {
                 if(params.data.code  == 1000){
                     const data = params.data.data;
-                    this.bless_info = data.bless_info
+                    console.log(data)
+                    this.bless_info = data.bless_info;
+                    this.title = data
                     
                     this.package_id = data.package_id;
 
