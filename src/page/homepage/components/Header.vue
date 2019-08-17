@@ -30,7 +30,7 @@ export default {
     name:'HomeHeader',
      props:{
         bless:Object,
-        title:Object
+        title:String
     },
     
     updated() {
@@ -38,8 +38,8 @@ export default {
     },
     methods: {
         title_text(){
-            localStorage.setItem("title",this.title.title)
-            this.title = localStorage.getItem('title')
+            /*localStorage.setItem("title",this.title.title)
+            this.title = localStorage.getItem('title')*/
         }
         
     },

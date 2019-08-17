@@ -24,7 +24,7 @@ export default {
         return {
             show:true,
             bless_info:{},
-            title:{},
+            title:'',
             goods_list:[],
             exchange_num:'',
             jid : utils.getUrlKey('jid'),
@@ -57,7 +57,7 @@ export default {
                     const data = params.data.data;
                     console.log(data)
                     this.bless_info = data.bless_info;
-                    this.title = data
+                    $('.title').html(data.title);
                     
                     this.package_id = data.package_id;
 
