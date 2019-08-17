@@ -118,7 +118,6 @@ export default {
       standbyPhone:'',
         lastClick :'',
         isDisable:false,
-        seleDate: '',
         list: [],
         ide: 0, //默认选择第一个,
         showChooseTime:false,
@@ -160,7 +159,7 @@ export default {
                 const data = params.data.data[0];
                 
                 console.log(params)
-                if(data.is_set_send_time){
+                if(data.is_set_send_time != 1){
                     this.showChooseTime = true
                 }
 
@@ -356,7 +355,7 @@ export default {
                      package_id:this.packageId,
                      jid:this.jid,
                      source:utils.getUrlKey('source'),
-                     choose_out_time:this.seleDate
+                     choose_out_time:this.ide+1
                  }).then(params =>{
                      if(params.data.code  == 1000){
                          this.chooseGoods = this.chooseGoods.split(',')[0];
@@ -368,7 +367,8 @@ export default {
                              account : this.account,
                              pwd : this.pwd,
                              address : this.address,
-                             source:utils.getUrlKey('source')
+                             source:utils.getUrlKey('source'),
+                             choose_out_time: this.ide+1
                          };
 
                          this.generateOrder(orderData);
