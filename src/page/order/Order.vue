@@ -1,10 +1,10 @@
 <template>
     <div class="goodsCart_list">
-        <div class="choose_address" v-if="!showAddress" ref='suke'>
+        <div class="choose_address" v-if="!showAddress" ref='suke'  @click="openAddress()">
             <div>
                 <img src="./../../assets/img/address_icon1.png" alt="">
             </div>
-            <p class="address_icon1_text" @click="openAddress()">添加收货地址</p>
+            <p class="address_icon1_text">添加收货地址</p>
             <van-icon name="arrow"  class="arrow"/>
         </div>
         <div class="show_address" style="display:none">
@@ -32,6 +32,9 @@
             </div>
 	        
  
+        </div>
+        <div class="Aog" v-if="showAog">
+           您的商品发货时间预计{{aog}}
         </div>
 
         <div class="goods_list">
@@ -122,7 +125,9 @@ export default {
         ide: 0, //默认选择第一个,
         showChooseTime:false,
         showTime:false,
-        seleDate:''
+        seleDate:'',
+        aog:'',
+        showAog:false,
     }
   },
   components:{
@@ -157,10 +162,13 @@ export default {
           }).then(params =>{
             if(params.data.code  == 1000){
                 const data = params.data.data[0];
-                
+                this.aog = data.start_time
                 console.log(params)
                 if(data.is_set_send_time != 1){
                     this.showChooseTime = true
+                }
+                if(data.is_set_send_time == 1 && data.service_time_type == 2){
+                    this.showAog = true
                 }
 
             }
@@ -459,6 +467,8 @@ export default {
     .choose_address
         position relative
         height 1.12rem
+        width 100%
+        box-sizing border-box
         display flex
         align-items center
         border-radius 0.08rem
@@ -486,6 +496,15 @@ export default {
             background #ebebeb
             margin-top 0.4rem 
             padding-left 0.2rem
+    .Aog
+        height 0.6rem;
+        line-height 0.6rem
+        background #fff
+        margin-top 0.2rem
+        color #ea2000
+        text-align center
+        .Aog_time
+            padding 0 0.2rem
     .timeChoose
         background #fff
         // height 3.5rem
