@@ -21,6 +21,19 @@
             <input type="number" name="" id="" placeholder="联系方式" class="standby_inp" v-model="standbyPhone">
         </div>
 
+        <div class="timeChoose" v-if="showChooseTime">
+            <div  @click="choose_time" class="choose_block">
+                <span class="timeChoose_block_left">选择发货时间：</span>
+                <input class="timeChoose_block_right" type="text" disabled="disabled" v-model="seleDate"/>
+                <span class="arrow"></span>
+            </div>
+            <div v-if="showTime" class="active_block">
+                <div  class="div_item_time" v-for="(item,index) in list" @click="fn(index)" :key="index" :class="{active:ide ==index}">{{item}}</div>
+            </div>
+
+
+        </div>
+
         <div class="goods_list">
             <ul>
                 <li  v-for="item in carData" :key="item.id" class="item">
@@ -51,8 +64,8 @@
         >
             <div class="form">
                 <p class="from_title">请验证</p>
-                <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入卡号" value="" class="inpt" v-model="account">
-                <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入密码" class="inpt" v-model="pwd">
+                <input type="number" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入卡号" value="" class="inpt" v-model="account">
+                <input type="number" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入密码" class="inpt" v-model="pwd">
                 <input type="button" value="确认提交" class="affirm_btn" @click="catr_verify"  :disabled="isDisable">
             </div>
         </van-popup>
@@ -64,10 +77,10 @@
             <div class="form">
                 <p class="from_title">请验证</p>
                 <div class="code_block">
-                    <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入手机号" value=""   class="input_code" v-model="mobile">
+                    <input type="number" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入手机号" value=""   class="input_code" v-model="mobile">
                     <button @click="getCode">获取验证码</button>
                 </div>
-                <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输验证码" value=""   class="inpt" v-model="code">
+                <input type="number" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输验证码" value=""   class="inpt" v-model="code">
                 <button class="btn_affirm" @click="catr_verify" :disabled="isDisable">确认提交</button>
             </div>
         </van-popup>
@@ -104,7 +117,12 @@
                 standbyName:'',
                 standbyPhone:'',
                 lastClick :'',
-                isDisable:false
+                isDisable:false,
+                list: [],
+                ide: 0, //默认选择第一个,
+                showChooseTime:false,
+                showTime:false,
+                seleDate:''
             }
         },
         components:{
@@ -132,6 +150,55 @@
             }
         },
         methods: {
+            init () {
+                let id = utils.getUrlKey('goods_id')
+                this.$api.home.getGoodsDetail({
+                    goods_id:id
+                }).then(params =>{
+                    if(params.data.code  == 1000){
+                        const data = params.data.data[0];
+
+                        console.log(params)
+                        if(data.is_set_send_time != 1){
+                            this.showChooseTime = true
+                        }
+
+                    }
+                })
+            },
+            fn(index) {
+
+                this.ide = index;
+
+                this.seleDate = document.getElementsByClassName('div_item_time')[index].innerHTML; //获取当前选中的时间
+                this.showTime = false;
+
+            },
+
+            getDate(n) {
+
+                var ss = 24 * 60 * 60 * 1000; //一天的毫秒数86400
+
+                var timestamp = new Date().getTime(); //获取当前时间戳
+
+                var date1 = new Date(ss * n + timestamp) //加上n天的国际标准日期
+
+                var newTime = date1.toLocaleString(); //把日期转换成2018/6/4 下午10:45:19 格式
+
+                var arr = newTime.split(" "); //把2018/6/4提取出来
+
+                var arr2 = arr[0].split('/'); //把年月日数字单独提出来
+
+                // return arr2[0] + '年' + arr2[1] + '月' + arr2[2] + '日'; //拼接成我们需要的格式返回
+
+                return  arr2[1] + '月' + arr2[2] + '日'; //拼接成我们需要的格式返回
+
+
+            },
+            choose_time(){
+                this.showTime =true
+            },
+
             // 增加数量
             addCar(data){
                 this.$store.dispatch('addCar',data)
@@ -287,7 +354,8 @@
                             pwd:this.pwd,
                             package_id:this.packageId,
                             jid:this.jid,
-                            source:utils.getUrlKey('source')
+                            source:utils.getUrlKey('source'),
+                            choose_out_time:this.ide+1
                         }).then(params =>{
                             if(params.data.code  == 1000){
                                 this.chooseGoods = this.chooseGoods.split(',')[0];
@@ -299,7 +367,8 @@
                                     account : this.account,
                                     pwd : this.pwd,
                                     address : this.address,
-                                    source:utils.getUrlKey('source')
+                                    source:utils.getUrlKey('source'),
+                                    choose_out_time: this.ide+1
                                 };
 
                                 this.generateOrder(orderData);
@@ -361,8 +430,22 @@
             } else {
                 this.isWx = false;
             }
+            this.init ();
+            var dateObj = {};
+
+            for(var i = 1; i <= 7; i++) {
+
+                dateObj = this.getDate(i); //把返回的日期赋值给对象
+
+                this.list.push(dateObj); //把对象添加到数组里面，然后渲染到页面
+
+            }
+
+
         },
-        mounted() {}
+        mounted() {
+
+        }
     };
 
 </script>
@@ -403,6 +486,53 @@
             background #ebebeb
             margin-top 0.4rem
             padding-left 0.2rem
+    .timeChoose
+        background #fff
+        // height 3.5rem
+        margin-top 0.2rem
+        position relative
+        .choose_block
+            display flex
+            justify-content space-between
+            align-items center
+            padding  0 0.4rem;
+            position relative
+            .timeChoose_block_left
+                display block
+                // width 100%
+                height 1rem
+                line-height 1rem
+            .timeChoose_block_right
+                display block
+                background #fff
+                width 1.4rem
+            .arrow
+                display: inline-block;
+                content: " ";
+                height: 0.1rem;
+                width: 0.1rem;
+                border-width: 0.03rem 0.03rem 0 0;
+                border-style: solid;
+                -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+                transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+                -webkit-transform-origin: center;
+                transform-origin: center;
+                position: absolute;
+                top: 48%;
+                right: 0.2rem;
+                margin-top: -0.04rem;
+        .active_block
+            position absolute
+            top 1rem
+            right 0.6rem;
+            z-index 99
+            background #eee
+            padding 0.2rem
+            .div_item_time{
+                height 0.6rem
+                line-height 0.6rem
+                border-bottom 0.01rem solid #ccc
+            }
 
     .show_address
         height 1.4rem
