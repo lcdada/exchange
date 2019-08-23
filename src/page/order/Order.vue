@@ -176,7 +176,7 @@
             },
             fn(index) {
 
-                this.ide = index;
+                this.ide = index+1;
 
                 this.seleDate = document.getElementsByClassName('div_item_time')[index].innerHTML; //获取当前选中的时间
                 this.showTime = false;
@@ -363,7 +363,8 @@
                             package_id:this.packageId,
                             jid:this.jid,
                             source:utils.getUrlKey('source'),
-                            choose_out_time:this.ide+1
+                            goods_id:utils.getUrlKey('goods_id'),
+                            choose_out_time:this.ide
                         }).then(params =>{
                             if(params.data.code  == 1000){
                                 this.chooseGoods = this.chooseGoods.split(',')[0];
@@ -376,7 +377,7 @@
                                     pwd : this.pwd,
                                     address : this.address,
                                     source:utils.getUrlKey('source'),
-                                    choose_out_time: this.ide+1
+                                    choose_out_time: this.ide
                                 };
 
                                 this.generateOrder(orderData);
