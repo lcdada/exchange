@@ -167,7 +167,7 @@ export default {
             let donate_id = localStorage.getItem('donate_id');
 
             if(this.jid) {
-                let package_id = localStorage.getItem("package_id"+that.jid);
+                let package_id = localStorage.getItem("package_id"+this.jid);
                 this.donateUserInfo = {
                     account:this.addDonateLog.account,
                     pwd:this.addDonateLog.pwd,
