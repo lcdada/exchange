@@ -10,9 +10,9 @@
         <div class="show_address" style="display:none">
             <div class="peopleInfo">
                 <p class="userName" :userName="userName">{{userName}}</p>
-                <p class="telNumber" :telNumber="telNumber">{{telNumber}}</p>    
+                <p class="telNumber" :telNumber="telNumber">{{telNumber}}</p>
             </div>
-            <p class="address_text" :detail="detail">{{detail}}</p>          
+            <p class="address_text" :detail="detail">{{detail}}</p>
         </div>
 
         <div class="standby">
@@ -23,32 +23,32 @@
 
         <div class="timeChoose" v-if="showChooseTime">
             <div  @click="choose_time" class="choose_block">
-                 <span class="timeChoose_block_left">选择发货时间：</span>
-                 <input class="timeChoose_block_right" type="text" disabled="disabled" v-model="seleDate"/>
-                 <span class="arrow"></span>
+                <span class="timeChoose_block_left">选择发货时间：</span>
+                <input class="timeChoose_block_right" type="text" disabled="disabled" v-model="seleDate"/>
+                <span class="arrow"></span>
             </div>
             <div v-if="showTime" class="active_block">
                 <div  class="div_item_time" v-for="(item,index) in list" @click="fn(index)" :key="index" :class="{active:ide ==index}">{{item}}</div>
             </div>
-	        
- 
+
+
         </div>
         <div class="Aog" v-if="showAog">
-           您的商品发货时间预计{{aog}}
+            您的商品发货时间预计{{aog}}
         </div>
 
         <div class="goods_list">
             <ul>
                 <li  v-for="item in carData" :key="item.id" class="item">
                     <!-- <div class="cart_goods"> -->
-                        <div class="goods_img">
-                            <img class="goods_picture" :src="item.picture" alt="">
-                        </div>
-                        <div class="item_text">
-                            <p class="goods_name">{{item.goods_name}}</p>
-                            <p class= "goods_title">{{item.title}}</p>
-                            <p class="goods_num"> x{{ item.num }}</p>
-                        </div>
+                    <div class="goods_img">
+                        <img class="goods_picture" :src="item.picture" alt="">
+                    </div>
+                    <div class="item_text">
+                        <p class="goods_name">{{item.goods_name}}</p>
+                        <p class= "goods_title">{{item.title}}</p>
+                        <p class="goods_num"> x{{ item.num }}</p>
+                    </div>
                     <!-- </div> -->
                     <!-- <van-icon name="cross" class="delete" @click="deleteFun(item)" /> -->
                 </li>
@@ -72,7 +72,7 @@
                 <input type="button" value="确认提交" class="affirm_btn" @click="catr_verify"  :disabled="isDisable">
             </div>
         </van-popup>
-         <van-popup
+        <van-popup
                 class="pop"
                 v-model="showagain"
                 lock-scroll:true
@@ -80,381 +80,382 @@
             <div class="form">
                 <p class="from_title">请验证</p>
                 <div class="code_block">
-			        <input type="number" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入手机号" value=""   class="input_code" v-model="mobile">
-				    <button @click="getCode">获取验证码</button>
-		        </div>
+                    <input type="number" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入手机号" value=""   class="input_code" v-model="mobile">
+                    <button @click="getCode">获取验证码</button>
+                </div>
                 <input type="number" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输验证码" value=""   class="inpt" v-model="code">
-                 <button class="btn_affirm" @click="catr_verify" :disabled="isDisable">确认提交</button>
+                <button class="btn_affirm" @click="catr_verify" :disabled="isDisable">确认提交</button>
             </div>
         </van-popup>
     </div>
 </template>
 
 <script>
-import utils from '../../utils/utils'
-import {  Tabbar,Icon,Popup,Toast  } from 'vant';
-export default {
-  name: "Order",
-  data() {
-    return {
-      show: false,
-      showagain:false,
-      pwd:'',
-      address : {},
-      remark:'',
-      isWx: false,
-      chooseGoods : '',
-      jid :'',
-      packageId : '',
-      exchangeNum : '',
-      showAddress:false,
-      userName:'',
-      telNumber:'',
-      detail:'',
-      timer:null,
-      donate_type:utils.getUrlKey('donate_type'),
-      mobile:utils.getUrlKey('mobile'),
-      account:utils.getUrlKey('account'),
-      requestParam:{},
-      code:'',
-      standbyName:'',
-      standbyPhone:'',
-        lastClick :'',
-        isDisable:false,
-        list: [],
-        ide: 0, //默认选择第一个,
-        showChooseTime:false,
-        showTime:false,
-        seleDate:'',
-        aog:'',
-        showAog:false,
-    }
-  },
-  components:{
-    [Tabbar.name]:Tabbar,
-    [Icon.name]:Icon,
-    [Popup.name]:Popup,
-    [Toast.name]:Toast   
-  },
-  computed: { 
-    //购物车列表
-    carData() {
-        if(this.$route.query.now!=undefined){
-        		return this.$store.state.nowlist;
-        	}else{
-        		return this.$store.state.carList;
-        	}
-    },
-    //商品总数
-    count() {
-      return this.$store.getters.carCount;
-    },
-    //商品总价
-    totalPrice() {
-      return this.$store.getters.totalPrice;
-    }
-  },
-  methods: {
-      init () {
-          let id = utils.getUrlKey('goods_id')
-          this.$api.home.getGoodsDetail({
-              goods_id:id
-          }).then(params =>{
-            if(params.data.code  == 1000){
-                const data = params.data.data[0];
-                this.aog = data.start_time_hg
-                console.log(params)
-                if(data.is_set_send_time != 1){
-                    this.showChooseTime = true
-                }
-                if(data.is_set_send_time == 1 && data.service_time_type == 2){
-                    this.showAog = true
-                }
-
+    import utils from '../../utils/utils'
+    import {  Tabbar,Icon,Popup,Toast  } from 'vant';
+    export default {
+        name: "Order",
+        data() {
+            return {
+                show: false,
+                showagain:false,
+                pwd:'',
+                address : {},
+                remark:'',
+                isWx: false,
+                chooseGoods : '',
+                jid :'',
+                packageId : '',
+                exchangeNum : '',
+                showAddress:false,
+                userName:'',
+                telNumber:'',
+                detail:'',
+                timer:null,
+                donate_type:utils.getUrlKey('donate_type'),
+                mobile:utils.getUrlKey('mobile'),
+                account:utils.getUrlKey('account'),
+                requestParam:{},
+                code:'',
+                standbyName:'',
+                standbyPhone:'',
+                lastClick :'',
+                isDisable:false,
+                list: [],
+                ide: 0, //默认选择第一个,
+                showChooseTime:false,
+                showTime:false,
+                seleDate:'',
+                aog:'',
+                showAog:false,
             }
-         })
-      },
-      fn(index) {
- 
-            this.ide = index;
-
-            this.seleDate = document.getElementsByClassName('div_item_time')[index].innerHTML; //获取当前选中的时间
-            this.showTime = false;
-
         },
- 
-        getDate(n) {
+        components:{
+            [Tabbar.name]:Tabbar,
+            [Icon.name]:Icon,
+            [Popup.name]:Popup,
+            [Toast.name]:Toast
+        },
+        computed: {
+            //购物车列表
+            carData() {
+                if(this.$route.query.now!=undefined){
+                    return this.$store.state.nowlist;
+                }else{
+                    return this.$store.state.carList;
+                }
+            },
+            //商品总数
+            count() {
+                return this.$store.getters.carCount;
+            },
+            //商品总价
+            totalPrice() {
+                return this.$store.getters.totalPrice;
+            }
+        },
+        methods: {
+            init () {
+                let id = utils.getUrlKey('goods_id')
+                this.$api.home.getGoodsDetail({
+                    goods_id:id
+                }).then(params =>{
+                    if(params.data.code  == 1000){
+                        const data = params.data.data[0];
+                        this.aog = data.start_time
+                        console.log(params)
+                        if(data.is_set_send_time != 1){
+                            this.showChooseTime = true
+                        }
+                        if(data.is_set_send_time == 1 && data.service_time_type == 2){
+                            this.showAog = true
+                        }
 
-            var ss = 24 * 60 * 60 * 1000; //一天的毫秒数86400
+                    }
+                })
+            },
+            fn(index) {
 
-            var timestamp = new Date().getTime(); //获取当前时间戳
+                this.ide = index+1;
 
-            var date1 = new Date(ss * n + timestamp) //加上n天的国际标准日期
+                this.seleDate = document.getElementsByClassName('div_item_time')[index].innerHTML; //获取当前选中的时间
+                this.showTime = false;
 
-            var newTime = date1.toLocaleString(); //把日期转换成2018/6/4 下午10:45:19 格式
+            },
 
-            var arr = newTime.split(" "); //把2018/6/4提取出来
+            getDate(n) {
 
-            var arr2 = arr[0].split('/'); //把年月日数字单独提出来
+                var ss = 24 * 60 * 60 * 1000; //一天的毫秒数86400
 
-            // return arr2[0] + '年' + arr2[1] + '月' + arr2[2] + '日'; //拼接成我们需要的格式返回
+                var timestamp = new Date().getTime(); //获取当前时间戳
+
+                var date1 = new Date(ss * n + timestamp) //加上n天的国际标准日期
+
+                var newTime = date1.toLocaleString(); //把日期转换成2018/6/4 下午10:45:19 格式
+
+                var arr = newTime.split(" "); //把2018/6/4提取出来
+
+                var arr2 = arr[0].split('/'); //把年月日数字单独提出来
+
+                // return arr2[0] + '年' + arr2[1] + '月' + arr2[2] + '日'; //拼接成我们需要的格式返回
 
                 return  arr2[1] + '月' + arr2[2] + '日'; //拼接成我们需要的格式返回
 
 
-        },
-        choose_time(){
-            this.showTime =true
-        },
- 
-      // 增加数量
-      addCar(data){
-          this.$store.dispatch('addCar',data)
-      },
-      // 减数量
-      reduceFun(data){
-          this.$store.dispatch('reducedCar',data)
-      },
-      // 删除
-      deleteFun(data){
-          this.$store.dispatch('deleteCar',data)
-      },
+            },
+            choose_time(){
+                this.showTime =true
+            },
 
-      // 用户首次登录请求购物车的数据
-      // initCar(){
-      //   this.$store.dispatch('initCar')
-      // },
-      goBuy(){
-          // this.$router.push({path:'./address'})
-          // this.$router.push({path:'/address',name:'Address'})
-      },
-      showPopup() {
-          //0.判断是否提交的有购物车商品
-        //   if(this.carData === 'null' ||this.carData.length === 0) {
-        //       Toast("请选择商品！");
-        //   }
+            // 增加数量
+            addCar(data){
+                this.$store.dispatch('addCar',data)
+            },
+            // 减数量
+            reduceFun(data){
+                this.$store.dispatch('reducedCar',data)
+            },
+            // 删除
+            deleteFun(data){
+                this.$store.dispatch('deleteCar',data)
+            },
 
-        //   if(this.carData.length > this.exchangeNum) {
-        //       Toast("你最多可以兑换"+this.exchangeNum+"款商品");
-        //   }
+            // 用户首次登录请求购物车的数据
+            // initCar(){
+            //   this.$store.dispatch('initCar')
+            // },
+            goBuy(){
+                // this.$router.push({path:'./address'})
+                // this.$router.push({path:'/address',name:'Address'})
+            },
+            showPopup() {
+                //0.判断是否提交的有购物车商品
+                //   if(this.carData === 'null' ||this.carData.length === 0) {
+                //       Toast("请选择商品！");
+                //   }
 
-          for(var i in this.carData)
-          {
-            this.chooseGoods += this.carData[i].id+',';
-          }
+                //   if(this.carData.length > this.exchangeNum) {
+                //       Toast("你最多可以兑换"+this.exchangeNum+"款商品");
+                //   }
 
-          //1.判断是否选择收货地址
-          let addressInfo = '';
-          addressInfo = localStorage.getItem('addressInfo');
-          if(!addressInfo || addressInfo === 'null') {
-              this.openAddress();
-          }
+                for(var i in this.carData)
+                {
+                    this.chooseGoods += this.carData[i].id+',';
+                }
 
-          addressInfo = JSON.parse(addressInfo);
-          //2.获取收货地址并验证
-          this.address = {
-              username : addressInfo.userName,
-              mobile : addressInfo.telNumber,
-              address : addressInfo.detailInfo,
-              area : addressInfo.provinceName+','+addressInfo.cityName+','+addressInfo.countryName, //省市区， 逗号拼接
+                //1.判断是否选择收货地址
+                let addressInfo = '';
+                addressInfo = localStorage.getItem('addressInfo');
+                if(!addressInfo || addressInfo === 'null') {
+                    this.openAddress();
+                }
 
-              remark : this.remark,
-              spare_name:this.standbyName,
-              spare_mobile:this.standbyPhone
-          };
+                addressInfo = JSON.parse(addressInfo);
+                //2.获取收货地址并验证
+                this.address = {
+                    username : addressInfo.userName,
+                    mobile : addressInfo.telNumber,
+                    address : addressInfo.detailInfo,
+                    area : addressInfo.provinceName+','+addressInfo.cityName+','+addressInfo.countryName, //省市区， 逗号拼接
 
-          if(!this.isWx) {
-              if(this.address.mobile === '') {
-                  Toast("请填写您的手机号码");
+                    remark : this.remark,
+                    spare_name:this.standbyName,
+                    spare_mobile:this.standbyPhone
+                };
+
+                if(!this.isWx) {
+                    if(this.address.mobile === '') {
+                        Toast("请填写您的手机号码");
+                    }
+
+                    if(this.address.address === '') {
+                        Toast("请填写你的地址信息");
+                    }
+                }
+
+                //3.显示输入卡密弹框
+                let donate_type = this.donate_type
+                if(!donate_type){
+                    this.jid = localStorage.getItem('jid');
+                    this.packageId = localStorage.getItem('package_id'+this.jid);
+                    this.show = true;
+                }else{
+                    this.packageId = utils.getUrlKey('package_id'),
+                        this.showagain = true
+                }
+            },
+
+            openAddress() {
+
+                /*var addressInfo={
+                  userName:'苏克',
+                  telNumber:'15810227932',
+                  provinceName:' 山西',
+                  cityName:'运城',
+                  countryName:'永济',
+                  detailInfo:'中关村在线'
               }
 
-              if(this.address.address === '') {
-                  Toast("请填写你的地址信息");
-              }
-          }
+              localStorage.setItem('addressInfo',JSON.stringify(addressInfo));*/
 
-          //3.显示输入卡密弹框
-          let donate_type = this.donate_type
-          if(!donate_type){
-              this.jid = localStorage.getItem('jid');
-              this.packageId = localStorage.getItem('package_id'+this.jid);
-              this.show = true;
-          }else{
-              this.packageId = utils.getUrlKey('package_id'),
-              this.showagain = true
-          }
-      },
+                //输出地址信息到页面
 
-      openAddress() {
 
-            var addressInfo={
-              userName:'苏克',
-              telNumber:'15810227932',
-              provinceName:' 山西',
-              cityName:'运城',
-              countryName:'永济',
-              detailInfo:'中关村在线'
-          }
+                if(this.isWx) {
+                    let showAddress = this.showAddress;
+                    wx.ready(function () {
+                        wx.openAddress({
+                            trigger: function (res) {
+                                //alert('用户开始拉出地址');
+                            },
+                            success: function (res) {
+                                //将收货地址信息 回显到 表单里
+                                $('.choose_address').hide();
+                                $('.show_address').show();
 
-          localStorage.setItem('addressInfo',JSON.stringify(addressInfo));
+                                $('.userName').html(res.userName);
+                                $('.telNumber').html(res.telNumber);
+                                $('.address_text').html(res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo);
+                                localStorage.setItem('addressInfo',JSON.stringify(res));
 
-        //输出地址信息到页面
-            
+                            },
+                            cancel: function (res) {
+                                //alert('用户取消拉出地址');
+                            },
+                            fail: function (res) {
+                                //alert(JSON.stringify(res));
+                            }
+                        });
+                    });
+                }else{
+                    //跳转新页面  编辑地址 并 save 保存到 localStorage addressInfo
+                }
+            },
 
-          if(this.isWx) {
-              let showAddress = this.showAddress;
-              wx.ready(function () {
-                  wx.openAddress({
-                      trigger: function (res) {
-                          //alert('用户开始拉出地址');
-                      },
-                      success: function (res) {
-                          //将收货地址信息 回显到 表单里
-                             $('.choose_address').hide();
-							 $('.show_address').show();
 
-							 $('.userName').html(res.userName);
-							 $('.telNumber').html(res.telNumber);
-							 $('.address_text').html(res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo);
-                          localStorage.setItem('addressInfo',JSON.stringify(res));
+            catr_verify(){
+                //4.验证卡密
+                this.isDisable = true
+                setTimeout(() => {
 
-                      },
-                      cancel: function (res) {
-                          //alert('用户取消拉出地址');
-                      },
-                      fail: function (res) {
-                          //alert(JSON.stringify(res));
-                      }
-                  });
-              });
-          }else{
-              //跳转新页面  编辑地址 并 save 保存到 localStorage addressInfo
-          }
-      },
+                    if(this.donate_type){
+                        if(!this.code){
+                            Toast("请填写验证码");
+                            return false
+                        }
+                        this.chooseGoods = this.chooseGoods.split(',')[0];
 
-     
-    catr_verify(){
-          //4.验证卡密
-            this.isDisable = true
-            setTimeout(() => {
+                        //5.获取订单信息 提交订单
+                        let orderData = {
+                            choose_goods : this.chooseGoods,
+                            package_id : this.packageId,
+                            address : this.address,
+                            mobile : this.mobile,
+                            code : this.code,
+                            account: this.account,
+                        };
 
-                 if(this.donate_type){
-                 if(!this.code){
-                     Toast("请填写验证码");
-                     return false
-                 }
-                 this.chooseGoods = this.chooseGoods.split(',')[0];
+                        this.generateOrder(orderData);
+                    }else{
+                        this.$api.home.accountPwd({
+                            account: this.account,
+                            pwd:this.pwd,
+                            package_id:this.packageId,
+                            jid:this.jid,
+                            source:utils.getUrlKey('source'),
+                            goods_id:utils.getUrlKey('goods_id'),
+                            choose_out_time:this.ide
+                        }).then(params =>{
+                            if(params.data.code  == 1000){
+                                this.chooseGoods = this.chooseGoods.split(',')[0];
 
-                 //5.获取订单信息 提交订单
-                 let orderData = {
-                     choose_goods : this.chooseGoods,
-                     package_id : this.packageId,
-                     address : this.address,
-                     mobile : this.mobile,
-                     code : this.code,
-                     account: this.account,
-                 };
+                                //5.获取订单信息 提交订单
+                                let orderData = {
+                                    choose_goods : this.chooseGoods,
+                                    package_id : params.data.data.package_id ? params.data.data.package_id : this.packageId,
+                                    account : this.account,
+                                    pwd : this.pwd,
+                                    address : this.address,
+                                    source:utils.getUrlKey('source'),
+                                    choose_out_time: this.ide
+                                };
 
-                 this.generateOrder(orderData);
-             }else{
-                 this.$api.home.accountPwd({
-                     account: this.account,
-                     pwd:this.pwd,
-                     package_id:this.packageId,
-                     jid:this.jid,
-                     source:utils.getUrlKey('source'),
-                     choose_out_time:this.ide+1
-                 }).then(params =>{
-                     if(params.data.code  == 1000){
-                         this.chooseGoods = this.chooseGoods.split(',')[0];
+                                this.generateOrder(orderData);
+                            }else if(params.data.code  == 2002){
+                                Toast(params.data.msg);
+                                this.showagain = false
+                            }
+                        })
+                    }
+                    this.isDisable = false
+                }, 1000)
 
-                         //5.获取订单信息 提交订单
-                         let orderData = {
-                             choose_goods : this.chooseGoods,
-                             package_id : params.data.data.package_id ? params.data.data.package_id : this.packageId,
-                             account : this.account,
-                             pwd : this.pwd,
-                             address : this.address,
-                             source:utils.getUrlKey('source'),
-                             choose_out_time: this.ide+1
-                         };
+            },
+            // 获取验证码
+            getCode(){
+                this.$api.home.getCode({
 
-                         this.generateOrder(orderData);
-                     }else if(params.data.code  == 2002){
-                         Toast(params.data.msg);
-                         this.showagain = false
-                     }
-                 })
-             }
-                this.isDisable = false
-            }, 1000)
-            
-      },
-        // 获取验证码
-      getCode(){
-          this.$api.home.getCode({
-				
-				mobile : this.mobile 
-            }).then(params => {
-                // if(params.data.code  == 1000){
-				
-				// }
-				console.log(params)
-            })
-      },
-      btn_affirm(){
+                    mobile : this.mobile
+                }).then(params => {
+                    // if(params.data.code  == 1000){
 
-      },
-       inputFocus(){
-            clearTimeout(this.timer)
-        },
-        inputFocusout() {
-            this.timer = setTimeout(() => {
-            window.scrollTo(0,0)
-            // 间隔设为10，减少页面失去焦点定时器的突兀感，
-            },10)
-        },
-        destroyed() {
-            clearTimeout(this.timer)
-        },
-      generateOrder(params) {
-        this.$api.home.generateOrder(params).then(params =>{
-            if(params.data.code === 1000){
-                this.$router.push({path:'/succeed','query':{"order_sn":params.data.data.ordersn}})
-            }else if(params.data.code === 2002){
-                Toast(params.data.msg);
+                    // }
+                    console.log(params)
+                })
+            },
+            btn_affirm(){
+
+            },
+            inputFocus(){
+                clearTimeout(this.timer)
+            },
+            inputFocusout() {
+                this.timer = setTimeout(() => {
+                    window.scrollTo(0,0)
+                    // 间隔设为10，减少页面失去焦点定时器的突兀感，
+                },10)
+            },
+            destroyed() {
+                clearTimeout(this.timer)
+            },
+            generateOrder(params) {
+                this.$api.home.generateOrder(params).then(params =>{
+                    if(params.data.code === 1000){
+                        this.$router.push({path:'/succeed','query':{"order_sn":params.data.data.ordersn}})
+                    }else if(params.data.code === 2002){
+                        Toast(params.data.msg);
+                    }
+                });
             }
-        });
-      }
-  },
-    created () {
-        localStorage.setItem('addressInfo',null);
-        var ua = navigator.userAgent.toLowerCase();
-        if(ua.match(/MicroMessenger/i)=="micromessenger") {
-            if(ua.match('wxwork') == "wxwork") {
+        },
+        created () {
+            localStorage.setItem('addressInfo',null);
+            var ua = navigator.userAgent.toLowerCase();
+            if(ua.match(/MicroMessenger/i)=="micromessenger") {
+                if(ua.match('wxwork') == "wxwork") {
+                    this.isWx = false;
+                }
+                this.isWx = true;
+            } else {
                 this.isWx = false;
             }
-            this.isWx = true;
-        } else {
-            this.isWx = false;
+            this.init ();
+            var dateObj = {};
+
+            for(var i = 1; i <= 7; i++) {
+
+                dateObj = this.getDate(i); //把返回的日期赋值给对象
+
+                this.list.push(dateObj); //把对象添加到数组里面，然后渲染到页面
+
+            }
+
+
+        },
+        mounted() {
+
         }
-        this.init ();    
-        var dateObj = {};
- 
-        for(var i = 1; i <= 7; i++) {
-
-            dateObj = this.getDate(i); //把返回的日期赋值给对象
-
-            this.list.push(dateObj); //把对象添加到数组里面，然后渲染到页面
-
-        }
-
-
-    },
-    mounted() {
-        
-    }
-};
+    };
 
 </script>
 <style lang='stylus' scoped>
@@ -494,7 +495,7 @@ export default {
         .standby_inp
             height 0.88rem;
             background #ebebeb
-            margin-top 0.4rem 
+            margin-top 0.4rem
             padding-left 0.2rem
     .Aog
         height 0.6rem;
@@ -573,7 +574,7 @@ export default {
         .address_text
             line-height 0.6rem
             color  #999
-            font-size 0.24rem   
+            font-size 0.24rem
     .goods_list
         margin-top 0.16rem
     .item
@@ -586,12 +587,12 @@ export default {
         align-items center
         background #fff
         margin-bottom 0.02rem
-    // .cart_goods
-    //     width 100%
-    //     height 100%
-    //     display flex
-    //     justify-content space-between
-    //     align-items center
+        // .cart_goods
+        //     width 100%
+        //     height 100%
+        //     display flex
+        //     justify-content space-between
+        //     align-items center
         .goods_img
             width 2.8rem
             height 3.14rem
@@ -619,7 +620,7 @@ export default {
                 padding-top 0.2rem
             .goods_num
                 position absolute
-                bottom 0 
+                bottom 0
                 left 0
     // .goods_num{
     //   width 1rem
@@ -684,21 +685,21 @@ export default {
         border-radius 0
         margin-top: 0.6rem;
         border-bottom: 1px solid #000;
-        // padding-bottom: 0.2rem;
+    // padding-bottom: 0.2rem;
     .code_block
-            display flex
-            justify-content space-between
-            align-items center
-            .input_code
-                width 2rem
-        .btn_affirm
-            width 4.24rem
-            height 0.8rem
-            background #333
-            color #ffffff
-            display  block
-            margin 0 auto
-            margin-top 1.6rem
+        display flex
+        justify-content space-between
+        align-items center
+        .input_code
+            width 2rem
+    .btn_affirm
+        width 4.24rem
+        height 0.8rem
+        background #333
+        color #ffffff
+        display  block
+        margin 0 auto
+        margin-top 1.6rem
     .affirm_btn
         width: 4.24rem;
         height: 0.8rem;

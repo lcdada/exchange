@@ -111,9 +111,14 @@ export default {
 			code:'',
 			friend_phone:'',
             codeTime:0,
+<<<<<<< HEAD
 			showCode:false,
 			showLoading:false
 			
+=======
+            showCode:false,
+
+>>>>>>> d327835c50acbbfacf24ae5e4019480ff41667e3
 		}
 	},
 	components:{
@@ -249,6 +254,7 @@ export default {
 		},
 		btn_affirm(){
 			let that = this;
+
 			this.addDonate(function(params) {
 				if(params.data.code == 1000){
 					const donate_id = params.data.data
@@ -261,6 +267,7 @@ export default {
 							package_id:package_id,
 							jid:that.jid,
 							donate_id:donate_id,
+							from_user:that.addDonateLog.from_user,
 						}
 					}else{
 						that.requestParam = {
@@ -269,12 +276,18 @@ export default {
 							to_mobile:that.friend_phone,
 							package_id:that.package_id,
 							donate_id:donate_id,
-							account:that.account
+							account:that.account,
+							from_user:that.addDonateLog.from_user,
 						}
 					}
 					that.$api.home.donateUser(that.requestParam).then(params => {
 						if(params.data.code  == 1000){
+<<<<<<< HEAD
 							that.$router.push({path:'/donatesucc','query':{"account":that.addDonateLog.account,"mobile":that.addDonateLog.phone}})
+=======
+							that.$router.push({path:'/donatesucc','query':{"account":that.addDonateLog.account,"mobile":that.addDonateLog.phone}
+							})
+>>>>>>> d327835c50acbbfacf24ae5e4019480ff41667e3
 						}
 					})
 				}
