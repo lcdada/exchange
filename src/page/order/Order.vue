@@ -162,7 +162,7 @@ export default {
           }).then(params =>{
             if(params.data.code  == 1000){
                 const data = params.data.data[0];
-                this.aog = data.start_time
+                this.aog = data.start_time_hg
                 console.log(params)
                 if(data.is_set_send_time != 1){
                     this.showChooseTime = true
@@ -287,7 +287,7 @@ export default {
 
       openAddress() {
 
-            /*var addressInfo={
+            var addressInfo={
               userName:'苏克',
               telNumber:'15810227932',
               provinceName:' 山西',
@@ -296,7 +296,7 @@ export default {
               detailInfo:'中关村在线'
           }
 
-          localStorage.setItem('addressInfo',JSON.stringify(addressInfo));*/
+          localStorage.setItem('addressInfo',JSON.stringify(addressInfo));
 
         //输出地址信息到页面
             

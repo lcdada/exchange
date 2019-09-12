@@ -114,7 +114,7 @@ export default {
 	  init(){
 		  if(this.$store.getters.carCount == 0){
 			  this.showGoodsCartNumber = false
-			  console.log(this.$store.getters.carCount)
+			//   console.log(this.$store.getters.carCount)
 		  }
 	  }
 

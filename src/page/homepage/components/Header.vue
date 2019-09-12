@@ -1,6 +1,6 @@
 <template>
   <div>
-        <div class="bless_video" controls="controls">
+        <div class="bless_video" controls="controls" v-if="showVideo">
             <video
                 :src="bless.video"
                 width="100%"
@@ -15,6 +15,9 @@
                 object-fit = fill
             >
             </video>
+        </div>
+        <div v-if="showImg">
+            <img :src="bless.thumb" alt="" class="showImg">
         </div>
       <div class="bless_text">
           <p class="to_name" v-html="bless.to_user"></p>
@@ -32,20 +35,24 @@ export default {
         bless:Object,
         title:Object
     },
-    
-    updated() {
-        
-    },
-    methods: {
-        title_text(){
-            localStorage.setItem("title",this.title.title)
-            this.title = localStorage.getItem('title')
+     data() {
+        return {
+            showVideo:true,
+            showImg:true,
         }
-        
     },
-    mounted() {
-        this.title_text()
+   
+    watch: {
+        bless:function(val){
+            if(val.video == undefined ||val.video == "" || val.video == "null"){
+               this.showVideo = false;
+            }
+            if(val.thumb == undefined ||val.thumb == "" || val.thumb == "null"){
+               this.showImg = false;
+            }
+        }
     },
+  
 }
 
 </script>
@@ -53,6 +60,8 @@ export default {
     .bless_video
         width 100%
         height 4.2rem
+    .showImg
+        width 100%
     .bless_text
         padding 0.16rem 0
         .to_name

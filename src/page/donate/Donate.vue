@@ -18,6 +18,7 @@
 					multiple
 					:max-count="1"
 					:after-read="afterReadOne"
+					:before-delete = "deleImg"
 				/>
 				<span>上传图片</span>
 		  	</div>
@@ -31,6 +32,9 @@
 				/>
 				<span>上传视频</span>
 		  	</div>
+	  </div>
+	  <div class="loading" v-if="showLoading">
+		  <van-loading type="spinner" color="#1989fa" />
 	  </div>
 	  <div class="footer_text">
 		  <p class="text_title">礼包转增说明</p>
@@ -67,7 +71,6 @@
 				<button @click="getCode" v-if="!showCode">获取验证码</button>
               	<button @click="getCode" v-if="showCode">{{codeTime}}s后重新获取</button>
 		   </div>
-		  
 		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" v-model="friend_phone">
 		   <button class="btn_affirm" @click="btn_affirm">确认提交</button>
 	  </van-popup>		
@@ -76,7 +79,7 @@
 
 <script>
 import utils from '../../utils/utils'
-import { Uploader,Tabbar ,Popup,Icon } from 'vant';
+import { Uploader,Tabbar ,Popup,Icon,Loading  } from 'vant';
 export default {
 	data() {
 		return {
@@ -108,7 +111,8 @@ export default {
 			code:'',
 			friend_phone:'',
             codeTime:0,
-            showCode:false
+			showCode:false,
+			showLoading:false
 			
 		}
 	},
@@ -116,7 +120,8 @@ export default {
 		[Uploader.name]:Uploader,
 		[Tabbar.name]:Tabbar,
 		[Popup.name]:Popup,
-		[Icon.name]:Icon
+		[Icon.name]:Icon,
+		[Loading.name]:Loading 
 	},
 	created() {
 		localStorage.setItem('thumb',null);
@@ -137,20 +142,31 @@ export default {
 		// }
 	},
 	methods: {
+		deleImg(file){
+			console.log(file)
+			console.log(8888)
+			this.showLoading = false;
+		},
 		afterReadOne(){
+			this.showLoading = true;
 			const img = this.fileList[0].content
 			const imgtype = this.fileList[0].file.type
 			this.$api.home.UploadImg({
 			   imgBase64:img,
 			   mime:imgtype
             }).then(params => {
+				console.log(params)
                 if(params.data.code  == 1000){
 					const preview_url = params.data.data.preview_url
+					this.showLoading = false
 					localStorage.setItem('thumb',preview_url)
+
                 }
             })
 		},
+		
 		afterRead(){
+			this.showLoading = true;
 			const img = this.fileListTwo[0].content
 			const imgtype = this.fileListTwo[0].file.type
 			this.$api.home.UploadImg({
@@ -158,7 +174,9 @@ export default {
 			   mime:imgtype
             }).then(params => {
                 if(params.data.code  == 1000){
-					const preview_url = params.data.data.preview_url
+					console.log(params)
+					const preview_url = params.data.data.preview_url;
+					this.showLoading = true;
 					localStorage.setItem('video',preview_url)
                 }
             })
@@ -256,7 +274,7 @@ export default {
 					}
 					that.$api.home.donateUser(that.requestParam).then(params => {
 						if(params.data.code  == 1000){
-							that.$router.push({path:'/donatesucc'})
+							that.$router.push({path:'/donatesucc','query':{"account":that.addDonateLog.account,"mobile":that.addDonateLog.phone}})
 						}
 					})
 				}
@@ -273,6 +291,11 @@ export default {
 	.donate
 		padding 0 0.32rem
 		background #ffffff
+		position relative
+		.loading
+			position: absolute;
+			top: 50%;
+			right: 50%;
 		.people_name
 			height 1.1rem
 			display flex

@@ -24,9 +24,40 @@ export default {
     },
     data() {
         return {
+            jid:utils.getUrlKey('jid'),
         }
     },
-    mounted() {}
+    methods:{
+        donate(){
+            if(this.jid === 929){
+            wx.ready(function () {
+                console.log(888888)
+                var sharedata = {
+                    title: title,
+                    desc: desc,
+                    link: window.location.href+"&donate_type=1"+"&action=around",
+                    imgUrl: imgUrl ? imgUrl : "",
+                    success: function(){
+
+                    },
+                    cancel: function(){
+
+                    }
+                };
+
+                wx.onMenuShareAppMessage(sharedata);
+                //peng you quan
+                wx.onMenuShareTimeline(sharedata);
+
+            });
+        }
+        }
+        
+      
+    },
+    mounted() {
+       this.donate() 
+    }
 }
 </script>
 <style lang='stylus' scoped> 
