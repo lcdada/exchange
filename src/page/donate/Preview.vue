@@ -118,10 +118,10 @@ export default {
         this.theme_content = theme_content;
         this.thumb = thumb;
         this.video = video;
-        if(!this.thumb){
+        if(this.thumb == undefined || this.thumb == "null" || !this.thumb){
             this.show_thumb = false
         }
-        if(!this.vidoe){
+        if(this.video == undefined || this.video == "null" || !this.video){
             this.show_video = false
         }
     },
@@ -191,7 +191,8 @@ export default {
                 if(params.data.code  == 1000){
 					// console.log(params);
                     this.showphome = false
-                    this.$router.push({path:'/donatesucc'})
+                    this.$router.push({path:'/donatesucc','query':{"account":this.addDonateLog.account,"mobile":this.addDonateLog.phone}
+                    })
                 }else{
                     Toast(params.data.msg);
                 }

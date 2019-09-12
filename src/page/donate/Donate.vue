@@ -108,8 +108,8 @@ export default {
 			code:'',
 			friend_phone:'',
             codeTime:0,
-            showCode:false
-			
+            showCode:false,
+
 		}
 	},
 	components:{
@@ -231,6 +231,7 @@ export default {
 		},
 		btn_affirm(){
 			let that = this;
+
 			this.addDonate(function(params) {
 				if(params.data.code == 1000){
 					const donate_id = params.data.data
@@ -258,7 +259,8 @@ export default {
 					}
 					that.$api.home.donateUser(that.requestParam).then(params => {
 						if(params.data.code  == 1000){
-							that.$router.push({path:'/donatesucc'})
+							that.$router.push({path:'/donatesucc','query':{"account":that.addDonateLog.account,"mobile":that.addDonateLog.phone}
+							})
 						}
 					})
 				}

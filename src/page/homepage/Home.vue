@@ -58,7 +58,7 @@ export default {
                     console.log(data)
                     this.bless_info = data.bless_info;
                     $('.title').html(data.title);
-                    
+
                     this.package_id = data.package_id;
 
                     this.getGoodsList(this.package_id);
