@@ -23,6 +23,11 @@
             [Tabbar.name]:Tabbar,
             [TabbarItem.name]:TabbarItem
         },
+        watch: {
+              $route(){
+                this.init()
+            },
+        },  
         methods:{
             init () {
                 let id = this.$route.query.id
@@ -80,4 +85,5 @@
 <style lang="stylus" scoped>
     .detail
         background #fff
+        padding-bottom 1.4rem
 </style>

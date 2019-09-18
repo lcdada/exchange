@@ -33,9 +33,9 @@
 				<span>上传视频</span>
 		  	</div>
 	  </div>
-	  <div class="loading" v-if="showLoading">
+	  <!-- <div class="loading" v-if="showLoading">
 		  <van-loading type="spinner" color="#1989fa" />
-	  </div>
+	  </div> -->
 	  <div class="footer_text">
 		  <p class="text_title">礼包转增说明</p>
 		  <p class="text_content">1.受赠用户只能凭 <span class="color_text">您输入的好友手机领取礼物</span> ，请谨慎填写！</p>
@@ -111,14 +111,8 @@ export default {
 			code:'',
 			friend_phone:'',
             codeTime:0,
-<<<<<<< HEAD
-			showCode:false,
-			showLoading:false
-			
-=======
             showCode:false,
 
->>>>>>> d327835c50acbbfacf24ae5e4019480ff41667e3
 		}
 	},
 	components:{
@@ -150,7 +144,7 @@ export default {
 		deleImg(file){
 			console.log(file)
 			console.log(8888)
-			this.showLoading = false;
+			// this.showLoading = false;
 		},
 		afterReadOne(){
 			this.showLoading = true;
@@ -163,7 +157,7 @@ export default {
 				console.log(params)
                 if(params.data.code  == 1000){
 					const preview_url = params.data.data.preview_url
-					this.showLoading = false
+					// this.showLoading = false
 					localStorage.setItem('thumb',preview_url)
 
                 }
@@ -171,7 +165,7 @@ export default {
 		},
 		
 		afterRead(){
-			this.showLoading = true;
+			// this.showLoading = true;
 			const img = this.fileListTwo[0].content
 			const imgtype = this.fileListTwo[0].file.type
 			this.$api.home.UploadImg({
@@ -282,12 +276,8 @@ export default {
 					}
 					that.$api.home.donateUser(that.requestParam).then(params => {
 						if(params.data.code  == 1000){
-<<<<<<< HEAD
-							that.$router.push({path:'/donatesucc','query':{"account":that.addDonateLog.account,"mobile":that.addDonateLog.phone}})
-=======
 							that.$router.push({path:'/donatesucc','query':{"account":that.addDonateLog.account,"mobile":that.addDonateLog.phone}
 							})
->>>>>>> d327835c50acbbfacf24ae5e4019480ff41667e3
 						}
 					})
 				}

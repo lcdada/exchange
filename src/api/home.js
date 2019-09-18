@@ -65,6 +65,10 @@ const home = {
 //商品公告相关
     getGoodsNotice(params){
         return axios.post(`${base.home}/exchange/getGoodsNotice`,qs.stringify(params))
+    },
+//加价购列表
+    getAddGoods(params){
+        return axios.post(`${base.home}/exchange/getAddBuyGoodsList`,qs.stringify(params))
     }
 }
 

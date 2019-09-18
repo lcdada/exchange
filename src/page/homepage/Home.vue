@@ -5,19 +5,22 @@
             <p class="numb_text">您可兑换<span class="number">{{exchange_num}}</span>款礼品</p>
         </div>
         <home-list :package="package_id" :list="goods_list" :bless="bless_info"></home-list>
-
+        <add-buy :addlist = "addList" :package="package_id"></add-buy>
     </div>
 </template>
 <script>
 import HomeHeader from './components/Header'
 import HomeList from './components/List'
 import utils from '@/utils/utils'
+import AddBuy from '@/page/components/Addbuy'
 
 export default {
     name:"HomePage",
     components:{
         HomeHeader,
-        HomeList
+        HomeList,
+        AddBuy
+
     },
     props:["flag"],
     data (){
@@ -31,7 +34,8 @@ export default {
             package_id:utils.getUrlKey('package_id'),
             donate_id:utils.getUrlKey('donate_id'),
             donate_type:utils.getUrlKey('donate_type'),
-            requestParam : {}
+            requestParam : {},
+            addList:[]
         }
 
     },
@@ -58,7 +62,7 @@ export default {
                     localStorage.setItem("video",data.bless_info.video)
                     
                     this.bless_info = data.bless_info;
-                    $('.title').html(data.title);
+                    // $('.title').html(data.title);
 
                     this.package_id = data.package_id;
 
@@ -83,11 +87,23 @@ export default {
                 }
             })
         },
+        getAddGoods (){
+            this.$api.home.getAddGoods({
+                type : "package",
+                id: 663
+            }).then(params => {
+                if(params.data.code  == 1000){
+                    const data = params.data.data;
+                    console.log(data)
+                    this.addList = data
+                }
+            })
+        },
     },
 
     mounted () {
         this.getBless()
-        // this.getGoodsList()
+        this.getAddGoods()
     },
 }
 </script>

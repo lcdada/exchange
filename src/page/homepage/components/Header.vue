@@ -33,7 +33,7 @@
         name:'HomeHeader',
         props:{
             bless:Object,
-            title:Object
+            title:String
         },
         data() {
             return {

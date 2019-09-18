@@ -4,8 +4,14 @@
             <p class="serialNum">{{message.goods_sn}}</p>
             <p class="goods_name">{{message.goods_name}}</p>
             <p class="name_second">{{message.salute_sketch}}</p>
+            <div v-if="show_price">
+                 <p class="addPrice">+ ￥<span>7999</span></p>
+                 <p class="addPrice_text"><span>{{this.pageName}}</span>+<span>199</span>元，兑换此礼品</p>
+            </div>
+           
         </div>
         <div class="detail_conent" v-html='message.summary'>{{message.summary}}</div>
+        <add-buy :addlist = "addList" v-if="showAddList"></add-buy>
         <van-tabbar class="footer">
             <div v-if="show_button_two" class="footer">
                 <div  class="footer_btn"  v-if="show_addcart">
@@ -25,10 +31,12 @@
                 </div>
             </div>
         </van-tabbar>
+       
     </div>
 </template>
 
 <script>
+    import AddBuy from '@/page/components/Addbuy'
     import utils from '../../../utils/utils'
     import {  Tabbar, Toast  } from 'vant';
     export default {
@@ -47,16 +55,30 @@
                 message_text:"该商品已下架",
                 arrival_time_text:false,
                 sold_out:false,
+                show_price:false,
+                addgoods:utils.getUrlKey('addgoods'),
+                goodsID : utils.getUrlKey('id'),
+                addList:[],
+                showAddList:false,
+                pageName:utils.getUrlKey('pageName'),
             }
         },
         components:{
             [Tabbar.name]:Tabbar,
-            [Toast.name]:Toast
+            [Toast.name]:Toast,
+            AddBuy
         },
         created(){
+             if(this.addgoods || this.addgoods == 'addgoods'){
+                this.show_price = true;
+                this.showAddList = true 
+                this.getAddGoods()
+            }
             if(this.source || this.source == 'goods_qrcode'){
                 this.show_addcart = false;
             }
+           
+
         },
         watch: {
             message:function(value){
@@ -66,30 +88,30 @@
                 if(b == false){
                     this.showTime()
                 }
+            },
+            $route(){
+                
             }
+            
         },
 
         methods: {
             addCart(params){
-                // console.log(params)
+                console.log(params)
                 this.$store.dispatch('addCar',params);
                 Toast.success('加入购物车');
-                // const goodsDetial = {
-                //     picture:params.thumb,
-                //     goods_name:params.goods_name,
-                //     title:params.class_name,
-                //     num:1
-                // }
-
-                // const goodsList = localStorage.setItem('CartList',JSON.stringify(goodsDetial))
-                // console.log(goodsList)
             },
             buyNow(params){
                 this.$store.dispatch('nowAddCar',params);
                 if(this.flag == false){
                     return false;
                 }else{
-                    this.$router.push({path:'/order',query: {goods_id: params.id,now:true} })
+                    if(this.addgoods || this.addgoods == 'addgoods'){
+                         this.$router.push({path:'/order',query: {goods_id: params.id,now:true,addgoods:"addgoods",pageName:this.pageName} })
+                    }else{
+                         this.$router.push({path:'/order',query: {goods_id: params.id,now:true} })
+                    }
+                   
                 }
 
             },
@@ -108,7 +130,21 @@
 
                 }
 
-            }
+            },
+             getAddGoods (){
+                this.$api.home.getAddGoods({
+                    type : "goods",
+                    // id: this.goodsID
+                    id:3122
+                }).then(params => {
+                    if(params.data.code  == 1000){
+                        console.log(params)
+                        const data = params.data.data;
+                        console.log(data)
+                        this.addList = data
+                    }
+                })
+            },
         },
         mounted(){
             // this.showTime()
@@ -124,6 +160,7 @@
         text-align center
         line-height 0.5rem
         padding-bottom 1.08rem
+        font-family PingFang-SC
         .goods_name
             font-size 0.32rem
             font-weight 600
@@ -132,6 +169,20 @@
         .name_second,.serialNum
             color #666
             font-size 0.28rem
+        .addPrice
+            font-size 0.32rem
+            color #FF0000
+            margin-top 0.1rem
+        .addPrice_text
+            display block
+            width 100%
+            height 0.8rem
+            line-height 0.8rem
+            background #999
+            color #ffffff
+            font-size 0.28rem
+            margin-top 0.2rem
+
     .detail_conent
         padding-bottom 2rem
     .footer

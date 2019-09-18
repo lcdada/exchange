@@ -10,7 +10,13 @@
                 <div class="item_text">
                     <p class="goods_name">{{item.goods_name}}</p>
                     <p class= "goods_title">{{item.title}}</p>
-                    <p class="goods_num"> x{{ item.num }}</p>
+                    <div v-if="showPrice">
+                        <p class="goods_num"> x{{ item.num }}</p>
+                    </div>
+                    <div class="goods_num" v-if="!showPrice">
+                         <div>+<span>{{9999 | currency}}</span></div>
+                         <div>x {{item.num}}</div>
+                    </div>
                 </div>
             </div>
             <van-icon name="cross" class="delete" @click="deleteFun(item)" />
@@ -30,11 +36,16 @@
 
 <script>
 import {Icon} from 'vant'
+import {currency} from '@/utils/currency'
 export default {
     name:'ShopCart',
+    filters:{
+		currency:currency
+	},
      data() {
         return {
-            seenCartgoods:false
+            seenCartgoods:false,
+            showPrice:false
         }
     },
     components:{
@@ -107,9 +118,11 @@ export default {
                 display flex
                 justify-content flex-start
                 align-items center
+                width 100%
                 .goods_img
                     width 2.8rem
                     height 3.14rem
+                    flex-shrink 0
                     .goods_picture
                         width 100%
                         height 100%
@@ -120,11 +133,12 @@ export default {
                     height: 3.14rem;
                     padding-top 0.18rem
                     position relative
+                    overflow hidden
                     .goods_name
                         font-size 0.28rem
                         color #333
                         font-weight 600
-                        width 50%
+                        width 90%
                         ellipsis()
                     .goods_title
                         ellipsis()
@@ -135,6 +149,12 @@ export default {
                         position absolute
                         bottom 0
                         left 0
+                        display inline-flex
+                        justify-content space-between
+                        width 100%
+                        align-items center
+                    .goods_num p
+                        display block
         .delete
             position absolute
             top 0.2rem

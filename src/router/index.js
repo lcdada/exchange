@@ -8,6 +8,8 @@ import Succeed from '@/page/succeed/Succeed'
 import Donate from '@/page/donate/Donate'
 import Preview from '@/page/donate/Preview'
 import DonateSucc from '@/page/donate/DonateSucc'
+import AddList from '@/page/components/AddList'
+import Pay from '@/page/components/Pay'
  
 Vue.use(Router)
 
@@ -54,6 +56,14 @@ export default new Router({
       path:'/donatesucc',
       name:'DonateSucc',
       component:DonateSucc
+    },{
+      path:'/addlist',
+      name:'AddList',
+      component:AddList
+    },{
+      path:'/pay',
+      name:'Pay',
+      component:Pay
     }
   ]
 })

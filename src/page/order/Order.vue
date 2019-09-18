@@ -47,18 +47,45 @@
                     <div class="item_text">
                         <p class="goods_name">{{item.goods_name}}</p>
                         <p class= "goods_title">{{item.title}}</p>
-                        <p class="goods_num"> x{{ item.num }}</p>
+                        <div v-if="showPrice">
+                            <p class="goods_num"> x{{ item.num }}</p>
+                        </div>
+                        <div class="goods_num" v-if="!showPrice">
+                            <div>+<span>{{item.addprice | currency}}</span></div>
+                            <div>x {{item.num}}</div>
+                        </div>
                     </div>
-                    <!-- </div> -->
-                    <!-- <van-icon name="cross" class="delete" @click="deleteFun(item)" /> -->
                 </li>
             </ul>
 
         </div>
+        <div class="overview" v-if="showAddMes">
+            <p class="overview_title">概览</p>
+            <ul class="pay_goods">
+                <li>
+                    <!-- <div class="itemMes">
+                        <p class="acro_item">兑换礼品:<span class="g_name">CAPSULE 系列 胶囊伞</span></p>
+                        <p>￥<span>2000</span></p>
+                    </div> -->
+                    <div class="itemMes">
+                        <p class="acro_item">礼包抵扣:<span class="g_name">{{this.pageName}}</span></p>
+                        <p>￥<span>2000</span></p>
+                    </div>
+                    <div class="itemMes">
+                        <p class="acro_item">折扣优惠:<span class="g_name"></span></p>
+                        <p>￥<span>2000</span></p>
+                    </div>
+                </li>
+            </ul>
+            <div>
+                <p><span>应付金额</span><span>￥200</span></p>
+            </div>
+        </div>
         <div class="leave_word">
             <p class="leave_word_text">给我们留言</p>
             <textarea class="leave_word_content" v-model="remark"></textarea>
-            <button class="goto_exchange" @click="showPopup">去兑换</button>
+            <button class="goto_exchange" @click="showPopup" v-if="showAddBtn">去兑换</button>
+            <button class="goto_exchange" @click="submit" v-if="!showAddBtn">提交</button>
         </div>
         <van-popup
                 class="pop"
@@ -93,8 +120,12 @@
 <script>
     import utils from '../../utils/utils'
     import {  Tabbar,Icon,Popup,Toast  } from 'vant';
+    import {currency} from '@/utils/currency'
     export default {
         name: "Order",
+         filters:{
+            currency:currency
+        },
         data() {
             return {
                 show: false,
@@ -128,6 +159,11 @@
                 seleDate:'',
                 aog:'',
                 showAog:false,
+                showPrice:true,
+                showAddBtn:true,
+                showAddMes:false,
+                addgoods:utils.getUrlKey('addgoods'),
+                pageName:utils.getUrlKey('pageName'),
             }
         },
         components:{
@@ -151,7 +187,11 @@
             },
             //商品总价
             totalPrice() {
-                return this.$store.getters.totalPrice;
+                if(this.$route.query.now!=undefined){
+                    return this.$store.getters.totalPrice1;
+                }else{
+                    return  this.$store.getters.totalPrice;
+                }
             }
         },
         methods: {
@@ -284,10 +324,50 @@
                         this.showagain = true
                 }
             },
+            // 加价购提交
+            submit(){
+                for(var i in this.carData)
+                {
+                    this.chooseGoods += this.carData[i].id+',';
+                }
+
+                //1.判断是否选择收货地址
+                let addressInfo = '';
+                addressInfo = localStorage.getItem('addressInfo');
+                if(!addressInfo || addressInfo === 'null') {
+                    this.openAddress();
+                }
+
+                addressInfo = JSON.parse(addressInfo);
+                //2.获取收货地址并验证
+                this.address = {
+                    username : addressInfo.userName,
+                    mobile : addressInfo.telNumber,
+                    address : addressInfo.detailInfo,
+                    area : addressInfo.provinceName+','+addressInfo.cityName+','+addressInfo.countryName, //省市区， 逗号拼接
+
+                    remark : this.remark,
+                    spare_name:this.standbyName,
+                    spare_mobile:this.standbyPhone
+                };
+
+                if(!this.isWx) {
+                    if(this.address.mobile === '') {
+                        Toast("请填写您的手机号码");
+                    }
+
+                    if(this.address.address === '') {
+                        Toast("请填写你的地址信息");
+                    }
+                }
+                this.$router.push("/pay")
+
+
+            },
 
             openAddress() {
 
-                /*var addressInfo={
+                var addressInfo={
                   userName:'苏克',
                   telNumber:'15810227932',
                   provinceName:' 山西',
@@ -296,7 +376,7 @@
                   detailInfo:'中关村在线'
               }
 
-              localStorage.setItem('addressInfo',JSON.stringify(addressInfo));*/
+              localStorage.setItem('addressInfo',JSON.stringify(addressInfo));
 
                 //输出地址信息到页面
 
@@ -449,6 +529,14 @@
                 this.list.push(dateObj); //把对象添加到数组里面，然后渲染到页面
 
             }
+
+            if(this.addgoods || this.addgoods == 'addgoods'){
+                this.showAddMes = true;
+                this.showPrice = false; 
+                this.showAddBtn = false;
+                console.log(this.totalPrice)
+            }
+
 
 
         },
@@ -622,6 +710,10 @@
                 position absolute
                 bottom 0
                 left 0
+                display inline-flex
+                justify-content space-between
+                width 100%
+                align-items center
     // .goods_num{
     //   width 1rem
     //   display flex
@@ -633,6 +725,37 @@
         position absolute
         top 0
         right 0
+    .overview
+        min-height 4rem
+        background #fff
+        margin 0.3rem 0
+        padding 0.32rem
+        box-sizing border-box
+        .overview_title
+            font-size 0.32rem
+            font-weight bold
+            line-height 0.44rem
+        .pay_goods
+            margin-top 0.34rem
+        .itemMes
+            display flex
+            justify-content space-between
+            align-items center
+            line-height 0.4rem
+            margin-bottom 0.1rem
+        .g_name
+            display: inline-block;
+            width: 3rem;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            line-height: 0.4rem;
+        .acro_item{
+            display flex 
+            align-items center
+        }
+
+
     .leave_word
         height 5.58rem
         background #fff

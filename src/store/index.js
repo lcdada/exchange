@@ -15,6 +15,7 @@ export default new Vuex.Store({
     mutations: {
         // 加
         addCar(state, params) {
+            console.log(params)
             let jid = localStorage.getItem("jid");
             let exchange_num = localStorage.getItem("exchange_num"+jid);
             let alreadyNum = 0;
@@ -50,6 +51,7 @@ export default new Vuex.Store({
                     "price": params.market_price,
                     "picture":params.thumb,
                     "num": 1,
+                    "addprice":params.market_price
                 }
                 this.state.carList.push(obj)
             }
@@ -64,6 +66,7 @@ export default new Vuex.Store({
                     "price": params.market_price,
                     "picture":params.thumb,
                     "num": 1,
+                    "addprice":params.market_price
                 }
                 this.state.nowlist.push(obj)
         },
@@ -101,11 +104,6 @@ export default new Vuex.Store({
             }
         },
 
-         // 初始化购物车，有可能用户一登录直接进入购物车
-        // initCar(state, car) {
-        //     state.carList = car
-        // },
-        //兑换数量
         newNum(state,sum){ //同上，这里面的参数除了state之外还传了需要增加的值sum
             state.exchangeNum+=sum;
          }
@@ -197,7 +195,19 @@ export default new Vuex.Store({
             let money = 0;
             if (Carlen.length != 0) {
                 Carlen.forEach((item) => {
-                    money += item.price * item.num
+                    money += item.market_price * item.num
+                })
+                return money;
+            } else {
+                return 0;
+            }
+        },
+        totalPrice1(state) {
+            let Carlen = state.nowlist;
+            let money = 0;
+            if (Carlen.length != 0) {
+                Carlen.forEach((item) => {
+                    money += item.market_price * item.num
                 })
                 return money;
             } else {
