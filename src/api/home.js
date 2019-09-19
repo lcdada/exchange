@@ -69,7 +69,19 @@ const home = {
 //加价购列表
     getAddGoods(params){
         return axios.post(`${base.home}/exchange/getAddBuyGoodsList`,qs.stringify(params))
-    }
+    },
+// 生成空订单
+    getEmptyOrder(params){
+        return axios.post(`${base.home}/exchange/generateEmptyOrder`,qs.stringify(params))    
+    },
+// 提交订单
+    getSubmitOrder(params){
+        return axios.post(`${base.home}/exchange/submitOrder`,qs.stringify(params))    
+    },
+// 获取微信支付参数
+    getWeiPay(params){
+        return axios.post(`${base.home}/exchange/weipay`,qs.stringify(params))    
+    },
 }
 
 export default home;  

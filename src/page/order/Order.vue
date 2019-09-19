@@ -69,7 +69,7 @@
                     </div> -->
                     <div class="itemMes">
                         <p class="acro_item">礼包抵扣:<span class="g_name">{{this.pageName}}</span></p>
-                        <p>￥<span>2000</span></p>
+                        <p><span>{{this.score  | currency}}</span></p>
                     </div>
                     <div class="itemMes">
                         <p class="acro_item">折扣优惠:<span class="g_name"></span></p>
@@ -78,7 +78,7 @@
                 </li>
             </ul>
             <div>
-                <p><span>应付金额</span><span>￥200</span></p>
+                <p><span>应付金额</span><span>{{this.totalPrice | currency}}</span></p>
             </div>
         </div>
         <div class="leave_word">
@@ -164,6 +164,9 @@
                 showAddMes:false,
                 addgoods:utils.getUrlKey('addgoods'),
                 pageName:utils.getUrlKey('pageName'),
+                emptyId:'',
+                score:"",
+                addPriceId:utils.getUrlKey('addPriceId')
             }
         },
         components:{
@@ -187,10 +190,11 @@
             },
             //商品总价
             totalPrice() {
+
                 if(this.$route.query.now!=undefined){
-                    return this.$store.getters.totalPrice1;
+                    return this.$store.getters.addtotalPrice1;
                 }else{
-                    return  this.$store.getters.totalPrice;
+                    return  this.$store.getters.addtotalPrice;
                 }
             }
         },
@@ -198,7 +202,8 @@
             init () {
                 let id = utils.getUrlKey('goods_id')
                 this.$api.home.getGoodsDetail({
-                    goods_id:id
+                    goods_id:id,
+                    markup_id:this.addPriceId
                 }).then(params =>{
                     if(params.data.code  == 1000){
                         const data = params.data.data[0];
@@ -245,28 +250,6 @@
             },
             choose_time(){
                 this.showTime =true
-            },
-
-            // 增加数量
-            addCar(data){
-                this.$store.dispatch('addCar',data)
-            },
-            // 减数量
-            reduceFun(data){
-                this.$store.dispatch('reducedCar',data)
-            },
-            // 删除
-            deleteFun(data){
-                this.$store.dispatch('deleteCar',data)
-            },
-
-            // 用户首次登录请求购物车的数据
-            // initCar(){
-            //   this.$store.dispatch('initCar')
-            // },
-            goBuy(){
-                // this.$router.push({path:'./address'})
-                // this.$router.push({path:'/address',name:'Address'})
             },
             showPopup() {
                 //0.判断是否提交的有购物车商品
@@ -326,31 +309,6 @@
             },
             // 加价购提交
             submit(){
-                for(var i in this.carData)
-                {
-                    this.chooseGoods += this.carData[i].id+',';
-                }
-
-                //1.判断是否选择收货地址
-                let addressInfo = '';
-                addressInfo = localStorage.getItem('addressInfo');
-                if(!addressInfo || addressInfo === 'null') {
-                    this.openAddress();
-                }
-
-                addressInfo = JSON.parse(addressInfo);
-                //2.获取收货地址并验证
-                this.address = {
-                    username : addressInfo.userName,
-                    mobile : addressInfo.telNumber,
-                    address : addressInfo.detailInfo,
-                    area : addressInfo.provinceName+','+addressInfo.cityName+','+addressInfo.countryName, //省市区， 逗号拼接
-
-                    remark : this.remark,
-                    spare_name:this.standbyName,
-                    spare_mobile:this.standbyPhone
-                };
-
                 if(!this.isWx) {
                     if(this.address.mobile === '') {
                         Toast("请填写您的手机号码");
@@ -360,10 +318,37 @@
                         Toast("请填写你的地址信息");
                     }
                 }
-                this.$router.push("/pay")
-
-
+                
+                //3.显示输入卡密弹框
+                let donate_type = this.donate_type
+                if(!donate_type){
+                    this.jid = localStorage.getItem('jid');
+                    this.packageId = localStorage.getItem('package_id'+this.jid);
+                    this.show = true;
+                }else{
+                    this.packageId = utils.getUrlKey('package_id'),
+                        this.showagain = true
+                }
             },
+
+            checkGoodsRegion(orderData) {
+			this.$api.home.checkGoodsRegion({
+				gid: orderData.goodsInfo,
+				addre: orderData.addressInfo
+			}).then(params =>{
+				if(params.data.status === 101){
+                    //生成订单
+                    if(this.addgoods || this.addgoods == 'addgoods'){
+                        this.addgenerateOrder(orderData);
+                    }else{
+                        this.generateOrder(orderData);
+                    }
+				}else if(params.data.code === 2002){
+					alert("该区域暂不支持配送");
+				}
+			});
+		},
+           
 
             openAddress() {
 
@@ -437,35 +422,119 @@
 
                         this.generateOrder(orderData);
                     }else{
-                        this.$api.home.accountPwd({
-                            account: this.account,
-                            pwd:this.pwd,
-                            package_id:this.packageId,
-                            jid:this.jid,
-                            source:utils.getUrlKey('source'),
-                            goods_id:utils.getUrlKey('goods_id'),
-                            choose_out_time:this.ide
-                        }).then(params =>{
-                            if(params.data.code  == 1000){
-                                this.chooseGoods = this.chooseGoods.split(',')[0];
+                        if(this.addgoods || this.addgoods == 'addgoods'){
+                              this.$api.home.accountPwd({
+                                account: this.account,
+                                pwd:this.pwd,
+                                package_id:this.packageId,
+                                jid:this.jid,
+                                source:utils.getUrlKey('source'),
+                                goods_id:utils.getUrlKey('goods_id'),
+                                choose_out_time:this.ide
+                            }).then(params =>{
+                                if(params.data.code  == 1000){ 
+                                    console.log(params)
+                                    this.score = params.data.data.score
+                                    // this.chooseGoods = this.chooseGoods.split(',')[0];
 
-                                //5.获取订单信息 提交订单
-                                let orderData = {
-                                    choose_goods : this.chooseGoods,
-                                    package_id : params.data.data.package_id ? params.data.data.package_id : this.packageId,
-                                    account : this.account,
-                                    pwd : this.pwd,
-                                    address : this.address,
-                                    source:utils.getUrlKey('source'),
-                                    choose_out_time: this.ide
-                                };
+                                    // //5.获取订单信息 提交订单
+                                    // let orderData = {
+                                    //     choose_goods : this.chooseGoods,
+                                    //     package_id : params.data.data.package_id ? params.data.data.package_id : this.packageId,
+                                    //     account : this.account,
+                                    //     pwd : this.pwd,
+                                    //     address : this.address,
+                                    //     source:utils.getUrlKey('source'),
+                                    //     choose_out_time: this.ide
+                                    // };
+                                      for(var i in this.carData)
+                                    {
+                                        this.chooseGoods += this.carData[i].id+',';
+                                    }
 
-                                this.generateOrder(orderData);
-                            }else if(params.data.code  == 2002){
-                                Toast(params.data.msg);
-                                this.showagain = false
-                            }
-                        })
+                                    //1.判断是否选择收货地址
+                                    let addressInfo = '';
+                                    addressInfo = localStorage.getItem('addressInfo');
+                                    if(!addressInfo || addressInfo === 'null') {
+                                        this.openAddress();
+                                    }
+                                    let orderData = {};
+
+                                    addressInfo = JSON.parse(addressInfo);
+                                    //2.获取收货地址并验证
+                                    this.address = {
+                                        username : addressInfo.userName,
+                                        mobile : addressInfo.telNumber,
+                                        address : addressInfo.detailInfo,
+                                        province:addressInfo.provinceName,
+                                        city:addressInfo.cityName,
+                                        area:addressInfo.countryName,
+
+                                        remark : this.remark,
+                                        spare_name:this.standbyName,
+                                        spare_mobile:this.standbyPhone
+                                    };
+                                    orderData.addressInfo = this.address;
+                                    if(utils.getUrlKey('now') === null) {
+                                        orderData.goodsInfo = this.$store.state.carList;
+                                        orderData.action = 'cart';
+                                    }else{
+                                        orderData.goodsInfo = this.$store.state.nowlist;
+                                        orderData.action = 'detail';
+                                    }
+                                    let oid = localStorage.getItem("emptyOrderId")
+                                    orderData.id = oid;
+                                    orderData.total = parseInt(this.totalPrice) + parseInt(this.score)  ;
+                                    orderData.custom_id = utils.getUrlKey('custom_id') ? utils.getUrlKey('custom_id') : 26;
+                                    orderData.pay_type = 2
+                                    console.log(this.score)
+
+                                    //获取支付选项
+                                        orderData.payOption = {
+                                            weipay: this.totalPrice,
+                                            num: 1,
+                                            total: orderData.total,
+                                            gift_card:this.score,
+                                            gc_account:this.account
+                                        };
+
+                                    this.addgenerateOrder(orderData);
+                                }else if(params.data.code  == 2002){
+                                    Toast(params.data.msg);
+                                    this.showagain = false
+                                }
+                            })
+                        }else{
+                              this.$api.home.accountPwd({
+                                account: this.account,
+                                pwd:this.pwd,
+                                package_id:this.packageId,
+                                jid:this.jid,
+                                source:utils.getUrlKey('source'),
+                                goods_id:utils.getUrlKey('goods_id'),
+                                choose_out_time:this.ide
+                            }).then(params =>{
+                                if(params.data.code  == 1000){
+                                    this.chooseGoods = this.chooseGoods.split(',')[0];
+
+                                    //5.获取订单信息 提交订单
+                                    let orderData = {
+                                        choose_goods : this.chooseGoods,
+                                        package_id : params.data.data.package_id ? params.data.data.package_id : this.packageId,
+                                        account : this.account,
+                                        pwd : this.pwd,
+                                        address : this.address,
+                                        source:utils.getUrlKey('source'),
+                                        choose_out_time: this.ide
+                                    };
+
+                                    this.generateOrder(orderData);
+                                }else if(params.data.code  == 2002){
+                                    Toast(params.data.msg);
+                                    this.showagain = false
+                                }
+                            })
+                        }
                     }
                     this.isDisable = false
                 }, 1000)
@@ -502,6 +571,17 @@
                 this.$api.home.generateOrder(params).then(params =>{
                     if(params.data.code === 1000){
                         this.$router.push({path:'/succeed','query':{"order_sn":params.data.data.ordersn}})
+                    }else if(params.data.code === 2002){
+                        Toast(params.data.msg);
+                    }
+                });
+            },
+            // 加价购生成订单
+             addgenerateOrder(params) {
+                this.$api.home.getSubmitOrder(params).then(params =>{
+                    if(params.data.code === 1000){
+                        console.log(params)
+                        this.$router.push({path:'/pay','query':{"order_sn":params.data.data.order_sn,weipay:this.totalPrice}})
                     }else if(params.data.code === 2002){
                         Toast(params.data.msg);
                     }

@@ -3,7 +3,7 @@
       <div class="add_title">
           <p class="add_title1">升级兑换区</p>
           <p class="add_title2">当前礼包+升级价格，即可兑换以下礼品</p>
-          <span class="add_title3" @click="goAddPage">查看更多</span>
+          <span class="add_title3" @click="goAddPage(mid)">查看更多</span>
       </div>
       <div>
         <swiper :options="swiperOption" ref="mySwiper">
@@ -34,7 +34,8 @@ export default {
     name: "AddBuy",
    props:{
             addlist:Array,
-            package:String
+            package:String,
+            mid:String
         },
     data(){
         return{
@@ -60,11 +61,11 @@ export default {
         SwipeSlide,
     },
     methods: {
-        goAddPage(){
-            this.$router.push({ path: "/addlist",})
+        goAddPage(data){
+            this.$router.push({ path: "/addlist",query:{addPriceId:data}})
         },
         gourl(data){
-            this.$router.push({ path: '/detail', query: {id: data.goods_id,addgoods:"addgoods",pageName:data.package_name} })
+            this.$router.push({ path: '/detail', query: {id: data.goods_id,addgoods:"addgoods",pageName:data.package_name,addPriceId:data.mid,package_id:this.package} })
         }
 
     },
@@ -74,7 +75,7 @@ export default {
 <style lang='stylus' scoped>
     @import '../../assets/styles/mixins.styl'
     .addContent
-        padding-bottom :0.6rem
+        padding-bottom :2rem
     .add_title
         display:flex;
         justify-content:center;

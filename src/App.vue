@@ -61,6 +61,7 @@
 <script>
 import {DrawerLayout} from 'vue-drawer-layout'
 import {NavBar,Icon,Popup} from 'vant'
+import utils from '@/utils/utils'
 
 export default {
   name: 'App',
@@ -69,7 +70,8 @@ export default {
       header_show:true,
 	  footer_show:true,
 	  show: false,
-	  showGoodsCartNumber:true
+	  showGoodsCartNumber:true,
+	  addgoods:utils.getUrlKey('addgoods')
 
     }
   },
@@ -92,7 +94,12 @@ export default {
           this.footer_show = bool;
       },
       goShopCart(){
-        this.$router.push('/shopcart');
+		  if(this.$route.query.addgoods!=undefined){
+			    this.$router.push({path:'/shopcart' ,query:{addgoods:"addgoods"}});
+		  }else{
+				this.$router.push('/shopcart');
+		  }
+     
 	  },
 	  goHomePage(){
 		  this.show = true

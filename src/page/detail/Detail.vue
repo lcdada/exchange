@@ -8,13 +8,17 @@
     import DetailBanner from './components/Banner'
     import DetailConent from './components/Conent'
     import {  Tabbar, TabbarItem } from 'vant';
+    import utils from '../../utils/utils'
     export default {
         name:'Detail',
         data (){
             return {
                 Swiperpics:[],
                 Msessage:{},
-                flag:""
+                flag:"",
+                addPriceId:utils.getUrlKey('addPriceId'),
+                package_id:utils.getUrlKey('package_id'),
+
             }
         },
         components:{
@@ -32,7 +36,9 @@
             init () {
                 let id = this.$route.query.id
                 this.$api.home.getGoodsDetail({
-                    goods_id:id
+                    goods_id:id,
+                    markup_id:this.addPriceId
+
                 }).then(params =>{
                     if(params.data.code  == 1000){
                         const data = params.data.data[0];
@@ -46,6 +52,7 @@
                 let id = this.$route.query.id
                 this.$api.home.getGoodsNotice({
                     gid:id
+                   
                 }).then(params =>{
                     if(params.data.code  == 1000){
                         if(params.data.data.hasOwnProperty("post_content") && params.data.data.post_content.length > 0){

@@ -4,7 +4,7 @@
 
        
           <li v-for="item in list" :key="item.id"  class="item_img">
-              <router-link tag="div" :to="{ path: '/detail', query: {id: item.id,jid:bless.id,package_id:package} }">
+              <router-link tag="div" :to="{ path: '/detail', query: {id: item.id,jid:bless.id,package_id:package,} }">
                     <div class="goods_img">
                         <img class="goods_picture" :src="item.around_thumb" alt="">
                     </div>

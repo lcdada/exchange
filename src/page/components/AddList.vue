@@ -6,7 +6,7 @@
       </div>
       <ul   class="allgoods">
           <li v-for="item in addlist" :key="item.id"  class="item_img">
-              <router-link tag="div"  :to="{ path: '/detail', query: {id: item.goods_id,addgoods:'addgoods',pageName:item.package_name} }">
+              <router-link tag="div"  :to="{ path: '/detail', query: {id: item.goods_id,addgoods:'addgoods',pageName:item.package_name,addPriceId:item.mid} }">
                     <div class="goods_img">
                         <img class="goods_picture" :src="item.thumb" alt="">
                     </div>
@@ -90,6 +90,7 @@ export default {
                     text-align center
                     line-height 0.4rem
                     font-size 0.28rem 
+                    padding 0 0.2rem
                     ellipsis()
                .text_1
                     color #333

@@ -5,7 +5,7 @@
             <p class="numb_text">您可兑换<span class="number">{{exchange_num}}</span>款礼品</p>
         </div>
         <home-list :package="package_id" :list="goods_list" :bless="bless_info"></home-list>
-        <add-buy :addlist = "addList" :package="package_id"></add-buy>
+        <add-buy :addlist = "addList" :package="package_id" :mid = "midOne" v-if="showAddSwiper"></add-buy>
     </div>
 </template>
 <script>
@@ -31,11 +31,14 @@ export default {
             goods_list:[],
             exchange_num:'',
             jid : utils.getUrlKey('jid'),
-            package_id:utils.getUrlKey('package_id'),
+            // package_id:utils.getUrlKey('package_id'),
             donate_id:utils.getUrlKey('donate_id'),
             donate_type:utils.getUrlKey('donate_type'),
             requestParam : {},
-            addList:[]
+            addList:[],
+            midOne:"",
+            package_id:"",
+            showAddSwiper:false,
         }
 
     },
@@ -67,6 +70,7 @@ export default {
                     this.package_id = data.package_id;
 
                     this.getGoodsList(this.package_id);
+                    this.getAddGoods(this.package_id)
                 }
             })
         },
@@ -87,15 +91,18 @@ export default {
                 }
             })
         },
-        getAddGoods (){
+        getAddGoods (package_id){
             this.$api.home.getAddGoods({
                 type : "package",
-                id: 663
+                id: package_id
             }).then(params => {
                 if(params.data.code  == 1000){
                     const data = params.data.data;
-                    console.log(data)
+                    if(data){
+                        this.showAddSwiper = true
+                    }
                     this.addList = data
+                    this.midOne = data[0].mid
                 }
             })
         },
@@ -103,7 +110,7 @@ export default {
 
     mounted () {
         this.getBless()
-        this.getAddGoods()
+        // this.getAddGoods() 
     },
 }
 </script>

@@ -51,13 +51,14 @@ export default new Vuex.Store({
                     "price": params.market_price,
                     "picture":params.thumb,
                     "num": 1,
-                    "addprice":params.market_price
+                    "addprice":params.markup_price
                 }
                 this.state.carList.push(obj)
             }
         },
         // 立即购买添加
         nowAddCar(state,params) {
+            console.log(params)
             this.state.nowlist=[]
             let obj = {
                     "goods_name":params.goods_name,
@@ -66,7 +67,7 @@ export default new Vuex.Store({
                     "price": params.market_price,
                     "picture":params.thumb,
                     "num": 1,
-                    "addprice":params.market_price
+                    "addprice":params.markup_price
                 }
                 this.state.nowlist.push(obj)
         },
@@ -195,7 +196,7 @@ export default new Vuex.Store({
             let money = 0;
             if (Carlen.length != 0) {
                 Carlen.forEach((item) => {
-                    money += item.market_price * item.num
+                    money += item.score * item.num
                 })
                 return money;
             } else {
@@ -207,7 +208,32 @@ export default new Vuex.Store({
             let money = 0;
             if (Carlen.length != 0) {
                 Carlen.forEach((item) => {
-                    money += item.market_price * item.num
+                    money += item.score * item.num
+                })
+                return money;
+            } else {
+                return 0;
+            }
+        },
+         //加价购返回购物车的总价
+         addtotalPrice(state) {
+            let Carlen = state.carList;
+            let money = 0;
+            if (Carlen.length != 0) {
+                Carlen.forEach((item) => {
+                    money += item.addprice * item.num
+                })
+                return money;
+            } else {
+                return 0;
+            }
+        },
+        addtotalPrice1(state) {
+            let Carlen = state.nowlist;
+            let money = 0;
+            if (Carlen.length != 0) {
+                Carlen.forEach((item) => {
+                    money += item.addprice * item.num
                 })
                 return money;
             } else {

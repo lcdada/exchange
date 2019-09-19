@@ -5,8 +5,8 @@
             <p class="goods_name">{{message.goods_name}}</p>
             <p class="name_second">{{message.salute_sketch}}</p>
             <div v-if="show_price">
-                 <p class="addPrice">+ ￥<span>7999</span></p>
-                 <p class="addPrice_text"><span>{{this.pageName}}</span>+<span>199</span>元，兑换此礼品</p>
+                 <p class="addPrice">+<span>{{message.markup_price | currency}}</span></p>
+                 <p class="addPrice_text"><span>{{this.pageName}}</span>+<span>{{message.markup_price | currency}}</span>元，兑换此礼品</p>
             </div>
            
         </div>
@@ -37,6 +37,7 @@
 
 <script>
     import AddBuy from '@/page/components/Addbuy'
+    import {currency} from '@/utils/currency'
     import utils from '../../../utils/utils'
     import {  Tabbar, Toast  } from 'vant';
     export default {
@@ -44,6 +45,9 @@
         props:{
             message:Object,
             flag:Boolean,
+        },
+         filters:{
+            currency:currency
         },
         data(){
             return{
@@ -61,6 +65,9 @@
                 addList:[],
                 showAddList:false,
                 pageName:utils.getUrlKey('pageName'),
+                addPriceId:utils.getUrlKey('addPriceId'),
+                package_id:utils.getUrlKey('package_id'),
+                
             }
         },
         components:{
@@ -69,10 +76,14 @@
             AddBuy
         },
         created(){
+            
+            
+            
+            this.getAddGoods()
              if(this.addgoods || this.addgoods == 'addgoods'){
                 this.show_price = true;
-                this.showAddList = true 
-                this.getAddGoods()
+                // this.showAddList = true 
+                // this.getAddGoods()
             }
             if(this.source || this.source == 'goods_qrcode'){
                 this.show_addcart = false;
@@ -102,18 +113,31 @@
                 Toast.success('加入购物车');
             },
             buyNow(params){
+                this.emptyOrder();
                 this.$store.dispatch('nowAddCar',params);
                 if(this.flag == false){
                     return false;
                 }else{
                     if(this.addgoods || this.addgoods == 'addgoods'){
-                         this.$router.push({path:'/order',query: {goods_id: params.id,now:true,addgoods:"addgoods",pageName:this.pageName} })
+                         this.$router.push({path:'/order',query: {goods_id: params.id,now:true,addgoods:"addgoods",pageName:this.pageName,markup_id:this.addPriceId} })
                     }else{
                          this.$router.push({path:'/order',query: {goods_id: params.id,now:true} })
                     }
                    
                 }
 
+            },
+
+            emptyOrder(){
+                this.$api.home.getEmptyOrder({
+
+                }).then(params =>{
+                    if(params.data.code  == 1000){
+                        const succeId = params.data.data;
+                        console.log(succeId)
+                        localStorage.setItem("emptyOrderId",succeId)
+                    }
+                })    
             },
             showTime(){
                 if (this.message.goods_stat != "1" ) {
@@ -131,15 +155,18 @@
                 }
 
             },
-             getAddGoods (){
+              
+            getAddGoods (){
                 this.$api.home.getAddGoods({
-                    type : "goods",
-                    // id: this.goodsID
-                    id:3122
+                   
+                    type : this.package_id ? "package": "goods",
+                    id: this.package_id ? this.package_id : this.goodsID,
                 }).then(params => {
                     if(params.data.code  == 1000){
-                        console.log(params)
                         const data = params.data.data;
+                        if(data){
+                             this.showAddList = true 
+                        }
                         console.log(data)
                         this.addList = data
                     }

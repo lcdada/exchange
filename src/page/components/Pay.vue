@@ -2,17 +2,68 @@
     <div class="pay_block">
         <div class="pay_price">
             <div class="price_text">
-                <p class="price"><span>399</span>元</p>
+                <p class="price"><span>{{this.weipaynum  |  currency}}</span>元</p>
                 <p class="priceText">实付金额</p>
             </div>
+            <div class="payBlock">
+                <p class="pay_text">支付方式</p>
+                <div class="weipay">
+                    <img src="../../assets/img/weipayIcon.png" alt="">
+                </div>
+            </div>
         </div>
-        <button class="gopay">支付并兑换</button>
+        <button class="gopay" @click="pay">支付并兑换</button>
     </div>
 </template>
 
 <script>
+import utils from '@/utils/utils'
+import {currency} from '@/utils/currency'
 export default {
-    name: "Pay"
+    name: "Pay",
+    filters:{
+		currency:currency
+    },
+    data() {
+        return {
+            orderSn : utils.getUrlKey('order_sn'),
+            weipaynum : utils.getUrlKey('weipay'),
+        }
+    },
+    methods: {
+        pay(){
+            this.$api.home.getWeiPay({
+                order_sn:this.orderSn,
+                openid:"oepU71hOHh5uoG3kMJJG0IF3QGfI"
+
+            }).then(params =>{
+                if(params.data.code  == 1000){
+                    console.log(params.data.data)
+                   	if (typeof WeixinJSBridge == "undefined"){
+						if( document.addEventListener ){
+							document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+						}else if (document.attachEvent){
+							document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+							document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+						}
+					}else{
+						WeixinJSBridge.invoke(
+								'getBrandWCPayRequest',
+								params.data.data,
+								function(res){
+									if(res.err_msg == 'get_brand_wcpay_request:ok') {
+										//跳转到成功页面
+									}else{
+										//WeixinJSBridge.log(res.err_msg);
+										//alert(res.err_code+res.err_desc+res.err_msg);
+									}
+								}
+						);
+					}
+                }
+            })    
+        }
+    },
 };
 </script>
 <style lang='stylus' scoped>
@@ -43,6 +94,22 @@ export default {
                     font-size 0.28rem
                     line-height 0.4rem
                     margin-top 0.12rem
+            .payBlock
+                padding-top 0.84rem
+                margin 0 0.44rem
+                .pay_text
+                    font-size 0.28rem
+                    font-weight 600
+                    line-height 0.4rem
+                .weipay
+                    width 100%
+                    height 0.64rem
+                    margin-top 0.3rem
+                .weipay img 
+                    width 100%
+                    height 100%
+
+
 
     .gopay
         width 6.46rem

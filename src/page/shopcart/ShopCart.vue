@@ -14,7 +14,7 @@
                         <p class="goods_num"> x{{ item.num }}</p>
                     </div>
                     <div class="goods_num" v-if="!showPrice">
-                         <div>+<span>{{9999 | currency}}</span></div>
+                         <div>+<span>{{item.addprice | currency}}</span></div>
                          <div>x {{item.num}}</div>
                     </div>
                 </div>
@@ -37,6 +37,7 @@
 <script>
 import {Icon} from 'vant'
 import {currency} from '@/utils/currency'
+import utils from '../../utils/utils'
 export default {
     name:'ShopCart',
     filters:{
@@ -45,7 +46,8 @@ export default {
      data() {
         return {
             seenCartgoods:false,
-            showPrice:false
+            showPrice:true,
+            addgoods:utils.getUrlKey('addgoods')
         }
     },
     components:{
@@ -57,6 +59,10 @@ export default {
             // console.log(111)
             this.seenCartgoods= true
         }
+        if(this.addgoods || this.addgoods == 'addgoods'){
+                this.showPrice = false; 
+            }
+
 	},
     computed: { 
         //购物车列表
@@ -90,7 +96,12 @@ export default {
             }
         },
         goExchange(){
-            this.$router.push({path:'/order'})
+            if(this.$route.query.addgoods!=undefined){
+			    this.$router.push({path:'/order' ,query:{addgoods:this.addgoods}});
+            }else{
+                   this.$router.push({path:'/order'})
+            }
+           
         },
 
         goHomePage(){
