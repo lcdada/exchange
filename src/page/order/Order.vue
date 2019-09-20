@@ -361,16 +361,16 @@
 
             openAddress() {
 
-                var addressInfo={
-                  userName:'苏克',
-                  telNumber:'15810227932',
-                  provinceName:' 山西',
-                  cityName:'运城',
-                  countryName:'永济',
-                  detailInfo:'中关村在线'
-              }
+            //     var addressInfo={
+            //       userName:'苏克',
+            //       telNumber:'15810227932',
+            //       provinceName:' 山西',
+            //       cityName:'运城',
+            //       countryName:'永济',
+            //       detailInfo:'中关村在线'
+            //   }
 
-              localStorage.setItem('addressInfo',JSON.stringify(addressInfo));
+            //   localStorage.setItem('addressInfo',JSON.stringify(addressInfo));
 
                 //输出地址信息到页面
 
