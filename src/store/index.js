@@ -15,7 +15,6 @@ export default new Vuex.Store({
     mutations: {
         // 加
         addCar(state, params) {
-            console.log(params)
             let jid = localStorage.getItem("jid");
             let exchange_num = localStorage.getItem("exchange_num"+jid);
             let alreadyNum = 0;
@@ -58,7 +57,6 @@ export default new Vuex.Store({
         },
         // 立即购买添加
         nowAddCar(state,params) {
-            console.log(params)
             this.state.nowlist=[]
             let obj = {
                     "goods_name":params.goods_name,

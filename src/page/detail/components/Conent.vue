@@ -108,7 +108,6 @@
 
         methods: {
             addCart(params){
-                console.log(params)
                 this.$store.dispatch('addCar',params);
                 Toast.success('加入购物车');
             },
@@ -134,7 +133,6 @@
                 }).then(params =>{
                     if(params.data.code  == 1000){
                         const succeId = params.data.data;
-                        console.log(succeId)
                         localStorage.setItem("emptyOrderId",succeId)
                     }
                 })    
@@ -167,7 +165,6 @@
                         if(data){
                              this.showAddList = true 
                         }
-                        console.log(data)
                         this.addList = data
                     }
                 })

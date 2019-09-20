@@ -208,7 +208,6 @@
                     if(params.data.code  == 1000){
                         const data = params.data.data[0];
                         this.aog = data.start_time
-                        console.log(params)
                         if(data.is_set_send_time != 1){
                             this.showChooseTime = true
                         }
@@ -433,7 +432,6 @@
                                 choose_out_time:this.ide
                             }).then(params =>{
                                 if(params.data.code  == 1000){ 
-                                    console.log(params)
                                     this.score = params.data.data.score
                                     // this.chooseGoods = this.chooseGoods.split(',')[0];
 
@@ -487,7 +485,6 @@
                                     orderData.total = parseInt(this.totalPrice) + parseInt(this.score)  ;
                                     orderData.custom_id = utils.getUrlKey('custom_id') ? utils.getUrlKey('custom_id') : 26;
                                     orderData.pay_type = 2
-                                    console.log(this.score)
 
                                     //获取支付选项
                                         orderData.payOption = {
@@ -549,7 +546,7 @@
                     // if(params.data.code  == 1000){
 
                     // }
-                    console.log(params)
+                    // console.log(params)
                 })
             },
             btn_affirm(){
@@ -580,7 +577,7 @@
              addgenerateOrder(params) {
                 this.$api.home.getSubmitOrder(params).then(params =>{
                     if(params.data.code === 1000){
-                        console.log(params)
+                        // console.log(params)
                         this.$router.push({path:'/pay','query':{"order_sn":params.data.data.order_sn,weipay:this.totalPrice}})
                     }else if(params.data.code === 2002){
                         Toast(params.data.msg);
@@ -614,7 +611,6 @@
                 this.showAddMes = true;
                 this.showPrice = false; 
                 this.showAddBtn = false;
-                console.log(this.totalPrice)
             }
 
 
