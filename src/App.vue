@@ -21,15 +21,6 @@
 							<p class="class_item">转赠</p>
 							<van-icon name="arrow"  class="arrow"/>
 						</li>
-						<!-- <li
-						v-for="item in class_list"
-						:key="item.id"
-						class="item"
-						@click="goClassList(item)"
-						>
-							<p class="class_item">{{item.name}}</p>
-							<van-icon name="arrow"  class="arrow"/>
-						</li> -->
 					</ul>
 				</div>
 			</van-popup>
@@ -49,10 +40,10 @@
 				</div>
 			</div>
 			<div class="center">
-				<keep-alive>
-					<router-view v-if="$route.meta.keepAlive" v-on:public_header="public_header" v-on:public_footer="public_footer"></router-view>
-				</keep-alive>
-				<router-view v-if="!$route.meta.keepAlive"></router-view>
+				<!-- <keep-alive> -->
+					<router-view v-on:public_header="public_header" v-on:public_footer="public_footer" ></router-view>
+				<!-- </keep-alive>:key="$route.path + $route.query.t"  -->
+				<!-- <router-view v-if="!$route.meta.keepAlive"></router-view> -->
 			</div>
 		</div>
 	</div>

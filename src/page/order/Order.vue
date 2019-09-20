@@ -69,16 +69,16 @@
                     </div> -->
                     <div class="itemMes">
                         <p class="acro_item">礼包抵扣:<span class="g_name">{{this.pageName}}</span></p>
-                        <p><span>{{this.score  | currency}}</span></p>
+                        <p><span>{{ this.libaoprice  | currency}}</span></p>
                     </div>
-                    <div class="itemMes">
+                    <div class="itemMes" v-if="showDiscount">
                         <p class="acro_item">折扣优惠:<span class="g_name"></span></p>
-                        <p>￥<span>2000</span></p>
+                        <p><span class="loseSprice">{{this.zhekou | currency}}</span></p>
                     </div>
                 </li>
             </ul>
-            <div>
-                <p><span>应付金额</span><span>{{this.totalPrice | currency}}</span></p>
+            <div class="amountPayable">
+                <span class="amount_text">应付金额</span><span class="amoun_mun">{{this.totalPrice | currency}}</span>
             </div>
         </div>
         <div class="leave_word">
@@ -166,7 +166,11 @@
                 pageName:utils.getUrlKey('pageName'),
                 emptyId:'',
                 score:"",
-                addPriceId:utils.getUrlKey('addPriceId')
+                addPriceId:utils.getUrlKey('addPriceId'),
+                markup_id:utils.getUrlKey('markup_id'),
+                libaoprice:"",
+                zhekou:"",
+                showDiscount:false
             }
         },
         components:{
@@ -203,11 +207,17 @@
                 let id = utils.getUrlKey('goods_id')
                 this.$api.home.getGoodsDetail({
                     goods_id:id,
-                    markup_id:this.addPriceId
+                    markup_id:this.markup_id
                 }).then(params =>{
                     if(params.data.code  == 1000){
                         const data = params.data.data[0];
-                        this.aog = data.start_time
+                        this.libaoprice = data.markup_package_price;
+                        this.aog = data.start_time;
+                        this.zhekou = data.markup_sale_price;
+                        if (this.zhekou) {
+                            this.showDiscount = true
+                        }
+
                         if(data.is_set_send_time != 1){
                             this.showChooseTime = true
                         }
@@ -802,10 +812,10 @@
         top 0
         right 0
     .overview
-        min-height 4rem
+        min-height 3.8rem
         background #fff
         margin 0.3rem 0
-        padding 0.32rem
+        padding 0.32rem 0.32rem 0rem 0.32rem
         box-sizing border-box
         .overview_title
             font-size 0.32rem
@@ -813,12 +823,31 @@
             line-height 0.44rem
         .pay_goods
             margin-top 0.34rem
+            border-bottom: 0.01rem solid #eee;
+            padding-bottom: 0.3rem;
+            min-height 1.1rem
+        .amountPayable
+            margin-top 0.32rem
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 0.6rem;
+            .amount_text
+                font-size 0.28rem
+                color #000
+                font-weight bold
+            .amoun_mun
+                font-weight bold
+                color #ff0000
+                font-size 0.32rem
+
         .itemMes
             display flex
             justify-content space-between
             align-items center
             line-height 0.4rem
-            margin-bottom 0.1rem
+            margin 0.16rem 0
+            color #666
         .g_name
             display: inline-block;
             width: 3rem;
@@ -826,6 +855,8 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             line-height: 0.4rem;
+        .loseSprice
+            text-decoration:line-through
         .acro_item{
             display flex 
             align-items center
@@ -842,6 +873,7 @@
         font-size 0.28rem
         color #000
         font-weight 600
+        
     .leave_word_content
         width 100%;
         height 2.38rem
@@ -851,6 +883,8 @@
         margin-top 0.4rem
         padding  0.2rem
         box-sizing  border-box
+        -webkit-appearance none
+        border-radius 0
     .goto_exchange
         width 100%
         height 0.92rem

@@ -15,12 +15,15 @@
         <van-tabbar class="footer">
             <div v-if="show_button_two" class="footer">
                 <div  class="footer_btn"  v-if="show_addcart">
-                    <button class="btn addcart"  @click="addCart(message)">加入购物车</button>
+                    <button class="btn addcart"  @click="addCart(message)" >加入购物车</button>
                     <button class="btn buynow" @click="buyNow(message)" ref='nowbutton'>立即兑换</button>
                 </div>
                 <div  class="footer_btn"  v-if="!show_addcart">
                     <button class="btn buynow nowButton" @click="buyNow(message)" ref='nowbutton'>立即兑换</button>
                 </div>
+            </div>
+            <div class="footer_btn"  v-if="showAddBtn">
+                 <button class="btn buynow nowButton" @click="buyNow(message)" ref='nowbutton'>立即兑换</button>
             </div>
             <div v-if="arrival_time" class="footer">
                 <div  class="footer_btn"  v-if="arrival_time_text">
@@ -60,13 +63,16 @@
                 arrival_time_text:false,
                 sold_out:false,
                 show_price:false,
-                addgoods:utils.getUrlKey('addgoods'),
+                // addgoods:utils.getUrlKey('addgoods'),
+                addgoods:this.$route.query.addgoods,
                 goodsID : utils.getUrlKey('id'),
                 addList:[],
                 showAddList:false,
                 pageName:utils.getUrlKey('pageName'),
                 addPriceId:utils.getUrlKey('addPriceId'),
                 package_id:utils.getUrlKey('package_id'),
+                showAddBtn:false,
+
                 
             }
         },
@@ -76,20 +82,13 @@
             AddBuy
         },
         created(){
-            
-            
-            
             this.getAddGoods()
              if(this.addgoods || this.addgoods == 'addgoods'){
                 this.show_price = true;
-                // this.showAddList = true 
-                // this.getAddGoods()
             }
             if(this.source || this.source == 'goods_qrcode'){
                 this.show_addcart = false;
             }
-           
-
         },
         watch: {
             message:function(value){
@@ -101,8 +100,19 @@
                 }
             },
             $route(){
-                
-            }
+                this.getAddGoods()
+                this.addgoods = this.$route.query.addgoods;
+                this.pageName = this.$route.query.pageName;
+                this.addPriceId = utils.getUrlKey('addPriceId');
+                if(this.addgoods || this.addgoods == 'addgoods'){
+                    this.show_price = true;
+                    this.showAddBtn = true;
+                    this.show_button_two = false;
+                }
+                if(this.source || this.source == 'goods_qrcode'){
+                    this.show_addcart = false;
+                }
+            },
             
         },
 
@@ -156,14 +166,13 @@
               
             getAddGoods (){
                 this.$api.home.getAddGoods({
-                   
                     type : this.package_id ? "package": "goods",
                     id: this.package_id ? this.package_id : this.goodsID,
                 }).then(params => {
                     if(params.data.code  == 1000){
                         const data = params.data.data;
                         if(data){
-                             this.showAddList = true 
+                             this.showAddList = true ;
                         }
                         this.addList = data
                     }
@@ -184,7 +193,7 @@
         text-align center
         line-height 0.5rem
         padding-bottom 1.08rem
-        font-family PingFang-SC
+        font-family Helvetica
         .goods_name
             font-size 0.32rem
             font-weight 600
@@ -193,6 +202,7 @@
         .name_second,.serialNum
             color #666
             font-size 0.28rem
+            font-family Helvetica
         .addPrice
             font-size 0.32rem
             color #FF0000

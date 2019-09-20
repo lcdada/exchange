@@ -63,10 +63,14 @@ export default {
     methods: {
         goAddPage(data){
             this.$router.push({ path: "/addlist",query:{addPriceId:data}})
+            localStorage.setItem("mid",data)
         },
         gourl(data){
-            this.$router.push({ path: '/detail', query: {id: data.goods_id,addgoods:"addgoods",pageName:data.package_name,addPriceId:data.mid,package_id:this.package} })
+            this.$router.push({ path: '/detail', query: {id: data.goods_id,addgoods:"addgoods",pageName:data.package_name,addPriceId:data.mid,package_id:this.package,} })
+           localStorage.setItem("mid",data.mid)
+
         }
+
 
     },
     

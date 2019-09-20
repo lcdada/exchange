@@ -35,9 +35,10 @@
         methods:{
             init () {
                 let id = this.$route.query.id
+                let mid = localStorage.getItem("mid")
                 this.$api.home.getGoodsDetail({
                     goods_id:id,
-                    markup_id:this.addPriceId
+                    markup_id:mid
 
                 }).then(params =>{
                     if(params.data.code  == 1000){
