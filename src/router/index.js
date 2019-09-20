@@ -65,5 +65,12 @@ export default new Router({
       name:'Pay',
       component:Pay
     }
-  ]
+  ],
+  scrollBehavior(to, from,savedPosition) {
+    return {
+      x: 0,
+      y: 0
+    }
+  }
+
 })
