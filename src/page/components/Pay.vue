@@ -31,10 +31,18 @@ export default {
         }
     },
     methods: {
+        getCookie(name) {
+			var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+			if (arr = document.cookie.match(reg))
+				return (arr[2]);
+			else
+				return null;
+		},
         pay(){
             this.$api.home.getWeiPay({
                 order_sn:this.orderSn,
-                openid:"oepU71hOHh5uoG3kMJJG0IF3QGfI"
+                // openid:"oepU71hOHh5uoG3kMJJG0IF3QGfI"
+                openid: this.getCookie('openid'),
 
             }).then(params =>{
                 if(params.data.code  == 1000){
