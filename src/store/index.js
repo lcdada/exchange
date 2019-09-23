@@ -57,6 +57,7 @@ export default new Vuex.Store({
         },
         // 立即购买添加
         nowAddCar(state,params) {
+            console.log(params)
             this.state.nowlist=[]
             let obj = {
                     "goods_name":params.goods_name,

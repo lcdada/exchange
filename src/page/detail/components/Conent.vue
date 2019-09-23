@@ -85,6 +85,8 @@
             this.getAddGoods()
              if(this.addgoods || this.addgoods == 'addgoods'){
                 this.show_price = true;
+                this.showAddBtn = true;
+                this.show_button_two = false; 
             }
             if(this.source || this.source == 'goods_qrcode'){
                 this.show_addcart = false;
@@ -108,6 +110,8 @@
                     this.show_price = true;
                     this.showAddBtn = true;
                     this.show_button_two = false; 
+                }else{
+                     this.show_price = false;
                 }
                 if(this.source || this.source == 'goods_qrcode'){
                     this.show_addcart = false;

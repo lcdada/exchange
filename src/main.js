@@ -12,12 +12,7 @@ import 'swiper/dist/css/swiper.css'
 import api from './api' // 导入api接口
 import 'babel-polyfill' //解决手机浏览器默认不支持promise。
 import utils from './utils/utils'
-import Router from 'vue-router'
 
-const originalPush = Router.prototype.push
-Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
-}
 
 
 Vue.prototype.$api = api; // 将api挂载到vue的原型上
