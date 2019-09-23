@@ -38,7 +38,7 @@
                 let mid = localStorage.getItem("mid")
                 this.$api.home.getGoodsDetail({
                     goods_id:id,
-                    markup_id:mid
+                    markup_id:mid?mid:this.$route.query.addPriceId,
 
                 }).then(params =>{
                     if(params.data.code  == 1000){

@@ -98,6 +98,7 @@ export default {
             }).then(params => {
                 if(params.data.code  == 1000){
                     const data = params.data.data;
+                    localStorage.setItem("addGoodsList",JSON.stringify(data));
                     if(data){
                         this.showAddSwiper = true
                     }
