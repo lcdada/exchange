@@ -5,7 +5,7 @@
           <p class="add_title2">当前礼包+升级价格，即可兑换以下礼品</p>
           <span class="add_title3" @click="goAddPage(mid)">查看更多</span>
       </div>
-      <div>
+      <div class="swiper_content">
         <swiper :options="swiperOption" ref="mySwiper">
             <swiper-slide v-for="item in addlist" :key="item.id" @click.stop>
                 <div @click="gourl(item)">
@@ -79,7 +79,9 @@ export default {
 <style lang='stylus' scoped>
     @import '../../assets/styles/mixins.styl'
     .addContent
-        padding-bottom :2rem
+        // padding-bottom :2rem
+    .swiper_content
+        height 6rem
     .add_title
         display:flex;
         justify-content:center;
