@@ -81,7 +81,7 @@ export default {
     .addContent
         // padding-bottom :2rem
     .swiper_content
-        height 6rem
+        height 5.2rem
     .add_title
         display:flex;
         justify-content:center;
