@@ -46,10 +46,6 @@ export default {
 
             }).then(params =>{
                 if(params.data.code  == 1000){
-                    console.log(params.data.data)
-                    alert(params.data)
-                    alert(params.data.data);
-                   
                    	if (typeof WeixinJSBridge == "undefined"){
 						if( document.addEventListener ){
 							document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
