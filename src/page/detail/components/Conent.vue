@@ -164,6 +164,7 @@
                     }
                 }
                 if (!this.message.is_start) {
+                    this.showAddBtn = false;
                     this.show_button_two = false;
                     this.arrival_time = true;
                     this.arrival_time_text = true;
