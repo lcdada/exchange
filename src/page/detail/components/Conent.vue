@@ -8,7 +8,7 @@
                  <p class="addPrice">+<span>{{message.markup_price | currency}}</span></p>
                  <p class="addPrice_text"><span>{{this.pageName}}</span>+<span>{{message.markup_price | currency}}</span>元，兑换此礼品</p>
             </div>
-           
+
         </div>
         <div class="detail_conent" v-html='message.summary'>{{message.summary}}</div>
         <add-buy :addlist = "addList" v-if="showAddList"></add-buy>
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </van-tabbar>
-       
+
     </div>
 </template>
 
@@ -73,7 +73,7 @@
                 package_id:utils.getUrlKey('package_id'),
                 showAddBtn:false,
 
-                
+
             }
         },
         components:{
@@ -86,7 +86,7 @@
              if(this.addgoods || this.addgoods == 'addgoods'){
                 this.show_price = true;
                 this.showAddBtn = true;
-                this.show_button_two = false; 
+                this.show_button_two = false;
             }
             if(this.source || this.source == 'goods_qrcode'){
                 this.show_addcart = false;
@@ -95,7 +95,7 @@
         watch: {
             message:function(value){
                 let valueData = value;
-                let d = JSON.stringify(valueData)
+                let d = JSON.stringify(valueData);
                 let b = (JSON.stringify(valueData) == "{}");
                 if(b == false){
                     this.showTime()
@@ -109,7 +109,7 @@
                 if(this.addgoods || this.addgoods == 'addgoods'){
                     this.show_price = true;
                     this.showAddBtn = true;
-                    this.show_button_two = false; 
+                    this.show_button_two = false;
                 }else{
                      this.show_price = false;
                 }
@@ -117,7 +117,7 @@
                     this.show_addcart = false;
                 }
             },
-            
+
         },
 
         methods: {
@@ -136,7 +136,7 @@
                     }else{
                          this.$router.push({path:'/order',query: {goods_id: params.id,now:true} })
                     }
-                   
+
                 }
 
             },
@@ -149,7 +149,7 @@
                         const succeId = params.data.data;
                         localStorage.setItem("emptyOrderId",succeId)
                     }
-                })    
+                })
             },
             showTime(){
                 if (this.message.goods_stat != "1" ) {
@@ -167,7 +167,7 @@
                 }
 
             },
-              
+
             getAddGoods (){
                 this.$api.home.getAddGoods({
                     type : this.package_id ? "package": "goods",
