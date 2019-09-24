@@ -22,8 +22,10 @@
                     <button class="btn buynow nowButton" @click="buyNow(message)" ref='nowbutton'>立即兑换</button>
                 </div>
             </div>
-            <div class="footer_btn"  v-if="showAddBtn">
-                 <button class="btn buynow nowButton" @click="buyNow(message)" ref='nowbutton'>立即兑换</button>
+            <div v-if="showAddBtn" class="footer">
+                <div class="footer_btn"  >
+                    <button class="btn buynow nowButton " @click="buyNow(message)" ref='nowbutton'>立即兑换</button>
+                </div>
             </div>
             <div v-if="arrival_time" class="footer">
                 <div  class="footer_btn"  v-if="arrival_time_text">
@@ -85,8 +87,7 @@
             this.getAddGoods()
              if(this.addgoods || this.addgoods == 'addgoods'){
                 this.show_price = true;
-                this.showAddBtn = true;
-                this.show_button_two = false; 
+                 this.showTime()
             }
             if(this.source || this.source == 'goods_qrcode'){
                 this.show_addcart = false;
@@ -103,16 +104,6 @@
             },
             $route(){
                 this.getAddGoods()
-                this.addgoods = this.$route.query.addgoods;
-                this.pageName = this.$route.query.pageName;
-                this.addPriceId = utils.getUrlKey('addPriceId');
-                if(this.addgoods || this.addgoods == 'addgoods'){
-                    this.show_price = true;
-                    this.showAddBtn = true;
-                    this.show_button_two = false; 
-                }else{
-                     this.show_price = false;
-                }
                 if(this.source || this.source == 'goods_qrcode'){
                     this.show_addcart = false;
                 }
@@ -155,8 +146,22 @@
                 if (this.message.goods_stat != "1" ) {
                     this.show_button_two = false;
                     this.arrival_time = true;
-                    this.sold_out = true
+                    this.sold_out = true;
+                    this.showAddBtn = false;
                     return false;
+                }else{
+                    this.addgoods = this.$route.query.addgoods;
+                    this.pageName = this.$route.query.pageName;
+                    this.addPriceId = utils.getUrlKey('addPriceId');
+                    if(this.addgoods || this.addgoods == 'addgoods'){
+                        this.show_price = true;
+                        this.showAddBtn = true;
+                        this.sold_out = false;
+                        this.arrival_time =false;
+                        this.show_button_two = false; 
+                    }else{
+                        this.show_price = false;
+                    }
                 }
                 if (!this.message.is_start) {
                     this.show_button_two = false;
@@ -251,5 +256,7 @@
                 font-size 0.28rem
             .nowButton
                 width  100%
+            .addbuy
+                width 100%
 
 </style>
