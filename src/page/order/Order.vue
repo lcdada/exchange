@@ -376,7 +376,7 @@
 
                 //输出地址信息到页面
 
-
+                localStorage.removeItem('addressProv');
                 if(this.isWx) {
                     let showAddress = this.showAddress;
                     wx.ready(function () {
@@ -393,8 +393,9 @@
                                 $('.telNumber').html(res.telNumber);
                                 $('.address_text').html(res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo);
                                 localStorage.setItem('addressInfo',JSON.stringify(res));
+
                                 localStorage.setItem('addressProv',JSON.stringify(res.provinceName))
-                                
+
                             },
                             cancel: function (res) {
                                 //alert('用户取消拉出地址');
@@ -420,7 +421,7 @@
                          this.notice = "";
                     }
                 })
-                
+
             },
 
 
