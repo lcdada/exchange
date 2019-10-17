@@ -81,6 +81,7 @@
                 <span class="amount_text">应付金额</span><span class="amoun_mun">{{this.totalPrice | currency}}</span>
             </div>
         </div>
+        <div class="notice" :notice = "notice">{{notice}}</div>
         <div class="leave_word">
             <p class="leave_word_text">给我们留言</p>
             <textarea class="leave_word_content" v-model="remark"></textarea>
@@ -142,6 +143,7 @@
                 userName:'',
                 telNumber:'',
                 detail:'',
+                notice:'',
                 timer:null,
                 donate_type:utils.getUrlKey('donate_type'),
                 mobile:utils.getUrlKey('mobile'),
@@ -364,7 +366,7 @@
             //     var addressInfo={
             //       userName:'苏克',
             //       telNumber:'15810227932',
-            //       provinceName:' 山西',
+            //       provinceName:'陕西',
             //       cityName:'运城',
             //       countryName:'永济',
             //       detailInfo:'中关村在线'
@@ -373,7 +375,7 @@
             //   localStorage.setItem('addressInfo',JSON.stringify(addressInfo));
 
                 //输出地址信息到页面
-
+                
 
                 if(this.isWx) {
                     let showAddress = this.showAddress;
@@ -391,7 +393,19 @@
                                 $('.telNumber').html(res.telNumber);
                                 $('.address_text').html(res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo);
                                 localStorage.setItem('addressInfo',JSON.stringify(res));
+                                this.$api.home.getGoodsNoticeNew({
+                                    goods_id:utils.getUrlKey('goods_id'),
+                                    type:"7",
+                                    city:res.provinceName
 
+                                }).then(params =>{
+                                    if (params.data.code  == 1000) {
+                                        $(".notice").html(params.data.data.post_content);
+                                        // this.notice = params.data.data.post_content
+                                    }else{
+                                         $(".notice").html();
+                                    }
+                                })
                             },
                             cancel: function (res) {
                                 //alert('用户取消拉出地址');
@@ -862,7 +876,11 @@
             align-items center
         }
 
-
+    .notice
+        color: #ea2000;
+        background: #fff;
+        text-align: center;
+        padding: 0.1rem 0.3rem;
     .leave_word
         height 5.58rem
         background #fff
