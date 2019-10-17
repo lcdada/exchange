@@ -393,19 +393,8 @@
                                 $('.telNumber').html(res.telNumber);
                                 $('.address_text').html(res.provinceName +' '+ res.cityName+ ' '+ res.countryName+' '+res.detailInfo);
                                 localStorage.setItem('addressInfo',JSON.stringify(res));
-                                this.$api.home.getGoodsNoticeNew({
-                                    goods_id:utils.getUrlKey('goods_id'),
-                                    type:"7",
-                                    city:res.provinceName
-
-                                }).then(params =>{
-                                    if (params.data.code  == 1000) {
-                                        $(".notice").html(params.data.data.post_content);
-                                        // this.notice = params.data.data.post_content
-                                    }else{
-                                         $(".notice").html();
-                                    }
-                                })
+                                localStorage.setItem('addressProv',JSON.stringify(res.provinceName))
+                                
                             },
                             cancel: function (res) {
                                 //alert('用户取消拉出地址');
@@ -418,6 +407,20 @@
                 }else{
                     //跳转新页面  编辑地址 并 save 保存到 localStorage addressInfo
                 }
+                const cityname = JSON.parse(localStorage.getItem('addressProv'));
+                this.$api.home.getGoodsNoticeNew({
+                    goods_id:utils.getUrlKey('goods_id'),
+                    type:"7",
+                    city:cityname
+
+                }).then(params =>{
+                    if (params.data.code  == 1000) {
+                        this.notice = params.data.data.post_content;
+                    }else{
+                         this.notice = "";
+                    }
+                })
+                
             },
 
 
