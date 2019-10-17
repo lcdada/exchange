@@ -329,7 +329,7 @@
                         Toast("请填写你的地址信息");
                     }
                 }
-                
+
                 //3.显示输入卡密弹框
                 let donate_type = this.donate_type
                 if(!donate_type){
@@ -359,7 +359,7 @@
 				}
 			});
 		},
-           
+
 
             openAddress() {
 
@@ -375,7 +375,7 @@
             //   localStorage.setItem('addressInfo',JSON.stringify(addressInfo));
 
                 //输出地址信息到页面
-                
+
 
                 if(this.isWx) {
                     let showAddress = this.showAddress;
@@ -455,7 +455,7 @@
                                 goods_id:utils.getUrlKey('goods_id'),
                                 choose_out_time:this.ide
                             }).then(params =>{
-                                if(params.data.code  == 1000){ 
+                                if(params.data.code  == 1000){
                                     this.score = params.data.data.score
                                     // this.chooseGoods = this.chooseGoods.split(',')[0];
 
@@ -633,7 +633,7 @@
 
             if(this.addgoods || this.addgoods == 'addgoods'){
                 this.showAddMes = true;
-                this.showPrice = false; 
+                this.showPrice = false;
                 this.showAddBtn = false;
             }
 
@@ -872,7 +872,7 @@
         .loseSprice
             text-decoration:line-through
         .acro_item{
-            display flex 
+            display flex
             align-items center
         }
 
@@ -891,7 +891,7 @@
         font-size 0.28rem
         color #000
         font-weight 600
-        
+
     .leave_word_content
         width 100%;
         height 2.38rem
