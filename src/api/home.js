@@ -82,6 +82,11 @@ const home = {
     getWeiPay(params){
         return axios.post(`${base.home}/exchange/weipay`,qs.stringify(params))    
     },
+// 商品公告
+
+    getGoodsNoticeNew(params){
+        return axios.post(`${base.home}/exchange/getGoodsNoticeNew`,qs.stringify(params))
+    },
 }
 
 export default home;  
