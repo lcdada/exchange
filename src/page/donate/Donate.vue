@@ -18,7 +18,7 @@
 					multiple
 					:max-count="1"
 					:after-read="afterReadOne"
-					:before-delete = "deleImg"
+					@delete="afterDelte"
 				/>
 				<span>上传图片</span>
 		  	</div>
@@ -29,13 +29,14 @@
 					:max-count="1"
 					accept = "video/mp4"
 					:after-read="afterRead"
+					@delete="afterDelte"
 				/>
 				<span>上传视频</span>
 		  	</div>
 	  </div>
-	  <!-- <div class="loading" v-if="showLoading">
-		  <van-loading type="spinner" color="#1989fa" />
-	  </div> -->
+	  <div class="loading" v-if="showLoading">
+		  <van-loading type="spinner" color="#ea2000" vertical>正在上传中。。。</van-loading>
+	  </div>
 	  <div class="footer_text">
 		  <p class="text_title">礼包转增说明</p>
 		  <p class="text_content">1.受赠用户只能凭 <span class="color_text">您输入的好友手机领取礼物</span> ，请谨慎填写！</p>
@@ -44,8 +45,8 @@
 	  <van-tabbar fixed class="footer_btn">
 		  <button class="fot_btn btn_one" @click="Preview">预览</button>
 		  <button class="fot_btn btn_wto" @click="NowPreview">直接转增</button>
-	  </van-tabbar>  
-	  <van-popup 
+	  </van-tabbar>
+	  <van-popup
 		v-model="showphome"
 		lock-scroll:true
 		class="showPreview"
@@ -58,7 +59,7 @@
 		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" v-model="addDonateLog.phone">
 		   <button class="btn_affirm" @click="btn_affirm">确认提交</button>
 	  </van-popup>
-	   <van-popup 
+	   <van-popup
 		v-model="showphomeagain"
 		lock-scroll:true
 		class="showPreview"
@@ -73,17 +74,17 @@
 		   </div>
 		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" v-model="friend_phone">
 		   <button class="btn_affirm" @click="btn_affirm">确认提交</button>
-	  </van-popup>		
+	  </van-popup>
   </div>
 </template>
 
 <script>
 import utils from '../../utils/utils'
-import { Uploader,Tabbar ,Popup,Icon,Loading  } from 'vant';
+import { Uploader,Tabbar ,Popup,Icon,Loading ,Toast } from 'vant';
 export default {
 	data() {
 		return {
-			
+
 			fileList: [],
 			fileListTwo:[],
 			showphome:false,
@@ -111,7 +112,8 @@ export default {
 			code:'',
 			friend_phone:'',
             codeTime:0,
-            showCode:false,
+			showCode:false,
+			showLoading:false
 
 		}
 	},
@@ -120,32 +122,21 @@ export default {
 		[Tabbar.name]:Tabbar,
 		[Popup.name]:Popup,
 		[Icon.name]:Icon,
-		[Loading.name]:Loading 
+		[Loading.name]:Loading,
+		[Toast.name]:Toast
 	},
 	created() {
 		localStorage.setItem('thumb',null);
 		localStorage.setItem('video',null);
-		// let VImg  = localStorage.getItem("donate_id");
-		// console.log(VImg)
-		// if(VImg != "" || VImg != null){
-        //     this.$api.home.getBless({
-		// 		donate_id:VImg
-		// 	}).then(params => {
-        //         if(params.data.code  == 1000){
-        //             const data = params.data.data;
-        //             this.fileList = data.bless_info.thumb
-        //             this.fileListTwo = data.bless_info.video
-        //           console.log(params);
-        //         }
-        //     })
-		// }
 	},
 	methods: {
-		deleImg(file){
-			console.log(file)
-			console.log(8888)
-			// this.showLoading = false;
+		afterDelte(){
+			this.showLoading  = false
+			Toast('取消上传');
+			localStorage.setItem('thumb',null);
+			localStorage.setItem('video',null);
 		},
+
 		afterReadOne(){
 			this.showLoading = true;
 			const img = this.fileList[0].content
@@ -157,15 +148,16 @@ export default {
 				console.log(params)
                 if(params.data.code  == 1000){
 					const preview_url = params.data.data.preview_url
-					// this.showLoading = false
+					this.showLoading = false
+					Toast('上传成功');
 					localStorage.setItem('thumb',preview_url)
 
                 }
             })
 		},
-		
+
 		afterRead(){
-			// this.showLoading = true;
+			this.showLoading = true;
 			const img = this.fileListTwo[0].content
 			const imgtype = this.fileListTwo[0].file.type
 			this.$api.home.UploadImg({
@@ -175,7 +167,8 @@ export default {
                 if(params.data.code  == 1000){
 					console.log(params)
 					const preview_url = params.data.data.preview_url;
-					this.showLoading = true;
+					this.showLoading = false;
+					Toast('上传成功');
 					localStorage.setItem('video',preview_url)
                 }
             })
@@ -218,8 +211,8 @@ export default {
 		},
 		getCode(){
 			this.$api.home.getCode({
-				
-				mobile : this.from_mobile 
+
+				mobile : this.from_mobile
             }).then(params => {
                if(params.data.code == 1000){
                     this.showCode = true,
@@ -284,7 +277,7 @@ export default {
 			})
 		},
 		close_icon(){
-           this.showphome = false 
+           this.showphome = false
         }
 	},
 }
@@ -297,8 +290,11 @@ export default {
 		position relative
 		.loading
 			position: absolute;
-			top: 50%;
+			width 50%
+			margin-right -25%
+			top: 60%;
 			right: 50%;
+			background #fff
 		.people_name
 			height 1.1rem
 			display flex
@@ -342,7 +338,7 @@ export default {
 		.footer_btn
 			display flex
 			justify-content space-between
-			align-items center 
+			align-items center
 			padding 0 0.32rem
 			box-sizing border-box
 			.fot_btn
@@ -359,7 +355,7 @@ export default {
 			width 70%
 			height 6rem
 			background #fff
-			border-radius 0.16rem 
+			border-radius 0.16rem
 			padding  0.56rem
 			.close_uicon
 				position absolute

@@ -376,7 +376,6 @@
 
                 //输出地址信息到页面
 
-                localStorage.removeItem('addressProv');
                 if(this.isWx) {
                     let showAddress = this.showAddress;
                     wx.ready(function () {
