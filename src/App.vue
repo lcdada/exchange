@@ -26,10 +26,11 @@
 				<div>
 					<!-- <van-icon name="wap-nav" slot="left" color="#000" size="20px" @click="goHomePage"/> -->
 					<!-- <van-icon name="shop-collect" slot="left" color="#000" size="20px" @click="Transferr"/> -->
+					<p></p>
 				</div>
-				<div class="logo_block">
+				<!-- <div class="logo_block">
 					<img src="./assets/img/logo_text.png" alt="" class="logo_img" @click="goHome">
-				</div>
+				</div> -->
 				<div class="cartNumberBlock">
 					<!-- <van-icon name="bag-o" slot="right" color="#000" size="20px" @click="goShopCart"/> -->
 					<!-- <span class="cartNumber" v-if="showGoodsCartNumber" >{{this.$store.getters.carCount}}</span> -->
@@ -158,6 +159,13 @@ export default {
 			display block
 		.cartNumberBlock
 			position relative
+			height: 0.7rem;
+			width: 1rem;
+			line-height: 0.7rem;
+			text-align: center;
+			background: #000;
+			color: #fff;
+			border-radius: 0.14rem;
 			.cartNumber
 				display block
 				position absolute
