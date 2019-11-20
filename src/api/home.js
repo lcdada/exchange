@@ -45,7 +45,7 @@ const home = {
     UploadImg(params){
         return axios.post(`${base.home}/exchange/uploadImg`,qs.stringify(params))
     },
-    //确认转增
+    //确认转赠
     donateUser(params){
         return axios.post(`${base.home}/donate/donateUser`,qs.stringify(params))
     },

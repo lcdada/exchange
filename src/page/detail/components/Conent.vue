@@ -15,7 +15,8 @@
         <van-tabbar class="footer">
             <div v-if="show_button_two" class="footer">
                 <div  class="footer_btn"  v-if="show_addcart">
-                    <button class="btn addcart"  @click="addCart(message)" >加入购物车</button>
+                    <!-- <button class="btn addcart"  @click="addCart(message)" >加入购物车</button> -->
+                    <button class="btn addcart" @click="Donate" >转赠</button>
                     <button class="btn buynow" @click="buyNow(message)" ref='nowbutton'>立即兑换</button>
                 </div>
                 <div  class="footer_btn"  v-if="!show_addcart">
@@ -187,6 +188,9 @@
                         this.addList = data
                     }
                 })
+            },
+             Donate(){
+                this.$router.push({path:'/donate'})
             },
         },
         mounted(){

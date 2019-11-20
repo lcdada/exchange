@@ -16,7 +16,7 @@
       <home :package="package_id" :list="goods_list" :bless="bless_info" :flag="flag"></home>
       <van-tabbar fixed class="footer_btn">
 		  
-		  <button class="fot_btn " @click="NowPreview">确认转增</button>
+		  <button class="fot_btn " @click="NowPreview">确认转赠</button>
 	  </van-tabbar>
        <van-popup 
 		v-model="showphome"

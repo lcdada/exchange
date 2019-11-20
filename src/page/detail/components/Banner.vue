@@ -61,7 +61,8 @@
         watch: {
             message:function(value){
                 let valueData = value.video;
-                if(valueData != ""){
+                let valueTime = value.video_time
+                if(valueData != "" &&  valueTime != ""){
                     this.showVideoTime()
                 }
             }

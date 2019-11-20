@@ -38,13 +38,13 @@
 		  <van-loading type="spinner" color="#ea2000" vertical>正在上传中。。。</van-loading>
 	  </div>
 	  <div class="footer_text">
-		  <p class="text_title">礼包转增说明</p>
+		  <p class="text_title">礼包转赠说明</p>
 		  <p class="text_content">1.受赠用户只能凭 <span class="color_text">您输入的好友手机领取礼物</span> ，请谨慎填写！</p>
-		  <p class="text_content">2.您还可以在微信公众号<span class="color_text">“礼物兑换中心”</span> 中使用礼包账号密码，对已转增的礼包进行回收等操作。</p>
+		  <p class="text_content">2.您还可以在微信公众号<span class="color_text">“礼物兑换中心”</span> 中使用礼包账号密码，对已转赠的礼包进行回收等操作。</p>
 	  </div>
 	  <van-tabbar fixed class="footer_btn">
 		  <button class="fot_btn btn_one" @click="Preview">预览</button>
-		  <button class="fot_btn btn_wto" @click="NowPreview">直接转增</button>
+		  <button class="fot_btn btn_wto" @click="NowPreview">直接转赠</button>
 	  </van-tabbar>
 	  <van-popup
 		v-model="showphome"
