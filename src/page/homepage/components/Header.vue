@@ -1,15 +1,15 @@
 <template>
     <div>
         <div class="bless_video" controls="controls" v-if="showVideo">
-            <video
+            <video  id="video_one"
                     :src="bless.video"
                     width="100%"
                     height="100%"
                     x5-video-player-fullscreen="true"
                     x5-playsinline
-                    playsinline
-                    webkit-playsinline
+                    playsinline="true"
                     preload="auto"
+                    webkit-playsinline="true" 
                     controls
                     :poster="bless.cover_map"
                     object-fit = fill

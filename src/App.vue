@@ -1,47 +1,15 @@
 <template>
 	<div id="app">
-		<div>
-			<!-- <van-popup
-			v-model="show"
-			position="left"
-			:lock-scroll="true"
-			:style="{ height: '100.5%' }"
-			class="pop"
-				>
-				<div ref="wrapper" class="wrapper">
-					<div class="class_img">
-						<img src="./assets/img/logo_icon.png" alt="">
-					</div>
-					<ul >
-						<li class="item" @click="Donate">
-							<p class="class_item">转赠</p>
-							<van-icon name="arrow"  class="arrow"/>
-						</li>
-					</ul>
-				</div>
-			</van-popup> -->
-		</div>
 		<div slot="content"> 
 			<div class="header">
 				<div>
-					<!-- <van-icon name="wap-nav" slot="left" color="#000" size="20px" @click="goHomePage"/> -->
-					<!-- <van-icon name="shop-collect" slot="left" color="#000" size="20px" @click="Transferr"/> -->
-					<p></p>
 				</div>
-				<!-- <div class="logo_block">
-					<img src="./assets/img/logo_text.png" alt="" class="logo_img" @click="goHome">
-				</div> -->
 				<div class="cartNumberBlock">
-					<!-- <van-icon name="bag-o" slot="right" color="#000" size="20px" @click="goShopCart"/> -->
-					<!-- <span class="cartNumber" v-if="showGoodsCartNumber" >{{this.$store.getters.carCount}}</span> -->
 					<p @click="Donate">转赠</p>
 				</div>
 			</div>
 			<div class="center">
-				<!-- <keep-alive> -->
 					<router-view v-on:public_header="public_header" v-on:public_footer="public_footer" ></router-view>
-				<!-- </keep-alive>:key="$route.path + $route.query.t"  -->
-				<!-- <router-view v-if="!$route.meta.keepAlive"></router-view> -->
 			</div>
 		</div>
 	</div>

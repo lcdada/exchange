@@ -46,6 +46,7 @@ export default {
         if( this.flag == false){
             this.show = false
         }
+        // this.videoPlay()
     },
     methods:{
         getBless () {
@@ -107,10 +108,17 @@ export default {
                 }
             })
         },
+        videoPlay(){
+            // console.log(111)
+            document.addEventListener("WeixinJSBridgeReady",function() { 
+                document.getElementById('vido_one').play(); 
+            }, false);
+        }
     },
 
     mounted () {
-        this.getBless()
+        this.videoPlay();
+        this.getBless();
         // this.getAddGoods() 
     },
 }

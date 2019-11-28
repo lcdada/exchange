@@ -13,7 +13,7 @@
                 <div class="time_icon">
                     <img src="@/assets/img/play_icon.png" alt="" class="video_btn_img">
                     
-                    <span class="video_timer">{{message.video_time}}</span>
+                    <!-- <span class="video_timer">{{message.video_time}}</span> -->
                 </div>
             </div>
         </div>
@@ -59,10 +59,11 @@
         },
        
         watch: {
+            
             message:function(value){
+                this.video_time = false;
                 let valueData = value.video;
-                let valueTime = value.video_time
-                if(valueData != "" &&  valueTime != ""){
+                if(valueData != "" || valueData != undefined){
                     this.showVideoTime()
                 }
             }
@@ -78,7 +79,7 @@
                 this.videoDetail = true
             },
             showVideoTime(){
-                if(this.message.video != "undefined" || this.message.video != ""){
+                if(this.message.video != ""){
                     this.video_time = true 
                 }
             }
@@ -108,7 +109,7 @@
             width 1.56rem
             height 0.56rem
             border-radius 0.28rem
-            background rgba(0,0,0,0.31)
+            // background rgba(0,0,0,0.31)
             position absolute
             bottom 0.2rem
             left 50%
@@ -117,7 +118,7 @@
             .time_icon
                 height 100%
                 display flex
-                justify-content space-between
+                justify-content center
                 align-items center
                 padding 0 0.15rem 0 0.1rem
             .video_btn_img
