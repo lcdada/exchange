@@ -13,6 +13,8 @@
                     controls
                     :poster="bless.cover_map"
                     object-fit = fill
+                    autoplay="autoplay"
+                    muted
             >
             </video>
         </div>
