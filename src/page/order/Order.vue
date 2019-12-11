@@ -7,7 +7,7 @@
             <p class="address_icon1_text">添加收货地址</p>
             <van-icon name="arrow"  class="arrow"/>
         </div>
-        <div class="show_address" style="display:none">
+        <div class="show_address" style="display:none" @click="openAddress()">
             <div class="peopleInfo">
                 <p class="userName" :userName="userName">{{userName}}</p>
                 <p class="telNumber" :telNumber="telNumber">{{telNumber}}</p>
@@ -378,12 +378,13 @@
 
                 if(this.isWx) {
                     let showAddress = this.showAddress;
+                    var _that = this
                     wx.ready(function () {
                         wx.openAddress({
                             trigger: function (res) {
                                 //alert('用户开始拉出地址');
                             },
-                            success: function (res) {
+                            success:function(res){
                                 //将收货地址信息 回显到 表单里
                                 $('.choose_address').hide();
                                 $('.show_address').show();
@@ -395,7 +396,21 @@
 
                                 localStorage.setItem('addressProv',JSON.stringify(res.provinceName))
 
+                                const cityname = JSON.parse(localStorage.getItem('addressProv'));
+                                _that.$api.home.getGoodsNoticeNew({
+                                    goods_id:utils.getUrlKey('goods_id'),
+                                    type:"7",
+                                    city:cityname
+
+                                }).then(params =>{
+                                    if (params.data.code  == 1000) {
+                                        _that.notice = params.data.data.post_content;
+                                    }else{
+                                        _that.notice = "";
+                                    }
+                                })
                             },
+                       
                             cancel: function (res) {
                                 //alert('用户取消拉出地址');
                             },
@@ -403,23 +418,12 @@
                                 //alert(JSON.stringify(res));
                             }
                         });
+                        
                     });
                 }else{
                     //跳转新页面  编辑地址 并 save 保存到 localStorage addressInfo
                 }
-                const cityname = JSON.parse(localStorage.getItem('addressProv'));
-                this.$api.home.getGoodsNoticeNew({
-                    goods_id:utils.getUrlKey('goods_id'),
-                    type:"7",
-                    city:cityname
-
-                }).then(params =>{
-                    if (params.data.code  == 1000) {
-                        this.notice = params.data.data.post_content;
-                    }else{
-                         this.notice = "";
-                    }
-                })
+                
 
             },
 
