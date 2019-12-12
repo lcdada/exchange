@@ -1,14 +1,14 @@
 <template>
 	<div id="app">
 		<div slot="content"> 
-			<div class="header">
+			<div class="header" v-if="showTab">
 				<div>
 				</div>
 				<div class="cartNumberBlock">
 					<p @click="Donate">转赠</p>
 				</div>
 			</div>
-			<div class="center">
+			<div class="center" ref='singleDom'>
 					<router-view v-on:public_header="public_header" v-on:public_footer="public_footer" ></router-view>
 			</div>
 		</div>
@@ -28,9 +28,22 @@ export default {
 	  footer_show:true,
 	  show: false,
 	  showGoodsCartNumber:true,
-	  addgoods:utils.getUrlKey('addgoods')
+	  addgoods:utils.getUrlKey('addgoods'),
+	  showTab:true,
 
     }
+  },
+  watch:{
+	  $route(e){
+		  console.log(e)
+		  if(e.name == 'Succeed'){
+			  this.showTab = false;
+			  this.$refs.singleDom.style.marginTop = 0
+		  }else{
+			   this.showTab = true;
+			    this.$refs.singleDom.style.marginTop = "0.92rem"
+		  }
+	  }
   },
   created() {
 	  this.init()
