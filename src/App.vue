@@ -36,7 +36,7 @@ export default {
   watch:{
 	  $route(e){
 		  console.log(e)
-		  if(e.name == 'Succeed'){
+		  if(e.name == 'Succeed' || e.name == 'DonateSucc' || e.name == 'Detail'){
 			  this.showTab = false;
 			  this.$refs.singleDom.style.marginTop = 0
 		  }else{

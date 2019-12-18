@@ -63,7 +63,8 @@ export default {
             this.$api.home.getBless(this.requestParam).then(params => {
                 if(params.data.code  == 1000){
                     const data = params.data.data;
-                    localStorage.setItem("video",data.bless_info.video)
+                    localStorage.setItem("video",data.bless_info.video),
+                    localStorage.setItem("sharePic",data.bless_info.share_img)
                     
                     this.bless_info = data.bless_info;
                     // $('.title').html(data.title);

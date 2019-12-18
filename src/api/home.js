@@ -43,7 +43,7 @@ const home = {
     },
     //上传转赠图片
     UploadImg(params){
-        return axios.post(`${base.home}/exchange/uploadImg`,qs.stringify(params))
+        return axios.post(`${base.home}/index.php?g=Wechat&m=Around&a=saveImgBase64&interface=1`,qs.stringify(params))
     },
     //确认转赠
     donateUser(params){

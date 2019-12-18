@@ -15,10 +15,11 @@
       <div class="succ_text_block">
           <p class="succ_text_text">物流信息追踪、找回丢失礼册订单信息，请关注下面公众号</p>
           <div class="arrow_block">
-               <img src="@/assets/img/arrowNew.png" alt="" class="arrowImg">
+               <img src="./../../assets/img/arrowNew.png" alt="" class="arrowImg">
           </div>
           <div class="qr_code">
               <img :src="qrcode" alt="" class="qr_code_img">
+              <p class="qr_code_text">长按二维码关注</p>
           </div>
       </div>
      
@@ -122,5 +123,8 @@ export default {
                 height 2.7rem
                 margin-top: 0.12rem;
                 margin-left:0.12rem;
+            .qr_code_text
+                text-align center
+                font-size 0.24rem
         
 </style>

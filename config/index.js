@@ -52,7 +52,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'exchange',
-    assetsPublicPath: '../addons/high_discount',
+    assetsPublicPath: '../addons/high_discount/',
 
     /**
      * Source Maps

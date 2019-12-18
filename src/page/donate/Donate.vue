@@ -39,8 +39,8 @@
 	  </div>
 	  <div class="footer_text">
 		  <p class="text_title">礼包转赠说明</p>
-		  <p class="text_content">1.受赠用户只能凭 <span class="color_text">您输入的好友手机领取礼物</span> ，请谨慎填写！</p>
-		  <p class="text_content">2.您还可以在微信公众号<span class="color_text">“礼物兑换中心”</span> 中使用礼包账号密码，对已转赠的礼包进行回收等操作。</p>
+		  <p class="text_content">受赠用户只能凭 <span class="color_text">您输入的好友手机领取礼物</span> ，请谨慎填写！</p>
+		  <!-- <p class="text_content">2.您还可以在微信公众号<span class="color_text">“礼物兑换中心”</span> 中使用礼包账号密码，对已转赠的礼包进行回收等操作。</p> -->
 	  </div>
 	  <van-tabbar fixed class="footer_btn">
 		  <button class="fot_btn btn_one" @click="Preview">预览</button>
@@ -56,8 +56,9 @@
 		   <p class="from_title">请验证</p>
 		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入卡号" value="" class="inpt"  v-model="addDonateLog.account">
 		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入密码" value="" class="inpt"  v-model="addDonateLog.pwd">
-		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" v-model="addDonateLog.phone">
+		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入受赠好友手机号" value="" class="inpt" v-model="addDonateLog.phone">
 		   <button class="btn_affirm" @click="btn_affirm">确认提交</button>
+		   <p class="tips">好友手机号领取礼物唯一凭证</p>
 	  </van-popup>
 	   <van-popup
 		v-model="showphomeagain"
@@ -72,7 +73,7 @@
 				<button @click="getCode" v-if="!showCode">获取验证码</button>
               	<button @click="getCode" v-if="showCode">{{codeTime}}s后重新获取</button>
 		   </div>
-		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入好友手机号" value="" class="inpt" v-model="friend_phone">
+		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入受赠好友手机号" value="" class="inpt" v-model="friend_phone">
 		   <button class="btn_affirm" @click="btn_affirm">确认提交</button>
 	  </van-popup>
   </div>
@@ -146,8 +147,8 @@ export default {
 			   mime:imgtype
             }).then(params => {
 				console.log(params)
-                if(params.data.code  == 1000){
-					const preview_url = params.data.data.preview_url
+                if(params.data.status  == 101){
+					const preview_url = params.data.preview_url
 					this.showLoading = false
 					Toast('上传成功');
 					localStorage.setItem('thumb',preview_url)
@@ -164,9 +165,9 @@ export default {
 			   imgBase64:img,
 			   mime:imgtype
             }).then(params => {
-                if(params.data.code  == 1000){
+                if(params.data.status  == 101){
 					console.log(params)
-					const preview_url = params.data.data.preview_url;
+					const preview_url = params.data.preview_url;
 					this.showLoading = false;
 					Toast('上传成功');
 					localStorage.setItem('video',preview_url)
@@ -269,8 +270,10 @@ export default {
 					}
 					that.$api.home.donateUser(that.requestParam).then(params => {
 						if(params.data.code  == 1000){
-							that.$router.push({path:'/donatesucc','query':{"account":that.addDonateLog.account,"mobile":that.addDonateLog.phone}
+							that.$router.push({path:'/donatesucc','query':{"account":that.addDonateLog.account,"mobile":that.addDonateLog.phone,"name":that.addDonateLog.from_user}
 							})
+						}else{
+							Toast(params.data.msg);
 						}
 					})
 				}
@@ -387,5 +390,7 @@ export default {
 				display  block
 				margin 0 auto
 				margin-top 1.6rem
-
+			.tips
+				text-align center
+				padding-top 0.2rem
  </style>
