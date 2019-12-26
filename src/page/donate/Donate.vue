@@ -107,7 +107,8 @@ export default {
             account:utils.getUrlKey('account'),
             donate_id:utils.getUrlKey('donate_id'),
             mobile:utils.getUrlKey('mobile'),
-            donate_type:utils.getUrlKey('donate_type'),
+			donate_type:utils.getUrlKey('donate_type'),
+			goods_id:utils.getUrlKey('id'),
 			requestParam : {},
 			phone_num:'',
 			code:'',
@@ -204,7 +205,7 @@ export default {
 			this.$router.push({path:'/preview'})
 		},
 		NowPreview(){
-			if(!this.jid) {
+			if(this.donate_id) {
 				this.showphomeagain = true
             }else{
 				this.showphome = true
@@ -246,7 +247,7 @@ export default {
 			this.addDonate(function(params) {
 				if(params.data.code == 1000){
 					const donate_id = params.data.data
-					if(that.jid) {
+					if(!that.donate_id) {
 						let package_id = localStorage.getItem("package_id"+that.jid);
 						that.requestParam = {
 							account:that.addDonateLog.account,
@@ -256,6 +257,7 @@ export default {
 							jid:that.jid,
 							donate_id:donate_id,
 							from_user:that.addDonateLog.from_user,
+							goods_id : that.goods_id
 						}
 					}else{
 						that.requestParam = {
@@ -280,7 +282,8 @@ export default {
 			})
 		},
 		close_icon(){
-           this.showphome = false
+		   this.showphome = false
+		   this.showphomeagain =false
         }
 	},
 }
