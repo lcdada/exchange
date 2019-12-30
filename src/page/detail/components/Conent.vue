@@ -75,6 +75,8 @@
                 addPriceId:utils.getUrlKey('addPriceId'),
                 package_id:utils.getUrlKey('package_id'),
                 showAddBtn:false,
+                jid:'',
+                packageId:'',
 
 
             }
@@ -92,6 +94,8 @@
             }
             if(this.source || this.source == 'goods_qrcode'){
                 this.show_addcart = false;
+                this.jid = localStorage.getItem('jid');
+                localStorage.removeItem('package_id'+this.jid);
             }
         },
         watch: {

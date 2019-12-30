@@ -109,7 +109,9 @@
                 <p class="from_title">请验证</p>
                 <div class="code_block">
                     <input type="number" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入手机号" value=""   class="input_code" v-model="mobile">
-                    <button @click="getCode">获取验证码</button>
+                    <!-- <button @click="getCode">获取验证码</button> -->
+                    <button @click="getCode" v-if="!showCode">获取验证码</button>
+              	    <button @click="getCode" v-if="showCode">{{codeTime}}s后重新获取</button>
                 </div>
                 <input type="number" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输验证码" value=""   class="inpt" v-model="code">
                 <button class="btn_affirm" @click="catr_verify" :disabled="isDisable">确认提交</button>
@@ -172,7 +174,9 @@
                 markup_id:utils.getUrlKey('markup_id'),
                 libaoprice:"",
                 zhekou:"",
-                showDiscount:false
+                showDiscount:false,
+                showCode:false,
+                codeTime:0,
             }
         },
         components:{
@@ -315,7 +319,7 @@
                     this.show = true;
                 }else{
                     this.packageId = utils.getUrlKey('package_id'),
-                        this.showagain = true
+                    this.showagain = true
                 }
             },
             // 加价购提交
@@ -574,10 +578,17 @@
 
                     mobile : this.mobile
                 }).then(params => {
-                    // if(params.data.code  == 1000){
-
-                    // }
-                    // console.log(params)
+                    if(params.data.code == 1000){
+                        this.showCode = true,
+                        this.codeTime = 60;
+                        let codeTimeTimer =  setInterval(()=>{
+                            this.codeTime--;
+                            if(this.codeTime<=0){
+                                this.showCode = false;
+                                clearInterval(codeTimeTimer);
+                            }
+                        }, 1000);
+                    }
                 })
             },
             btn_affirm(){
