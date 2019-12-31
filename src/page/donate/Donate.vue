@@ -147,7 +147,7 @@ export default {
 			   imgBase64:img,
 			   mime:imgtype
             }).then(params => {
-				console.log(params)
+				// console.log(params)
                 if(params.data.status  == 101){
 					const preview_url = params.data.preview_url
 					this.showLoading = false
@@ -167,7 +167,7 @@ export default {
 			   mime:imgtype
             }).then(params => {
                 if(params.data.status  == 101){
-					console.log(params)
+					// console.log(params)
 					const preview_url = params.data.preview_url;
 					this.showLoading = false;
 					Toast('上传成功');
@@ -195,14 +195,14 @@ export default {
 			})
 		},
 		Preview(){
+			
+			let _that = this
 			this.addDonate(function(params) {
 				if(params.data.code == 1000){
 					const donate_id = params.data.data
-					localStorage.setItem('donate_id',donate_id)
+					_that.$router.push({path:'/preview','query':{"donate_id":donate_id}})
 				}
 			})
-			// return false
-			this.$router.push({path:'/preview'})
 		},
 		NowPreview(){
 			if(this.donate_id) {
@@ -264,7 +264,7 @@ export default {
 							from_mobile:that.from_mobile,
 							code:that.code,
 							to_mobile:that.friend_phone,
-							package_id:that.package_id,
+							package_id:(that.package_id === null) ? "" : that.package_id,
 							donate_id:donate_id,
 							account:that.account,
 							from_user:that.addDonateLog.from_user,
@@ -272,7 +272,12 @@ export default {
 					}
 					that.$api.home.donateUser(that.requestParam).then(params => {
 						if(params.data.code  == 1000){
-							that.$router.push({path:'/donatesucc','query':{"account":that.addDonateLog.account,"mobile":that.addDonateLog.phone,"name":that.addDonateLog.from_user}
+							that.$router.push({path:'/donatesucc',
+							'query':{
+								"account":that.addDonateLog.account,
+								"mobile":that.addDonateLog.phone,
+								"name":that.addDonateLog.from_user,
+								"donate_id":donate_id}
 							})
 						}else{
 							Toast(params.data.msg);

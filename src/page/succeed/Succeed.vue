@@ -41,6 +41,7 @@ export default {
             qrcode : '',
             userInfo:'',
             detailInfo:'',
+            jid:'',
         }
     },
      created(){
@@ -54,6 +55,8 @@ export default {
             order_id : this.order_sn
         }).then(params => {
             this.qrcode = params.data.data;
+            this.jid = localStorage.getItem('jid');
+            localStorage.removeItem('package_id'+this.jid);
         })
     }
 }

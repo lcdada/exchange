@@ -165,7 +165,7 @@ export default {
         },
         btn_affirm(){
             // let that = this;
-            let donate_id = localStorage.getItem('donate_id');
+            let donate_id =  utils.getUrlKey('donate_id');
 
             if(this.jid) {
                 let package_id = localStorage.getItem("package_id"+this.jid);
@@ -192,7 +192,7 @@ export default {
                 if(params.data.code  == 1000){
 					// console.log(params);
                     this.showphome = false
-                    this.$router.push({path:'/donatesucc','query':{"account":this.addDonateLog.account,"mobile":this.addDonateLog.phone}
+                    this.$router.push({path:'/donatesucc','query':{"account":this.addDonateLog.account,"mobile":this.addDonateLog.phone,"donate_id":donate_id}
                     })
                 }else{
                     Toast(params.data.msg);

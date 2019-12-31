@@ -10,6 +10,7 @@ import Preview from '@/page/donate/Preview'
 import DonateSucc from '@/page/donate/DonateSucc'
 import AddList from '@/page/components/AddList'
 import Pay from '@/page/components/Pay'
+import OrderNowechat from '@/page/order/OrderNowechat'
  
 Vue.use(Router)
 
@@ -64,6 +65,11 @@ export default new Router({
       path:'/pay',
       name:'Pay',
       component:Pay
+    },
+    {
+      path:'/ordernowechat',
+      name:'OrderNowechat',
+      component:OrderNowechat
     }
   ],
   scrollBehavior(to, from,savedPosition) {

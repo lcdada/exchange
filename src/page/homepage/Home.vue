@@ -50,7 +50,7 @@ export default {
     },
     methods:{
         getBless () {
-             if(this.donate_id) {
+            if(this.donate_id) {
                 this.requestParam = {
                     donate_id:this.donate_id
                 }

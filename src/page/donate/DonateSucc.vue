@@ -61,7 +61,7 @@
                     let sharePic = localStorage.getItem("sharePic")
 
                     let share = {
-                        donate_id : localStorage.getItem('donate_id'),
+                        donate_id : utils.getUrlKey('donate_id'),
                         mobile : utils.getUrlKey('mobile'),
                         account : utils.getUrlKey('account'),
                         package_id :localStorage.getItem('package_id'+that.jid),
@@ -74,6 +74,8 @@
                         imgUrl: sharePic,
                         success: function(){
                             Toast('转赠成功')
+                          this.jid = localStorage.getItem('jid');
+                          localStorage.removeItem('package_id'+this.jid);
                         },
                         cancel: function(){
                         }

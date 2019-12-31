@@ -12,6 +12,8 @@ import 'swiper/dist/css/swiper.css'
 import api from './api' // 导入api接口
 import 'babel-polyfill' //解决手机浏览器默认不支持promise。
 import utils from './utils/utils'
+// import VConsole from 'vconsole/dist/vconsole.min.js' 
+// let vConsole = new VConsole() // 初始化
 
 
 
