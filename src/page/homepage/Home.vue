@@ -94,20 +94,26 @@ export default {
             })
         },
         getAddGoods (package_id){
-            this.$api.home.getAddGoods({
-                type : "package",
-                id: package_id
-            }).then(params => {
-                if(params.data.code  == 1000){
-                    const data = params.data.data;
-                    localStorage.setItem("addGoodsList",JSON.stringify(data));
-                    if(data){
-                        this.showAddSwiper = true
+            let isWeiXin = () => { return navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1 }
+            if (isWeiXin()) {
+                this.$api.home.getAddGoods({
+                    type : "package",
+                    id: package_id
+                }).then(params => {
+                    if(params.data.code  == 1000){
+                        const data = params.data.data;
+                        localStorage.setItem("addGoodsList",JSON.stringify(data));
+                        if(data){
+                            this.showAddSwiper = true
+                        }
+                        this.addList = data
+                        this.midOne = data[0].mid
                     }
-                    this.addList = data
-                    this.midOne = data[0].mid
-                }
-            })
+                })
+                
+            } else {
+                
+            }
         },
         videoPlay(){
             // console.log(111)

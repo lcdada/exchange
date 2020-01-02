@@ -88,7 +88,7 @@
         },
         created(){
             this.getAddGoods()
-             if(this.addgoods || this.addgoods == 'addgoods'){
+            if(this.addgoods || this.addgoods == 'addgoods'){
                 this.show_price = true;
                  this.showTime()
             }
@@ -128,9 +128,24 @@
                     return false;
                 }else{
                     if(this.addgoods || this.addgoods == 'addgoods'){
-                         this.$router.push({path:'/order',query: {goods_id: params.id,now:true,addgoods:"addgoods",pageName:this.pageName,markup_id:this.addPriceId} })
+                        let isWeiXin = () => { return navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1 }
+                        if (isWeiXin()) {
+                            console.log(888)
+                            this.$router.push({path:'/order',query: {goods_id: params.id,now:true,addgoods:"addgoods",pageName:this.pageName,markup_id:this.addPriceId} })
+                        } else {
+                            console.log(8889)
+                            this.$router.push({path:'/ordernowechat',query: {goods_id: params.id,now:true,addgoods:"addgoods",pageName:this.pageName,markup_id:this.addPriceId} })
+                        }
+                         
                     }else{
-                         this.$router.push({path:'/order',query: {goods_id: params.id,now:true} })
+                        let isWeiXin = () => { return navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1 }
+                        if (isWeiXin()) {
+                             this.$router.push({path:'/order',query: {goods_id: params.id,now:true} })
+                        } else {
+                            this.$router.push({path:'/ordernowechat',query: {goods_id: params.id,now:true} })
+                        }
+                        
+                        //  this.$router.push({path:'/order',query: {goods_id: params.id,now:true} })
                     }
 
                 }
@@ -180,18 +195,26 @@
             },
 
             getAddGoods (){
-                this.$api.home.getAddGoods({
-                    type : this.package_id ? "package": "goods",
-                    id: this.package_id ? this.package_id : this.goodsID,
-                }).then(params => {
-                    if(params.data.code  == 1000){
-                        const data = params.data.data;
-                        if(data){
-                             this.showAddList = true ;
+                let isWeiXin = () => { return navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1 }
+                if (isWeiXin()) {
+                    this.$api.home.getAddGoods({
+                        type : this.package_id ? "package": "goods",
+                        id: this.package_id ? this.package_id : this.goodsID,
+                    }).then(params => {
+                        if(params.data.code  == 1000){
+                            const data = params.data.data;
+                            if(data){
+                                this.showAddList = true ;
+                            }
+                            this.addList = data
                         }
-                        this.addList = data
-                    }
-                })
+                    })
+
+                } else {
+                    
+                }
+                        
+           
             },
              Donate(){
                 this.$router.push({path:'/donate'})
