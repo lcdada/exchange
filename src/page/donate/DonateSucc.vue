@@ -35,7 +35,8 @@
 <script>
     import {Icon,Toast} from 'vant'
     import utils from '../../utils/utils'
-
+    // import VConsole from 'vconsole/dist/vconsole.min.js' 
+    
     export default {
         name:'DonateSucc',
         components:{
@@ -45,11 +46,14 @@
         data() {
             return {
                 jid:utils.getUrlKey('jid'),
+                donateId:utils.getUrlKey('donateId'),
+                share:{}
             }
         },
 
         created() {
             this.donate()
+            // let vConsole = new VConsole() // 初始化
         },
 
         methods:{
@@ -59,18 +63,27 @@
                     let title = "您的好友"+ utils.getUrlKey('name')+"送给您一份礼物";
                     let desc = '点击领取';
                     let sharePic = localStorage.getItem("sharePic")
-
-                    let share = {
-                        donate_id : utils.getUrlKey('donate_id'),
-                        mobile : utils.getUrlKey('mobile'),
-                        account : utils.getUrlKey('account'),
-                        package_id :localStorage.getItem('package_id'+that.jid),
-                    };
+                    if(!that.donateId){
+                        that.share = {
+                            donate_id : utils.getUrlKey('donate_id'),
+                            mobile : utils.getUrlKey('mobile'),
+                            account : utils.getUrlKey('account'),
+                            package_id :localStorage.getItem('package_id'+that.jid),
+                        };
+                    }else{
+                        that.share = {
+                            donate_id : utils.getUrlKey('donateId'),
+                            mobile : utils.getUrlKey('mobile'),
+                            account : utils.getUrlKey('account'),
+                            package_id :localStorage.getItem('package_id'+that.jid),
+                        };
+                    }
+                    
 
                     var sharedata = {
                         title: title,
                         desc: desc,
-                        link: "http://www.lkvip.com/lancard_wechat/app/index.php?i=7&c=entry&do=highDiscount&package_id="+share.package_id+"&account="+share.account+"&donate_id="+share.donate_id+"&mobile="+share.mobile+"&donate_type=1&m=highDiscount#/",
+                        link: "http://www.lkvip.com/lancard_wechat/app/index.php?i=7&c=entry&do=highDiscount&package_id="+that.share.package_id+"&account="+that.share.account+"&donate_id="+that.share.donate_id+"&mobile="+that.share.mobile+"&donate_type=1&m=highDiscount#/",
                         imgUrl: sharePic,
                         success: function(){
                             Toast('转赠成功')

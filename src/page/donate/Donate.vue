@@ -82,6 +82,8 @@
 <script>
 import utils from '../../utils/utils'
 import { Uploader,Tabbar ,Popup,Icon,Loading ,Toast } from 'vant';
+//  import VConsole from 'vconsole/dist/vconsole.min.js' ;
+  
 export default {
 	data() {
 		return {
@@ -130,6 +132,7 @@ export default {
 	created() {
 		localStorage.setItem('thumb',null);
 		localStorage.setItem('video',null);
+		// let vConsole = new VConsole() // 初始化
 	},
 	methods: {
 		afterDelte(){
@@ -264,7 +267,7 @@ export default {
 							from_mobile:that.from_mobile,
 							code:that.code,
 							to_mobile:that.friend_phone,
-							package_id:(that.package_id === null) ? "" : that.package_id,
+							package_id:(that.package_id === null || that.package_id == "null" || !that.package_id) ? "" : that.package_id,
 							donate_id:donate_id,
 							account:that.account,
 							from_user:that.addDonateLog.from_user,
@@ -272,13 +275,23 @@ export default {
 					}
 					that.$api.home.donateUser(that.requestParam).then(params => {
 						if(params.data.code  == 1000){
-							that.$router.push({path:'/donatesucc',
-							'query':{
-								"account":that.addDonateLog.account,
-								"mobile":that.addDonateLog.phone,
-								"name":that.addDonateLog.from_user,
-								"donate_id":donate_id}
-							})
+							if(!that.donate_id){
+								that.$router.push({path:'/donatesucc',
+								'query':{
+									"account":that.addDonateLog.account,
+									"mobile":that.addDonateLog.phone,
+									"name":that.addDonateLog.from_user,
+									"donate_id":donate_id}
+								})
+							}else{
+								that.$router.push({path:'/donatesucc',
+								'query':{
+									"account":that.addDonateLog.account,
+									"mobile":that.friend_phone,
+									"name":that.addDonateLog.from_user,
+									"donateId":donate_id}
+								})
+							}
 						}else{
 							Toast(params.data.msg);
 						}
