@@ -67,7 +67,7 @@
 		close-on-click-overlay:true>
 	  	   <van-icon name="cross"  class="close_uicon" size='20px' @click="close_icon"/>
 		   <p class="from_title">请验证</p>
-		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout"  value="15810227932" class="inpt"  v-model="from_mobile">
+		   <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout"  value="" class="inpt"  v-model="from_mobile">
 		   <div class="code_block">
 			    <input type="text" @focus="inputFocus($event)" @focusout="inputFocusout" placeholder="请输入验证码" value=""   class="input_code" v-model="code">
 				<button @click="getCode" v-if="!showCode">获取验证码</button>
@@ -93,7 +93,8 @@ export default {
 			showphome:false,
 			showphomeagain:false,
 			timer:null,
-			from_mobile:utils.getUrlKey('mobile'),
+			// from_mobile:utils.getUrlKey('mobile'),
+			from_mobile:"",
 			addDonateLog:{
 				from_user:'',
 				to_user:'',
@@ -287,7 +288,7 @@ export default {
 								that.$router.push({path:'/donatesucc',
 								'query':{
 									"account":that.addDonateLog.account,
-									"mobile":that.friend_phone,
+									"mobile_again":that.friend_phone,
 									"name":that.addDonateLog.from_user,
 									"donateId":donate_id}
 								})

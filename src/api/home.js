@@ -87,6 +87,12 @@ const home = {
     getGoodsNoticeNew(params){
         return axios.post(`${base.home}/exchange/getGoodsNoticeNew`,qs.stringify(params))
     },
+    // 通用公告
+    getCurrencyNotice(params){
+        return axios.post(`${base.home}/index.php?g=Wechat&m=User&a=getAdver&interface=1`,qs.stringify(params))
+    }
+
+
 }
 
 export default home;  

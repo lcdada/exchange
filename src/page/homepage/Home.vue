@@ -6,20 +6,33 @@
         </div>
         <home-list :package="package_id" :list="goods_list" :bless="bless_info"></home-list>
         <add-buy :addlist = "addList" :package="package_id" :mid = "midOne" v-if="showAddSwiper"></add-buy>
+        <van-popup
+            class="pop"
+            v-model="showNotice"
+            lock-scroll:true
+        >
+            <div class="form">
+                <span class="from_title">{{noticeTitle}}</span>
+                <div class="noticeCont">{{noticeContent}}</div>
+            </div>
+        </van-popup>
     </div>
 </template>
 <script>
+import {Popup} from 'vant'
 import HomeHeader from './components/Header'
 import HomeList from './components/List'
 import utils from '@/utils/utils'
 import AddBuy from '@/page/components/Addbuy'
+import axios from 'axios'
 
 export default {
     name:"HomePage",
     components:{
         HomeHeader,
         HomeList,
-        AddBuy
+        AddBuy,
+        [Popup.name]:Popup
 
     },
     props:["flag"],
@@ -39,6 +52,9 @@ export default {
             midOne:"",
             package_id:"",
             showAddSwiper:false,
+            showNotice:true,
+            noticeTitle:"",
+            noticeContent:""
         }
 
     },
@@ -47,8 +63,25 @@ export default {
             this.show = false
         }
         // this.videoPlay()
+        this.getNotice()
     },
     methods:{
+        getNotice(){
+            this.$api.home.getCurrencyNotice().then(params=>{
+                if(params.data.status  == 101){
+                    // this.showNotice = true
+                    this.noticeTitle = params.data.data[0].post_title
+                    this.noticeContent =  params.data.data[0].post_content
+                }else{
+                    // this.showNotice = false
+                }   
+            })
+            .catch((err)=>{
+                // this.showNotice = false
+                 this.noticeTitle = "2020春节快递提醒"
+                this.noticeContent =  "快递受春节假期影响，1月13日—31日快递停止发货(部分厂家放假1月7日停止发货），微信及网站可正常兑换，节后陆续发出！客服热线1月24日-26日暂停服务，不便之处请谅解！祝您春节愉快、阖家幸福！"
+            })
+        },
         getBless () {
             if(this.donate_id) {
                 this.requestParam = {
@@ -147,4 +180,30 @@ export default {
             .number
                 font-size 0.36rem
                 padding 0 0.04rem
+    .pop
+        width 6.46rem
+        height 4.2rem
+        border-radius 0.32rem
+        padding: 0.3rem;
+        box-sizing: border-box;
+        .form
+            height 100%
+            width 100%  
+            margin 0 auto
+            display flex
+            justify-content center
+            flex-direction column 
+            align-items center
+            box-sizing border-box
+        .from_title
+            font-size 0.32rem
+            color #333
+            font-weight 600
+        .noticeCont
+            width 100%
+            font-size 0.32rem
+            color #666
+            margin-top 0.3rem
+            text-align center
+            line-height 0.38rem
 </style>

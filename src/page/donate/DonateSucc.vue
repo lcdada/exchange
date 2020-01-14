@@ -54,6 +54,7 @@
         created() {
             this.donate()
             // let vConsole = new VConsole() // 初始化
+            console.log(utils.getUrlKey('mobile_again'))
         },
 
         methods:{
@@ -73,7 +74,7 @@
                     }else{
                         that.share = {
                             donate_id : utils.getUrlKey('donateId'),
-                            mobile : utils.getUrlKey('mobile'),
+                            mobile : utils.getUrlKey('mobile_again'),
                             account : utils.getUrlKey('account'),
                             package_id :localStorage.getItem('package_id'+that.jid),
                         };
